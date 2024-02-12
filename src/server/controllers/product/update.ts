@@ -13,6 +13,7 @@ interface ProductData {
   price: number;
   size: string;
   category: string;
+  subcategory: string;
   description: string;
   composition: string;
   characteristic: string;
@@ -55,12 +56,15 @@ export const updateProduct = async (req: Request, res: Response) => {
   updateData.name = productData.name;
   updateData.brand = productData.brand;
   updateData.category = productData.category;
+  updateData.subcategory = productData.subcategory;
   updateData.description = productData.description;
   updateData.price = productData.price;
+  updateData.size = productData.size;
   updateData.colors = productData.colors;
   updateData.codeColors = productData.codeColors;
   updateData.composition = productData.composition;
   updateData.characteristic = productData.characteristic;
+  updateData.active = productData.active;
   const stock = {
     amount: productData.amount ?? [0]
   };
@@ -72,12 +76,13 @@ export const updateProduct = async (req: Request, res: Response) => {
   }
 
   if (images?.length) {
+
     async function uploads() {
       
       // Use `map` with `Promise.all` to await for all uploads to complete
       await Promise.all(
         images?.map(async (image: any, index: number) => {
-          const data = await uploadToS3(image);
+          const data = await uploadToS3('products',image);
           image.filename = data;
         }),
       );
@@ -93,8 +98,9 @@ export const updateProduct = async (req: Request, res: Response) => {
 
   // delete Old Images
   product.images.forEach((image) => {
-    removeImageS3(image);
+    removeImageS3('products',image);
   });
+  
   await Product.findByIdAndUpdate(id, updateData);
 
   res

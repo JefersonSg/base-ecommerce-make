@@ -17,7 +17,7 @@ const s3 = new S3Client({
   region: bucketRegion,
 });
 
-async function uploadToS3(file: Express.Multer.File) {
+async function uploadToS3(path: string, file: Express.Multer.File) {
   const name =
     (await Date.now()) +
     String(Math.floor(Math.random() * 1000)) +
@@ -25,7 +25,7 @@ async function uploadToS3(file: Express.Multer.File) {
 
   const params = {
     Bucket: bucketName,
-    Key: name,
+    Key:`${path}/${name}`,
     Body: file?.buffer,
     contentType: file?.mimetype,
   };
@@ -48,10 +48,10 @@ async function updateImageToS3(file: Express.Multer.File, pathImage: string) {
 
   return pathImage;
 }
-async function removeImageS3(image: string) {
+async function removeImageS3(path: string,image: string) {
   const deleteParams = {
     Bucket: bucketName,
-    Key: image,
+    Key: `${path}/${image}`,
   };
 
   try {

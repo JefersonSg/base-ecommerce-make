@@ -3,6 +3,7 @@ import cors from "cors";
 import UserRoutes from "./server/routes/UserRoutes";
 import ProductRoutes from "./server/routes/ProductRoutes";
 import CategoryRoutes from "./server/routes/CategoryRoutes";
+import SubcategoryRoutes from "./server/routes/SubcategoryRoutes";
 import path from "path";
 import "dotenv/config";
 
@@ -41,6 +42,7 @@ app.use("/files", express.static(path.resolve(__dirname, "public", "images")));
 app.use("/user", UserRoutes);
 app.use("/products", ProductRoutes);
 app.use("/categories", CategoryRoutes);
+app.use("/subcategories", SubcategoryRoutes);
 
 // Routes
 app.listen(port);

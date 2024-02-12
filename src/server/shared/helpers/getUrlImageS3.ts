@@ -15,11 +15,11 @@ const s3 = new S3Client({
     region: bucketRegion,
   });
 
-export default async function getUrlImageS3  (image: string)  {
+export default async function getUrlImageS3  (path: string,image: string)  {
     try {
         const getObjectParams = {
             Bucket: bucketName,
-            Key: image,
+            Key: `${path}/${image}`,
           };
     
         const command = new GetObjectCommand(getObjectParams)

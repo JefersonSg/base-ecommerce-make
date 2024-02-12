@@ -10,6 +10,7 @@ export const validationProduct = validate({
     promotion: yup.boolean().required(),
     promotionalPrice: yup.number(),
     category: yup.string().required(),
+    subcategory: yup.string().required(),
     description: yup.string().required(),
     composition: yup.string(),
     characteristic: yup.string(),

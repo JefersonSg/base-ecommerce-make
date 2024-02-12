@@ -29,7 +29,7 @@ export const getAll = async (req: Request, res: Response) => {
   }
 for (const category of categories) {
 
-  const url = await getUrlImageS3(category.image)
+  const url = await getUrlImageS3('category', category.image)
 
   category.image = url ?? ''
 }

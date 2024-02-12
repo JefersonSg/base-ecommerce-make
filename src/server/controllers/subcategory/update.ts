@@ -1,24 +1,25 @@
 import { Request, Response } from "express";
-import Category from "../../db/models/Category";
+import SubcategoryModel from "../../db/models/Subcategory";
 
 import mongoose from "mongoose";
 import { removeImageS3, updateImageToS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 const ObjectId = mongoose.Types.ObjectId;
 
-interface Categories {
+interface Subcategories {
   name: string;
   description:string;
+  category:string;
   image: string;
 }
 
-export const updateCategory = async (req: Request, res: Response) => {
+export const update = async (req: Request, res: Response) => {
   const id = req.params.id;
 
   const name = req.body.name;
   const description = req.body.description;
   const image: any = req.file;
 
-  const updateData: Categories | any = {};
+  const updateData: Subcategories | any = {};
 
   if (!ObjectId.isValid(id)) {
     res.status(422).json({
@@ -27,42 +28,41 @@ export const updateCategory = async (req: Request, res: Response) => {
     return;
   }
 
-  const category = await Category.findById(id);
+  const subcategory = await SubcategoryModel.findById(id);
 
-  if (!category) {
+  if (!subcategory) {
     res.status(422).json({
-      message: "Categoria não encontrada",
+      message: "Subcategoria não encontrada",
     });
     return;
   }
 
   // Validations
   if (!name) {
-    res.status(422).json({ message: "O nome da categoria é obrigatória!" });
+    res.status(422).json({ message: "O nome da subcategoria é obrigatória!" });
     return;
   } else {
     updateData.name = name;
   }
 
   if (!description) {
-    res.status(422).json({ message: "A descrição da categoria é obrigatória!" });
+    res.status(422).json({ message: "A descrição da subcategoria é obrigatória!" });
     return;
   } else {
     updateData.description = description;
   }
 
-  if (image && category.image) {
-    const newImage = await uploadToS3('category',image);
+  if (image && subcategory.image) {
+    const newImage = await uploadToS3('subcategory',image);
     updateData.image = newImage;
+
+   await removeImageS3('subcategory',subcategory.image);
+
   }
 
-  // delete Old Images
-  
-  if (category.image) await removeImageS3('category',category?.image);
-  
-  await Category.findByIdAndUpdate(id, updateData);
+  await SubcategoryModel.findByIdAndUpdate(id, updateData);
 
   res
     .status(200)
-    .json({ category, message: "Categoria atualizada com sucesso!" });
+    .json({ subcategory, message: "Categoria atualizada com sucesso!" });
 };

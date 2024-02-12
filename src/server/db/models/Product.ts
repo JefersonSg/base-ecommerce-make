@@ -3,7 +3,7 @@ import mongoose from "../conn";
 const { Schema } = mongoose;
 
 const Product = mongoose.model(
-  "Product",
+  "product",
   new Schema(
     {
       name: {
@@ -15,6 +15,14 @@ const Product = mongoose.model(
       },
       description: {
         type: String,
+      },
+      category: {
+        type: String,
+        required: true,
+      },
+      subcategory: {
+        type: String,
+        required: true,
       },
       size: {
         type: String,
@@ -35,10 +43,6 @@ const Product = mongoose.model(
       },
       codeColors: {
         type: Array,
-        required: true,
-      },
-      category: {
-        type: String,
         required: true,
       },
       images: {

@@ -3,7 +3,7 @@ import mongoose from "../conn";
 const { Schema } = mongoose;
 
 const User = mongoose.model(
-  "User",
+  "user",
   new Schema(
     {
       name: {

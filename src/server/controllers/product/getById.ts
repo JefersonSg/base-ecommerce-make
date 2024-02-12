@@ -26,7 +26,7 @@ export const getProductById = async (req: Request, res: Response) => {
     
     for (let i = 0; i < product.images.length; i++) {
 
-      const url = await getUrlImageS3(product?.images[i])
+      const url = await getUrlImageS3('products',product?.images[i])
 
 
       product.images[i] = url ?? ''

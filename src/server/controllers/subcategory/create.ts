@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import Category from "../../db/models/Category";
+import SubcategoryModel from "../../db/models/Subcategory";
 
-export const createCategory = async (req: Request, res: Response) => {
+export const createSubcategory = async (req: Request, res: Response) => {
   const name = req.body.name;
   const description = req.body.description;
+  const category = req.body.category;
   const image: any = req.file;
 
   if (!image) {
@@ -14,7 +16,7 @@ export const createCategory = async (req: Request, res: Response) => {
     return;
   }
 
-  const imageUpload = await uploadToS3('category',image);
+  const imageUpload = await uploadToS3('subcategory',image);
 
   if (!imageUpload) {
     return res.status(404).send({
@@ -23,16 +25,17 @@ export const createCategory = async (req: Request, res: Response) => {
   }
 
   // create Category
-  const category = new Category({
+  const subcategory = new SubcategoryModel({
     name,
     description,
+    category,
     image: imageUpload,
   });
   try {
-    const newCategory = await category.save();
+    const newSubcategory = await subcategory.save();
     res.status(200).json({
-      message: "Categoria criada com sucesso",
-      newCategory,
+      message: "Subcategoria criada com sucesso",
+      newSubcategory,
     });
   } catch (error) {
     res.status(500).json({ message: error });

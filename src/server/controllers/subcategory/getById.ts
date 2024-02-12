@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
 import mongoose from "mongoose";
-import Category from "../../db/models/Category";
 import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
+import SubcategoryModel from "../../db/models/Subcategory";
 const ObjectId = mongoose.Types.ObjectId;
 
 export const getById = async (req: Request, res: Response) => {
@@ -14,23 +14,24 @@ export const getById = async (req: Request, res: Response) => {
     return;
   }
 
-  const category = await Category.findById(id);
+  const subcategory = await SubcategoryModel.findById(id);
 
-  if (!category) {
+
+
+  if (!subcategory) {
     res.status(422).json({
-      message: "Categoria não encontrada",
+      message: "subcategoria não encontrada",
     });
     return;
   }
-  if (!category.image) {
-    return  res.status(200).json({
-      category,
-    });
-  }
-    const url = await getUrlImageS3('category', category?.image)
 
-    category.image = url
+if (!subcategory.image) return res.status(200).json({subcategory});
+
+  const url = await getUrlImageS3('subcategory', subcategory?.image)
+
+  subcategory.image = url
+
   res.status(200).json({
-    category,
+    subcategory,
   });
 };

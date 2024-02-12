@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Product from "../../db/models/Product";
+import { removeImageS3 } from "../../shared/helpers/imageUpload";
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -23,6 +24,11 @@ export const removeProductById = async (req: Request, res: Response) => {
 
   try {
     await Product.findByIdAndRemove(id);
+    
+    for (const images of product.images) {
+
+      await removeImageS3('products', images)
+    }
 
     res.status(200).json({ message: "Produto removido com sucesso!" });
   } catch (err) {

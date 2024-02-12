@@ -28,7 +28,7 @@ export const editUser = async (req: Request, res: Response) => {
   }
 
   if (req.file) {
-    const fileName = await uploadToS3(req.file)
+    const fileName = await uploadToS3('users',req.file)
     user.image = fileName;
   }
 

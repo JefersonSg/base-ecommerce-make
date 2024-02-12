@@ -8,18 +8,19 @@ const upload = multer({ storage: storage });
 
 import checkToken from "../shared/helpers/checkToken";
 
-import { CategoryController } from "../controllers";
+import { SubcategoryController } from "../controllers";
 
 // GET
-router.get("/", CategoryController.getAll);
-router.get("/:id", CategoryController.getById);
+router.get("/", SubcategoryController.getAll);
+router.get("/:id", SubcategoryController.getById);
 
-// POST
+// CREATE
 router.post(
   "/create",
   checkToken,
   upload.single("image"),
-  CategoryController.createCategory,
+  SubcategoryController.validationSubcategory,
+  SubcategoryController.createSubcategory,
 );
 
 // UPDATE
@@ -27,10 +28,10 @@ router.patch(
   "/edit/:id",
   checkToken,
   upload.single("image"),
-  CategoryController.updateCategory,
+  SubcategoryController.update,
 );
 
 // DELETE
-router.delete("/delete/:id", checkToken, CategoryController.deleteCategory);
+router.delete("/delete/:id", checkToken, SubcategoryController.deleteSubcategory);
 
 export default router;
