@@ -70,12 +70,9 @@ export const createComment = async(req : Request,res : Response)=>{
       images: [],
       edited: false
     }
-
     
     if (images && images.length > 0) {
-
       await uploads()
-      
       images?.map((image: any) => {
         commentData.images.push(image.filename);
       });

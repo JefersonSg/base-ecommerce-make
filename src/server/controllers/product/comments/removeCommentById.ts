@@ -24,8 +24,8 @@ export const removeCommentById = async(req : Request,res : Response)=>{
             message: 'Nenhum produto encontrado com esse ID'
         })
     }
-    
       const commentRemoved = product.comments.filter(comment => comment._id === idComment)
+
       if (!commentRemoved[0]) {
         return res.status(200).json({
           message: 'Nenhum comentario foi encontrado para ser removido'
