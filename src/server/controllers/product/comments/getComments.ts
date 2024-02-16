@@ -22,7 +22,6 @@ export const getAllComments = async (req: Request, res: Response) => {
       message: "Nenhum produto encontrado com esse ID",
     });
   }
-  let ArrayImages : string[] = [];
 
   for (const comment of product.comments) {
     for (let i = 0; i < comment.images.length; i++) {
