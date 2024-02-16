@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongoose";
+import "dotenv/config";
+import { userInterface } from "../../controllers/user/interfaceUser";
+
+const id_admin = process.env.ID_ADMIN ?? "";
 
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-interface User {
-  _id?: any;
-  name: string;
-}
-
-const createUserToken = async (user: User, req: Request, res: Response) => {
+const createUserToken = async (
+  user: userInterface,
+  req: Request,
+  res: Response,
+) => {
   // create a token
 
   const secret = process.env.SECRET_JWT;
@@ -27,6 +30,7 @@ const createUserToken = async (user: User, req: Request, res: Response) => {
     message: "Você está autenticado",
     token: token,
     userId: user._id,
+    admin: user.admin,
   });
 };
 

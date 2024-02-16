@@ -23,13 +23,13 @@ export const getById = async (req: Request, res: Response) => {
     return;
   }
   if (!category.image) {
-    return  res.status(200).json({
+    return res.status(200).json({
       category,
     });
   }
-    const url = await getUrlImageS3('category', category?.image)
+  const url = await getUrlImageS3("category", category?.image);
 
-    category.image = url
+  category.image = url;
   res.status(200).json({
     category,
   });

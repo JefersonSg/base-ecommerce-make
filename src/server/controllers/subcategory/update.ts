@@ -2,13 +2,17 @@ import { Request, Response } from "express";
 import SubcategoryModel from "../../db/models/Subcategory";
 
 import mongoose from "mongoose";
-import { removeImageS3, updateImageToS3, uploadToS3 } from "../../shared/helpers/imageUpload";
+import {
+  removeImageS3,
+  updateImageToS3,
+  uploadToS3,
+} from "../../shared/helpers/imageUpload";
 const ObjectId = mongoose.Types.ObjectId;
 
 interface Subcategories {
   name: string;
-  description:string;
-  category:string;
+  description: string;
+  category: string;
   image: string;
 }
 
@@ -17,6 +21,7 @@ export const update = async (req: Request, res: Response) => {
 
   const name = req.body.name;
   const description = req.body.description;
+  const category = req.body.category;
   const image: any = req.file;
 
   const updateData: Subcategories | any = {};
@@ -46,18 +51,25 @@ export const update = async (req: Request, res: Response) => {
   }
 
   if (!description) {
-    res.status(422).json({ message: "A descrição da subcategoria é obrigatória!" });
+    res
+      .status(422)
+      .json({ message: "A descrição da subcategoria é obrigatória!" });
     return;
   } else {
     updateData.description = description;
   }
+  if (!category) {
+    res.status(422).json({ message: "A categoria é obrigatória!" });
+    return;
+  } else {
+    updateData.category = category;
+  }
 
   if (image && subcategory.image) {
-    const newImage = await uploadToS3('subcategory',image);
+    const newImage = await uploadToS3("subcategory", image);
     updateData.image = newImage;
 
-   await removeImageS3('subcategory',subcategory.image);
-
+    await removeImageS3("subcategory", subcategory.image);
   }
 
   await SubcategoryModel.findByIdAndUpdate(id, updateData);

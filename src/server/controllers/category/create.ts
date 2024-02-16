@@ -14,7 +14,7 @@ export const createCategory = async (req: Request, res: Response) => {
     return;
   }
 
-  const imageUpload = await uploadToS3('category',image);
+  const imageUpload = await uploadToS3("category", image);
 
   if (!imageUpload) {
     return res.status(404).send({

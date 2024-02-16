@@ -61,6 +61,9 @@ const Product = mongoose.model(
       active: {
         type: Boolean,
       },
+      comments: {
+        type: Array<Object>,
+      },
     },
     { timestamps: true },
   ),

@@ -16,19 +16,19 @@ app.use(express.json());
 // Configuração do CORS
 app.use((req, res, next) => {
   const allowedOrigins = [
-    'http://localhost:3000',
-    'https://base-ecommerce-git-formularios-jefersonsg.vercel.app',
-    'https://basecommerce.vercel.app'
+    "http://localhost:3000",
+    "https://base-ecommerce-git-formularios-jefersonsg.vercel.app",
+    "https://basecommerce.vercel.app",
   ];
 
-  const origin = req.headers.origin ?? '';
+  const origin = req.headers.origin ?? "";
 
   if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
+    res.header("Access-Control-Allow-Origin", origin);
   }
 
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
 

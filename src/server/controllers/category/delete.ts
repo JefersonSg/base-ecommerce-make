@@ -20,7 +20,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
   }
 
   try {
-    if (category.image) await removeImageS3('category', category.image);
+    if (category.image) await removeImageS3("category", category.image);
     await Category.findByIdAndRemove(id);
 
     res.status(200).json({ message: "Categoria removida com sucesso!" });

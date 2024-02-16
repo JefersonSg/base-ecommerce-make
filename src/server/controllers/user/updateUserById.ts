@@ -16,22 +16,21 @@ interface User {
 
 export const editUser = async (req: Request, res: Response) => {
   const token = getToken(req);
-  const user = await getUserByToken(res, token) as unknown as User;
+  const user = (await getUserByToken(res, token)) as unknown as User;
 
   const { name, email, password, confirmpassword } = req.body;
-  const {id} = req.params
+  const { id } = req.params;
 
   if (id && id !== user._id.toString()) {
     return res.status(400).json({
-      message: 'o Id do token e do parametro fornecido não coincidem'
-    })
+      message: "o Id do token e do parametro fornecido não coincidem",
+    });
   }
 
   if (req.file) {
-    const fileName = await uploadToS3('users',req.file)
+    const fileName = await uploadToS3("users", req.file);
     user.image = fileName;
   }
-
 
   user.name = name;
   const userExists = await User.findOne({ email: email });
@@ -60,10 +59,10 @@ export const editUser = async (req: Request, res: Response) => {
       { new: true },
     );
 
-    if (!updatedUser) return res.status(404).json({message: 'Erro ao atualizar'})
+    if (!updatedUser)
+      return res.status(404).json({ message: "Erro ao atualizar" });
 
-    updatedUser.password = ''
-
+    updatedUser.password = "";
 
     res.json({
       message: "Usuário atualizado com sucesso!",

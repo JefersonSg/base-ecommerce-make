@@ -2,12 +2,16 @@ import { Request, Response } from "express";
 import Category from "../../db/models/Category";
 
 import mongoose from "mongoose";
-import { removeImageS3, updateImageToS3, uploadToS3 } from "../../shared/helpers/imageUpload";
+import {
+  removeImageS3,
+  updateImageToS3,
+  uploadToS3,
+} from "../../shared/helpers/imageUpload";
 const ObjectId = mongoose.Types.ObjectId;
 
 interface Categories {
   name: string;
-  description:string;
+  description: string;
   image: string;
 }
 
@@ -45,21 +49,20 @@ export const updateCategory = async (req: Request, res: Response) => {
   }
 
   if (!description) {
-    res.status(422).json({ message: "A descrição da categoria é obrigatória!" });
+    res
+      .status(422)
+      .json({ message: "A descrição da categoria é obrigatória!" });
     return;
   } else {
     updateData.description = description;
   }
 
   if (image && category.image) {
-    const newImage = await uploadToS3('category',image);
+    const newImage = await uploadToS3("category", image);
+    await removeImageS3("category", category?.image);
     updateData.image = newImage;
   }
 
-  // delete Old Images
-  
-  if (category.image) await removeImageS3('category',category?.image);
-  
   await Category.findByIdAndUpdate(id, updateData);
 
   res

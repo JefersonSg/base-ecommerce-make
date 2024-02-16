@@ -13,7 +13,8 @@ import checkToken from "../shared/helpers/checkToken";
 router.post("/register", UserController.validationUser, UserController.create);
 router.post("/login", UserController.validationLoginUser, UserController.login);
 router.get("/checkuser", UserController.checkUser);
-router.get("/:id", UserController.getUserById);
+router.get("/get/:id", UserController.getUserById);
+router.get("/get", UserController.getUserById);
 router.patch(
   "/edit/:id",
   checkToken,

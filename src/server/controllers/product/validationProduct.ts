@@ -17,6 +17,6 @@ export const validationProduct = validate({
     colors: yup.string().required(),
     codeColors: yup.string().required(),
     amount: yup.string().required(),
-    active: yup.boolean().required()
+    active: yup.boolean().required(),
   }),
 });

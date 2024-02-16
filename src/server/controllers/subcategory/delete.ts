@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import Category from "../../db/models/Category";
 
 import mongoose from "mongoose";
 import { removeImageS3 } from "../../shared/helpers/imageUpload";
@@ -21,8 +20,10 @@ export const deleteSubcategory = async (req: Request, res: Response) => {
   }
 
   try {
-    if (Subcategory.image) await removeImageS3('subcategory', Subcategory.image);
-    await Category.findByIdAndRemove(id);
+    await SubcategoryModel.findByIdAndRemove(id);
+
+    if (Subcategory.image)
+      await removeImageS3("subcategory", Subcategory.image);
 
     res.status(200).json({ message: "Subcategoria removida com sucesso!" });
   } catch (erro) {

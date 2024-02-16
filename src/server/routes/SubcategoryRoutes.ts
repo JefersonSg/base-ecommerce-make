@@ -32,6 +32,10 @@ router.patch(
 );
 
 // DELETE
-router.delete("/delete/:id", checkToken, SubcategoryController.deleteSubcategory);
+router.delete(
+  "/delete/:id",
+  checkToken,
+  SubcategoryController.deleteSubcategory,
+);
 
 export default router;

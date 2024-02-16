@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import SubcategoryModel from "../../db/models/Subcategory";
 
-
 interface SubcategoryInterface {
   name: string;
   description: string;
@@ -10,10 +9,10 @@ interface SubcategoryInterface {
   image: string;
 }
 
-
-
 export const getAll = async (req: Request, res: Response) => {
-  const subcategories  = await SubcategoryModel.find().sort("-createdAt") as SubcategoryInterface[];
+  const subcategories = (await SubcategoryModel.find().sort(
+    "-createdAt",
+  )) as SubcategoryInterface[];
 
   if (!subcategories) {
     res.status(422).json({
@@ -22,15 +21,14 @@ export const getAll = async (req: Request, res: Response) => {
     return;
   }
 
-for (const subcategory of subcategories) {
+  for (const subcategory of subcategories) {
+    const url = await getUrlImageS3("subcategory", subcategory.image);
 
-  const url = await getUrlImageS3('subcategory',subcategory.image)
-
-  if (!subcategory?.image) {
-    return
+    if (!subcategory?.image) {
+      return;
+    }
+    subcategory.image = url ?? "";
   }
-  subcategory.image = url ?? ''
-}
 
   try {
     res.status(200).json({

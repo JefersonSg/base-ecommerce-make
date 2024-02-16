@@ -16,8 +16,6 @@ export const getById = async (req: Request, res: Response) => {
 
   const subcategory = await SubcategoryModel.findById(id);
 
-
-
   if (!subcategory) {
     res.status(422).json({
       message: "subcategoria não encontrada",
@@ -25,11 +23,11 @@ export const getById = async (req: Request, res: Response) => {
     return;
   }
 
-if (!subcategory.image) return res.status(200).json({subcategory});
+  if (!subcategory.image) return res.status(200).json({ subcategory });
 
-  const url = await getUrlImageS3('subcategory', subcategory?.image)
+  const url = await getUrlImageS3("subcategory", subcategory?.image);
 
-  subcategory.image = url
+  subcategory.image = url;
 
   res.status(200).json({
     subcategory,

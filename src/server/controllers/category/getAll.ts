@@ -4,7 +4,6 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 
-
 const bucketName = process.env.BUCKET_NAME ?? "";
 const bucketRegion = process.env.BUCKET_REGION ?? "";
 const secretAcessKey = process.env.SECRET_ACESS_KEY ?? "";
@@ -16,10 +15,8 @@ interface category {
   image: string;
 }
 
-
-
 export const getAll = async (req: Request, res: Response) => {
-  const categories  = await Category.find().sort("-createdAt") as category[];
+  const categories = (await Category.find().sort("-createdAt")) as category[];
 
   if (!categories) {
     res.status(422).json({
@@ -27,13 +24,11 @@ export const getAll = async (req: Request, res: Response) => {
     });
     return;
   }
-for (const category of categories) {
+  for (const category of categories) {
+    const url = await getUrlImageS3("category", category.image);
 
-  const url = await getUrlImageS3('category', category.image)
-
-  category.image = url ?? ''
-}
-
+    category.image = url ?? "";
+  }
 
   try {
     res.status(200).json({

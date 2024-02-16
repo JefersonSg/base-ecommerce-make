@@ -6,34 +6,17 @@ import {
   updateImageToS3,
   uploadToS3,
 } from "../../shared/helpers/imageUpload";
-
-interface ProductData {
-  name: string;
-  brand: string;
-  price: number;
-  size: string;
-  category: string;
-  subcategory: string;
-  description: string;
-  composition: string;
-  characteristic: string;
-  colors: string[];
-  codeColors: string[];
-  amount: number[];
-  promotion: boolean;
-  active: boolean;
-  promotionalPrice: number;
-}
+import { ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
 
 const ObjectId = mongoose.Types.ObjectId;
 
 export const updateProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const productData: ProductData = req.body;
+  const productData: ProductDataFrontEnd = req.body;
 
   const images: any = req.files;
 
-  const updateData: ProductData | any = {};
+  const updateData: ProductDataFrontEnd | any = {};
   // check if ID exists
 
   if (!ObjectId.isValid(id)) {
@@ -60,29 +43,30 @@ export const updateProduct = async (req: Request, res: Response) => {
   updateData.description = productData.description;
   updateData.price = productData.price;
   updateData.size = productData.size;
-  updateData.colors = productData.colors;
-  updateData.codeColors = productData.codeColors;
+  updateData.colors = productData.colors.split(",");
+  updateData.codeColors = productData.codeColors.split(",");
   updateData.composition = productData.composition;
   updateData.characteristic = productData.characteristic;
   updateData.active = productData.active;
   const stock = {
-    amount: productData.amount ?? [0]
+    amount: productData.amount.split(",").map((amount) => {
+      return +amount;
+    }),
   };
   updateData.stock = stock;
   updateData.promotion = productData.promotion;
+  updateData.comments = productData?.comments;
 
   if (productData.promotionalPrice) {
     updateData.promotionalPrice = productData.promotionalPrice;
   }
 
-  if (images?.length) {
-
+  if (images?.length > 0) {
     async function uploads() {
-      
       // Use `map` with `Promise.all` to await for all uploads to complete
       await Promise.all(
         images?.map(async (image: any, index: number) => {
-          const data = await uploadToS3('products',image);
+          const data = await uploadToS3("products", image);
           image.filename = data;
         }),
       );
@@ -98,9 +82,9 @@ export const updateProduct = async (req: Request, res: Response) => {
 
   // delete Old Images
   product.images.forEach((image) => {
-    removeImageS3('products',image);
+    removeImageS3("products", image);
   });
-  
+
   await Product.findByIdAndUpdate(id, updateData);
 
   res
