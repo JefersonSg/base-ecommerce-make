@@ -10,6 +10,7 @@ import * as getAll from './getAll'
 import * as createAddress from './address/create'
 import * as updateAddress from './address/updateAddressById'
 import * as getAdressById from './address/getById'
+import * as validarionAdress from './address/validationAdress'
 
 export const UserController = {
   ...create,
@@ -23,5 +24,6 @@ export const UserController = {
   ...validationRegister,
   ...createAddress,
   ...updateAddress,
-  ...getAdressById
+  ...getAdressById,
+  ...validarionAdress
 };

@@ -2,17 +2,25 @@ import { Request, Response } from "express";
 import "dotenv/config";
 import mongoose from "mongoose";
 import AdressModel from "../../../db/models/Adress";
+import getToken from "../../../shared/helpers/getToken";
+import getUserByToken from "../../../shared/helpers/getUserByToken";
+import { userInterface } from "../interfaceUser";
 const ObjectId = mongoose.Types.ObjectId;
 
 
 export const getAdressById = async (req: Request, res: Response) => {
-  const {adressId} = req.params;
-  if (!adressId) {
+
+  const token = await getToken(req)
+
+  const User = await getUserByToken(res, token) as unknown as userInterface
+
+
+  if (!User) {
     res.status(422).json({
-      message: "O Parametro de id não foi passado na requisção",
+      message: "Nenhum usuário encontrado no token",
     });
   }
-  if (!ObjectId.isValid(adressId)) {
+  if (!ObjectId.isValid(User?._id)) {
     res.status(422).json({
       message: "ID inválido, endereço não encontrado",
     });
@@ -20,7 +28,9 @@ export const getAdressById = async (req: Request, res: Response) => {
   }
 
 try {
-  const adress = await AdressModel.findById(adressId)
+  const adress = await AdressModel.findOne({userId: User._id})
+
+  console.log(adress)
 
   if (!adress) {
     res.status(422).json({ message: "Endereço não encontrado!" });

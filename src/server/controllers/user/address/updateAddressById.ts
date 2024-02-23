@@ -27,7 +27,7 @@ export const updateAddressById = async (req: Request, res: Response) => {
   }
 
   try {
-    const createAdress = new AdressModel({
+    const createAdress = {
       bairro : bairro ?? adress.bairro,
       cep : cep ?? adress.cep,
       cidade : cidade ?? adress.cidade,
@@ -36,8 +36,8 @@ export const updateAddressById = async (req: Request, res: Response) => {
       referencia : referencia ?? adress.referencia,
       rua : rua ?? adress.rua ,
       userId: adress.userId
-    })
-    const newAdress = await AdressModel.findOneAndUpdate({ _id: adressId },createAdress)
+    }
+    const newAdress = await AdressModel.findOneAndUpdate({ _id: adressId }, createAdress)
 
     if (!newAdress){
       return res.status(404).json({ message: "Erro ao atualizar o endereço" });
