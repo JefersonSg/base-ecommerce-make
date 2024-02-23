@@ -5,13 +5,23 @@ import * as getUserById from "./getById";
 import * as checkUser from "./checkUser";
 import * as validationLogin from "./validationLogin";
 import * as validationRegister from "./validationRegister";
+import * as getByToken from './getByToken'
+import * as getAll from './getAll'
+import * as createAddress from './address/create'
+import * as updateAddress from './address/updateAddressById'
+import * as getAdressById from './address/getById'
 
 export const UserController = {
   ...create,
   ...login,
   ...edit,
   ...getUserById,
+  ...getByToken,
+  ...getAll,
   ...checkUser,
   ...validationLogin,
   ...validationRegister,
+  ...createAddress,
+  ...updateAddress,
+  ...getAdressById
 };

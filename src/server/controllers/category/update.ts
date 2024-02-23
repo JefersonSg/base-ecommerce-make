@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import Category from "../../db/models/Category";
-
 import mongoose from "mongoose";
 import {
   removeImageS3,
-  updateImageToS3,
   uploadToS3,
 } from "../../shared/helpers/imageUpload";
 const ObjectId = mongoose.Types.ObjectId;
@@ -17,12 +15,10 @@ interface Categories {
 
 export const updateCategory = async (req: Request, res: Response) => {
   const id = req.params.id;
-
-  const name = req.body.name;
-  const description = req.body.description;
+  const {name, description} = req.body;
   const image: any = req.file;
 
-  const updateData: Categories | any = {};
+  const updateData: Categories | any = {name, description};
 
   if (!ObjectId.isValid(id)) {
     res.status(422).json({
@@ -40,32 +36,20 @@ export const updateCategory = async (req: Request, res: Response) => {
     return;
   }
 
-  // Validations
-  if (!name) {
-    res.status(422).json({ message: "O nome da categoria é obrigatória!" });
-    return;
-  } else {
-    updateData.name = name;
-  }
-
-  if (!description) {
-    res
-      .status(422)
-      .json({ message: "A descrição da categoria é obrigatória!" });
-    return;
-  } else {
-    updateData.description = description;
-  }
-
+try {
   if (image && category.image) {
     const newImage = await uploadToS3("category", image);
     await removeImageS3("category", category?.image);
     updateData.image = newImage;
   }
-
   await Category.findByIdAndUpdate(id, updateData);
 
-  res
+  return res
     .status(200)
-    .json({ category, message: "Categoria atualizada com sucesso!" });
-};
+    .json({ category, message: "Subcategoria atualizada com sucesso!" });
+} catch (error) {
+  console.log(error)
+  return res.status(401).json({
+  message: 'erro ao fazer update' + error
+})
+}};

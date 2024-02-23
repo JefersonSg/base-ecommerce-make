@@ -1,12 +1,9 @@
 export interface CommentInterface {
-  _id: string;
+  productId: string;
   userId: string;
   comment: string;
-  date: string;
-  hours: number;
-  images: string[];
+  image?: string[];
   stars: number;
-  edited: boolean;
 }
 
 export interface ProductDataFrontEnd {
@@ -49,4 +46,35 @@ export interface ProductDataBackEnd {
   active: boolean;
   promotionalPrice: number;
   comments: CommentInterface[];
+}
+
+export interface BannerInterface {
+  name: string;
+  link: string;
+  active: boolean;
+  images: string[]
+}
+export interface itemCart {
+  _id: string;
+  shoppingCartId: string;
+  productId: string;
+  color: string;
+  amount: string;
+  size: string;
+}
+
+export interface shoopingCart {
+  _id: string;
+  userId: string;
+}
+
+export interface AdressInterface {
+  userId: string;
+  cidade: string;
+  rua: string;
+  bairro: string;
+  cep: string;
+  complemento: string;
+  referencia: string;
+  numero: string;
 }

@@ -14,7 +14,7 @@ export const getProductByCategory = async (req: Request, res: Response) => {
     return;
   }
 
-  const products = await Product.find({ category: category });
+  const products = await Product.find({ category: category, active: true });
 
   if (!products) {
     res.status(422).json({

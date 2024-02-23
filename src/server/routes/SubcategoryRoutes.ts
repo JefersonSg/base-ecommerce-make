@@ -13,6 +13,7 @@ import { SubcategoryController } from "../controllers";
 // GET
 router.get("/", SubcategoryController.getAll);
 router.get("/:id", SubcategoryController.getById);
+router.get("/category/:id", SubcategoryController.getByCategory);
 
 // CREATE
 router.post(

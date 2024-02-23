@@ -2,24 +2,26 @@ import mongoose from "../conn";
 
 const { Schema } = mongoose;
 
-const Car = mongoose.model(
-  "metrics",
+const BannersModel = mongoose.model(
+  "banners",
   new Schema({
-    userID: {
-      type: String,
-    },
-    productID: {
+    name: {
       type: String,
       required: true,
     },
-    amount: {
+    link: {
       type: String,
       required: true,
     },
-    deteled: {
+    active: {
       type: Boolean,
+      required: true,
+    },
+    images: {
+      type: Array,
+      required: true
     },
   }),
 );
 
-export default Car;
+export default BannersModel;

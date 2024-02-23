@@ -9,13 +9,16 @@ import { ProductController } from "../controllers";
 
 // middleware
 import checkToken from "../shared/helpers/checkToken";
+import handleUploadError from "../shared/middleware/handleUploadError";
 
 // GETS
 router.get("/", ProductController.getAll);
+router.get("/actives", ProductController.getAllActives);
 router.get("/:id", ProductController.getProductById);
-router.get("/categories/:id", ProductController.getProductByCategory);
+router.get("/category/:id", ProductController.getProductByCategory);
+router.get("/subcategory/:id", ProductController.getBySubcategory);
 // comments
-router.get("/comments/:id", ProductController.getAllComments);
+router.get("/comments/get-all/:productId", ProductController.getAllComments);
 
 // POST
 router.post(
@@ -27,9 +30,9 @@ router.post(
 );
 // comments
 router.post(
-  "/create/comment/:id",
+  "/create/comment",
   checkToken,
-  upload.array("images"),
+  upload.single("image"),
   ProductController.createComment,
 );
 
@@ -43,14 +46,16 @@ router.patch(
 );
 // comments
 router.patch(
-  "/update/comment/:id",
+  "/update/comment",
   checkToken,
-  upload.array("images"),
+  upload.single("image"),
   ProductController.updateCommentById,
 );
 
 // DELETE
 router.delete("/delete/:id", checkToken, ProductController.removeProductById);
+
+// comment
 router.delete("/delete/comment/:id", checkToken, ProductController.removeCommentById);
 
 export default router;

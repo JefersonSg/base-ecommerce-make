@@ -5,6 +5,5 @@ export const validationCategory = validate({
   body: yup.object().shape({
     name: yup.string().required().min(3),
     description: yup.string().required().min(3),
-    image: yup.string().required().min(6),
   }),
 });

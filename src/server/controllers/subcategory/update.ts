@@ -19,12 +19,11 @@ interface Subcategories {
 export const update = async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const name = req.body.name;
-  const description = req.body.description;
-  const category = req.body.category;
+  const {name, description, category }  = req.body;
   const image: any = req.file;
-
-  const updateData: Subcategories | any = {};
+  const updateData: Subcategories | any = {
+    name, description, category
+  };
 
   if (!ObjectId.isValid(id)) {
     res.status(422).json({
@@ -43,38 +42,25 @@ export const update = async (req: Request, res: Response) => {
   }
 
   // Validations
-  if (!name) {
-    res.status(422).json({ message: "O nome da subcategoria é obrigatória!" });
-    return;
-  } else {
-    updateData.name = name;
-  }
 
-  if (!description) {
-    res
-      .status(422)
-      .json({ message: "A descrição da subcategoria é obrigatória!" });
-    return;
-  } else {
-    updateData.description = description;
-  }
-  if (!category) {
-    res.status(422).json({ message: "A categoria é obrigatória!" });
-    return;
-  } else {
-    updateData.category = category;
-  }
+try {
+if (image && subcategory.image) {
+  const newImage = await uploadToS3("subcategory", image);
+  
+  updateData.image = newImage;
 
-  if (image && subcategory.image) {
-    const newImage = await uploadToS3("subcategory", image);
-    updateData.image = newImage;
+  await removeImageS3("subcategory", subcategory.image);
+}
 
-    await removeImageS3("subcategory", subcategory.image);
-  }
+await SubcategoryModel.findByIdAndUpdate(id, updateData);
 
-  await SubcategoryModel.findByIdAndUpdate(id, updateData);
-
-  res
-    .status(200)
-    .json({ subcategory, message: "Categoria atualizada com sucesso!" });
+return res
+  .status(200)
+  .json({ subcategory, message: "Categoria atualizada com sucesso!" });
+} catch (error) {
+  console.log(error)
+  return res.status(401).json({
+    message: 'erro ao fazer update' + error
+  })
+}
 };

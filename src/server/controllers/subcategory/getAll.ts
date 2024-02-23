@@ -22,7 +22,7 @@ export const getAll = async (req: Request, res: Response) => {
   }
 
   for (const subcategory of subcategories) {
-    const url = await getUrlImageS3("subcategory", subcategory.image);
+    const url = await getUrlImageS3("subcategory", subcategory?.image);
 
     if (!subcategory?.image) {
       return;

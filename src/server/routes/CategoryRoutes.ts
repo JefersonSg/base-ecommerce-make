@@ -19,6 +19,7 @@ router.post(
   "/create",
   checkToken,
   upload.single("image"),
+  CategoryController.validationCategory,
   CategoryController.createCategory,
 );
 
@@ -27,6 +28,7 @@ router.patch(
   "/edit/:id",
   checkToken,
   upload.single("image"),
+  CategoryController.validationCategory,
   CategoryController.updateCategory,
 );
 

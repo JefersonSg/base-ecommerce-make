@@ -9,7 +9,7 @@ export const getById = async (req: Request, res: Response) => {
   const id = req.params.id;
   if (!ObjectId.isValid(id)) {
     res.status(422).json({
-      message: "ID inválido, Categoria não encontrada",
+      message: "ID inválido, Subcategoria não encontrada",
     });
     return;
   }

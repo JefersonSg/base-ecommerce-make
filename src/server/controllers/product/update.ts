@@ -57,6 +57,7 @@ export const updateProduct = async (req: Request, res: Response) => {
   updateData.promotion = productData.promotion;
   updateData.comments = productData?.comments;
 
+try {
   if (productData.promotionalPrice) {
     updateData.promotionalPrice = productData.promotionalPrice;
   }
@@ -70,6 +71,11 @@ export const updateProduct = async (req: Request, res: Response) => {
           image.filename = data;
         }),
       );
+    
+    // delete Old Images
+    product?.images.forEach((image) => {
+    removeImageS3("products", image);
+    });
     }
 
     updateData.images = [];
@@ -80,14 +86,17 @@ export const updateProduct = async (req: Request, res: Response) => {
     });
   }
 
-  // delete Old Images
-  product.images.forEach((image) => {
-    removeImageS3("products", image);
-  });
+  
 
   await Product.findByIdAndUpdate(id, updateData);
 
-  res
+  return res
     .status(200)
     .json({ updateData, message: "Produto atualizado com sucesso!" });
+} catch (error) {
+  console.log(error)
+  return res.status(401).json({
+    message: 'erro ao fazer update' + error
+  })
+}
 };

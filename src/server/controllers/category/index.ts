@@ -3,6 +3,7 @@ import * as update from "./update";
 import * as getById from "./getById";
 import * as getAll from "./getAll";
 import * as deleteCategory from "./delete";
+import * as validationCategory from "./validationCategory";
 
 export const CategoryController = {
   ...create,
@@ -10,4 +11,5 @@ export const CategoryController = {
   ...getById,
   ...getAll,
   ...deleteCategory,
+  ...validationCategory
 };

@@ -2,75 +2,57 @@ import { Request, Response } from "express";
 import ProductModel from '../../../db/models/Product'
 import mongoose from "mongoose";
 import { CommentInterface, ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
-import { uploadToS3 } from "../../../shared/helpers/imageUpload";
+import { removeImageS3, uploadToS3 } from "../../../shared/helpers/imageUpload";
+import CommentsModel from "../../../db/models/Comments";
 
 export const updateCommentById = async(req : Request,res : Response)=>{
-    const {id} = req.params
-    const {idComment, userId, comment, stars} = req.body
-    const images : any = req.files
+    const { commentId, comment, stars} = req.body
+    const image : any = req.file
 
     const ObjectId = mongoose.Types.ObjectId;
-
-    if (!ObjectId.isValid(id)) {
+    if (!ObjectId.isValid(commentId)) {
         res.status(422).json({
-          message: "ID inválido, produto não encontrado",
+          message: "ID inválido, comentário não encontrado",
         });
         return;
       }
 
-    const product = await ProductModel.findOne({_id: id}) as ProductDataBackEnd
+  try {
+    const commentData = await CommentsModel.findOne({ _id: commentId })
 
-    if (!product) {
+    if (!commentData) {
         return res.status(400).json({
-            message: 'Nenhum produto encontrado com esse ID'
+            message: 'Nenhum comentário encontrado com esse ID'
         })
     }
 
-    async function uploads() {
-      // Use `map` with `Promise.all` to wait for all uploads to complete
-      await Promise.all(
-        images?.map(async (image: any) => {
-          const ImageName = await uploadToS3( 'comments', image);
-          image.filename = ImageName;
-        }),
-      );
-    }
-
-      let findComment : CommentInterface[] = product.comments.filter(comment => comment._id === idComment)
-
-      let updateCommentData : CommentInterface = {
-        _id: findComment[0]._id ?? '',
-        userId: findComment[0].userId ?? '',
-        comment: comment ?? findComment[0].comment ?? '' ,
-        date: findComment[0].date ?? '',
-        hours: findComment[0].hours ?? '',
-        stars: stars ?? findComment[0].stars ?? 5 ,
-        images:  findComment[0].images,
-        edited: true
+    let updateCommentData : CommentInterface = {
+        userId: commentData?.userId ?? '',
+        stars: stars ?? commentData?.stars ?? 5,
+        productId: commentData.productId,
+        image: [],
+        comment
       }
-      
-      if (images && images.length > 0) {
 
-        await uploads()
-        updateCommentData.images = []
-        images?.map((image: any) => updateCommentData.images.push(image.filename));
-      } 
-    
-      const newComments = product.comments.map((commented)=>{
-          if (commented._id === idComment) {
-            return commented = updateCommentData
-          }
-          return commented
-        })
+      if (image) {
+        const newImage = await uploadToS3("comments", image);
+  
+        updateCommentData.image = [newImage]
+        await removeImageS3("comments", commentData?.image[0]);
+      } else {
+        updateCommentData.image = commentData.image
+      }
 
-      try {
-        const newComment = await ProductModel.findByIdAndUpdate( id, 
-          {comments: newComments})
+        const newComment = await CommentsModel.findByIdAndUpdate( commentId, updateCommentData )
+
         return res.status(200).json({
-          message: 'commentario inserido com sucesso', newComments
+          message: 'commentario atualizado com sucesso', newComment
         })
       } catch (error) {
         console.log(error)
+        return res.status(400).json({
+          message: 'Erro na requisição: ' + error
+        })
       }
 
     }

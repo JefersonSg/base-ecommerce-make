@@ -3,11 +3,10 @@ import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import Category from "../../db/models/Category";
 
 export const createCategory = async (req: Request, res: Response) => {
-  const name = req.body.name;
-  const description = req.body.description;
+  const {name, description} = req.body;
   const image: any = req.file;
 
-  if (!image) {
+  if (image && image?.length === 0) {
     res.status(422).json({
       message: "A imagem é obrigatoria",
     });
@@ -28,6 +27,7 @@ export const createCategory = async (req: Request, res: Response) => {
     description,
     image: imageUpload,
   });
+  
   try {
     const newCategory = await category.save();
     res.status(200).json({
