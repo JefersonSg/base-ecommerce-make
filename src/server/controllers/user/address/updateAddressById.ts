@@ -1,51 +1,43 @@
 import { Request, Response } from "express";
-import User from "../../../db/models/User";
-import AdressModel from "../../../db/models/Adress";
-import { AdressInterface } from "../../../shared/helpers/Interfaces";
+import AddressModel from "../../../db/models/Address";
 
-interface User {
-  _id: string;
-  name: string;
-  surname: string;
-  email: string;
-  image: string;
-  password: string;
-}
 
 export const updateAddressById = async (req: Request, res: Response) => {
+  const { nome, cidade, rua, bairro, cep,telefone, complemento, referencia, numero, uf } = req.body;
+  const { addressId } = req.params;
 
-  const { cidade, rua, bairro, cep, complemento, referencia, numero } = req.body;
+  const address = await AddressModel.findOne({ _id: addressId })
 
-  const { adressId } = req.params;
-
-  const adress = await AdressModel.findOne({ _id: adressId })
-
-  if (!adress) {
+  if (!address) {
     return res.status(404).json({
       message: 'Nenhum Endereço encontrado com o id'
     })
   }
 
   try {
-    const createAdress = {
-      bairro : bairro ?? adress.bairro,
-      cep : cep ?? adress.cep,
-      cidade : cidade ?? adress.cidade,
-      complemento : complemento ?? adress.complemento,
-      numero : numero ?? adress.numero,
-      referencia : referencia ?? adress.referencia,
-      rua : rua ?? adress.rua ,
-      userId: adress.userId
+    const createAddress = {
+      userId: address.userId,
+      nome: nome ?? address.nome,
+      telefone : telefone ?? address.telefone ,
+      cep : cep ?? address.cep,
+      cidade : cidade ?? address.cidade,
+      uf : uf ?? address.uf,
+      bairro : bairro ?? address.bairro,
+      rua : rua ?? address.rua ,
+      numero : numero ?? address.numero,
+      referencia : referencia ?? address.referencia,
+      complemento : complemento ?? address.complemento,
     }
-    const newAdress = await AdressModel.findOneAndUpdate({ _id: adressId }, createAdress)
 
-    if (!newAdress){
+    const newAddress = await AddressModel.findOneAndUpdate({ _id: addressId }, createAddress)
+
+    if (!newAddress){
       return res.status(404).json({ message: "Erro ao atualizar o endereço" });
     }
 
     return res.json({
       message: "Endereço atualizado com sucesso!",
-      data: newAdress,
+      data: newAddress,
     });
   } catch (error) {
     console.log('erro ao atualizar endereço', error)

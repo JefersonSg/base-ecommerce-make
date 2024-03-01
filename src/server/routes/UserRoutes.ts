@@ -23,13 +23,17 @@ router.patch(
   UserController.editUser,
 );
 
-// adress
-router.get("/adress/", checkToken,UserController.getAdressById);
-router.post("/adress/create", checkToken, UserController.validationCreateAdress, UserController.createAdress);
-router.patch(
-  "/adress/update/:adressId",
+// address
+router.get("/address", checkToken, UserController.getAddressById);
+router.post("/address/create", 
   checkToken,
-  UserController.validationCreateAdress,
+  UserController.validationCreateAddress,
+  UserController.createAddress);
+
+router.patch(
+  "/address/update/:addressId",
+  checkToken,
+  UserController.validationCreateAddress,
   UserController.updateAddressById,
 );
 

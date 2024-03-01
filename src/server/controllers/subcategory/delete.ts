@@ -26,7 +26,7 @@ export const deleteSubcategory = async (req: Request, res: Response) => {
       await removeImageS3("subcategory", Subcategory.image);
 
     res.status(200).json({ message: "Subcategoria removida com sucesso!" });
-  } catch (erro) {
-    console.log(erro);
+  } catch (error) {
+    console.log(error);
   }
 };

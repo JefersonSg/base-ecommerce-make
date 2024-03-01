@@ -32,6 +32,7 @@ export const update = async (req: Request, res: Response) => {
     return;
   }
 
+  try {
   const subcategory = await SubcategoryModel.findById(id);
 
   if (!subcategory) {
@@ -43,7 +44,6 @@ export const update = async (req: Request, res: Response) => {
 
   // Validations
 
-try {
 if (image && subcategory.image) {
   const newImage = await uploadToS3("subcategory", image);
   

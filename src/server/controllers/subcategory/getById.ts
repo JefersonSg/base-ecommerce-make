@@ -14,7 +14,7 @@ export const getById = async (req: Request, res: Response) => {
     return;
   }
 
-  const subcategory = await SubcategoryModel.findById(id);
+try {  const subcategory = await SubcategoryModel.findById(id);
 
   if (!subcategory) {
     res.status(422).json({
@@ -32,4 +32,10 @@ export const getById = async (req: Request, res: Response) => {
   res.status(200).json({
     subcategory,
   });
+  
+} catch (error) {
+  res.status(400).json({
+    message: "erro no get subcategory by id " + error
+  })
+}
 };

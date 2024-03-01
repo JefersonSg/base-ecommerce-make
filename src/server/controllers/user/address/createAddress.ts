@@ -1,27 +1,13 @@
 import { Request, Response } from "express";
-import User from "../../../db/models/User";
-import AdressModel from "../../../db/models/Adress";
+import AddressModel from "../../../db/models/Address";
 import getUserByToken from "../../../shared/helpers/getUserByToken";
 import getToken from "../../../shared/helpers/getToken";
 import { userInterface } from "../interfaceUser";
 
-interface User {
-  _id: string;
-  name: string;
-  surname: string;
-  email: string;
-  image: string;
-  password: string;
-}
-
-export const createAdress = async (req: Request, res: Response) => {
-
-  const { cidade, rua, bairro, cep, complemento, referencia, numero } = req.body;
-
-  const { id } = req.params;
+export const createAddress = async (req: Request, res: Response) => {
+  const { nome, cidade, rua, bairro, cep, complemento, referencia, numero, telefone, uf } = req.body;
 
   const token = await getToken(req)
-
   const user = await getUserByToken(res, token) as unknown as userInterface
 
   if (!user) {
@@ -30,33 +16,35 @@ export const createAdress = async (req: Request, res: Response) => {
     })
   }
 
-  const oldAdress = await AdressModel.find({userId: user?._id})
+  const oldAddress = await AddressModel.find({userId: user?._id})
 
-  if (oldAdress) {
+  if (oldAddress[0]) {
     return res.status(409).json({
       message: 'Usuário ja tem endereço cadastrado'
     })
   }
 
-  console.log(oldAdress)
   try {
-    const createAdress = await new AdressModel({
+    const createAddress = await new AddressModel({
       userId: user._id,
-      bairro,
+      nome,
+      telefone,
       cep,
       cidade,
-      complemento,
+      uf,
+      bairro,
+      rua,
       numero,
       referencia,
-      rua
+      complemento,
     }).save()
 
-    if (!createAdress)
+    if (!createAddress)
       return res.status(404).json({ message: "Erro ao atualizar" });
 
     res.json({
       message: "Endereço criado com sucesso!",
-      data: createAdress,
+      data: createAddress,
     });
   } catch (error) {
     res.status(500).json({ message: error });

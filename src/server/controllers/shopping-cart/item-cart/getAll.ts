@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import ShoppingCart from "../../../db/models/ShoppingCart";
 import ItemCart from "../../../db/models/ItemCart";
-import { itemCart, shoopingCart } from "../../../shared/helpers/Interfaces";
-
 
 export const getAllItemsCart = async (req: Request, res: Response) => {
   const { userId } = req.params

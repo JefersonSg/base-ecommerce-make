@@ -4,6 +4,10 @@ import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import { ProductDataBackEnd } from "../../shared/helpers/Interfaces";
 
 export const getAllActives = async (req: Request, res: Response) => {
+
+  const {skip} = req.params
+
+
   const products = (await Product.find({active: true}).sort(
     "-createdAt",
   )) as unknown as ProductDataBackEnd[];

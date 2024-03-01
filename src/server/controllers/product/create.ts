@@ -50,7 +50,6 @@ export const create = async (req: Request, res: Response) => {
     promotion: productData.promotion,
     promotionalPrice: productData.promotionalPrice,
     active: productData.active,
-    comments: [],
   });
 
   await uploads();

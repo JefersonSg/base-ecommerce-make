@@ -1,7 +1,6 @@
 import express from "express";
 const router = express.Router();
 import multer from "multer";
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -16,6 +15,7 @@ router.get("/", ProductController.getAll);
 router.get("/actives", ProductController.getAllActives);
 router.get("/:id", ProductController.getProductById);
 router.get("/category/:id", ProductController.getProductByCategory);
+router.get("/name/:name", ProductController.getProductByCategory);
 router.get("/subcategory/:id", ProductController.getBySubcategory);
 // comments
 router.get("/comments/get-all/:productId", ProductController.getAllComments);

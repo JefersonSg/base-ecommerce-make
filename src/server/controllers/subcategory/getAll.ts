@@ -35,8 +35,9 @@ export const getAll = async (req: Request, res: Response) => {
       subcategories,
     });
     return;
-  } catch (erro) {
-    res.status(500).json({ message: erro });
+  } catch (error) {
+    res.status(500).json({ message: error });
+    console.log(error)
     return;
   }
 };

@@ -58,11 +58,18 @@ const Product = mongoose.model(
       promotionalPrice: {
         type: Number,
       },
+
       active: {
         type: Boolean,
       },
-      comments: {
-        type: Array<Object>,
+      sales : {
+        type: Number,
+        required: true,
+        default: 0
+      },
+      assessment : {
+        type: Number,
+        required: true
       },
     },
     { timestamps: true },

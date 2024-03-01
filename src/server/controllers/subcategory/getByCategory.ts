@@ -22,9 +22,9 @@ export const getByCategory = async (req: Request, res: Response) => {
     return;
   }
 
+try {
   const subcategories = await SubcategoryModel.find({category: categoryId}) as SubcategoryInterface[];
 
-  console.log(subcategories)
   if (!subcategories) {
     res.status(422).json({
       message: "nenhuma subcategoria encontrada",
@@ -44,4 +44,9 @@ export const getByCategory = async (req: Request, res: Response) => {
   res.status(200).json(
      { subcategories},
   );
+} catch (error) {
+  res.status(400).json({
+    message: 'erro'  + error 
+  })
+}
 };

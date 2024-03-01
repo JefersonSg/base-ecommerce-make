@@ -2,14 +2,26 @@ import mongoose from "../conn";
 
 const { Schema } = mongoose;
 
-const AdressModel = mongoose.model(
-  "adress",
+const AddressModel = mongoose.model(
+  "address",
   new Schema({
     userId: {
       type: String,
       required: true,
     },
+    nome: {
+      type: String,
+      required: true,
+    },
+    cep: {
+      type: String,
+      required: true,
+    },
     cidade: {
+      type: String,
+      required: true,
+    },
+    uf: {
       type: String,
       required: true,
     },
@@ -18,10 +30,6 @@ const AdressModel = mongoose.model(
       required: true,
     },
     bairro: {
-      type: String,
-      required: true,
-    },
-    cep: {
       type: String,
       required: true,
     },
@@ -37,7 +45,11 @@ const AdressModel = mongoose.model(
       type: String,
       required: true,
     },
+    telefone: {
+      type: String,
+      required: true,
+    },
   }),
 );
 
-export default AdressModel;
+export default AddressModel;

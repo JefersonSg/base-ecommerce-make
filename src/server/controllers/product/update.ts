@@ -55,7 +55,6 @@ export const updateProduct = async (req: Request, res: Response) => {
   };
   updateData.stock = stock;
   updateData.promotion = productData.promotion;
-  updateData.comments = productData?.comments;
 
 try {
   if (productData.promotionalPrice) {

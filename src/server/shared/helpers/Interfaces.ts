@@ -63,12 +63,12 @@ export interface itemCart {
   size: string;
 }
 
-export interface shoopingCart {
+export interface shoppingCart {
   _id: string;
   userId: string;
 }
 
-export interface AdressInterface {
+export interface AddressInterface {
   userId: string;
   cidade: string;
   rua: string;
