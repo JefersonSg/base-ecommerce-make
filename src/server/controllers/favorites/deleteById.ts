@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 
-import mongoose from "mongoose";
 import FavoriteModel from "../../db/models/Favorite";
-const ObjectId = mongoose.Types.ObjectId;
+import testeID from "../../shared/helpers/verifyId";
 
 export const deleteById = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const isValidId = testeID(id)
 
-  if (!ObjectId.isValid(id)) {
+  if (!isValidId) {
     res.status(422).json({ message: "ID inválido!" });
     return;
   }

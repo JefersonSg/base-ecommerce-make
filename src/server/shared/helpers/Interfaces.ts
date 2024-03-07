@@ -48,11 +48,23 @@ export interface ProductDataBackEnd {
   comments: CommentInterface[];
 }
 
+export interface CategoryInterface {
+  name: string;
+  description: string;
+  image: string;
+}
+export interface SubcategoryInterface {
+  name: string;
+  description: string;
+  category: string;
+  image: string;
+}
 export interface BannerInterface {
   name: string;
   link: string;
   active: boolean;
-  images: string[]
+  imageMobile: string;
+  imageDesktop: string;
 }
 export interface itemCart {
   _id: string;

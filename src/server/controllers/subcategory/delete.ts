@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 
-import mongoose from "mongoose";
 import { removeImageS3 } from "../../shared/helpers/imageUpload";
 import SubcategoryModel from "../../db/models/Subcategory";
-const ObjectId = mongoose.Types.ObjectId;
+import testeID from "../../shared/helpers/verifyId";
 
 export const deleteSubcategory = async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  if (!ObjectId.isValid(id)) {
+  if (!testeID(id)) {
     res.status(422).json({ message: "ID inválido!" });
     return;
   }

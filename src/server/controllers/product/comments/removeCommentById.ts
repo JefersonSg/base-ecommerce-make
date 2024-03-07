@@ -4,14 +4,15 @@ import mongoose from "mongoose";
 import { ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
 import { removeImageS3 } from "../../../shared/helpers/imageUpload";
 import CommentsModel from "../../../db/models/Comments";
+import testeID from "../../../shared/helpers/verifyId";
 
 
 export const removeCommentById = async(req : Request,res : Response)=>{
     const { id } = req.params
 
-    const ObjectId = mongoose.Types.ObjectId;
+    const isValidId = testeID(id)
 
-    if (!ObjectId.isValid(id)) {
+    if (!isValidId) {
         res.status(422).json({
           message: "ID inválido " + id,
         });

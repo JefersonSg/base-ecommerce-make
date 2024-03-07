@@ -1,28 +1,24 @@
 import { Request, Response } from "express";
-import Category from "../../db/models/Category";
 
-import mongoose from "mongoose";
 import {
   removeImageS3,
   uploadToS3,
 } from "../../shared/helpers/imageUpload";
 import BannersModel from "../../db/models/Banner";
 import { BannerInterface } from "../../shared/helpers/Interfaces";
-const ObjectId = mongoose.Types.ObjectId;
-
-
+import testeID from "../../shared/helpers/verifyId";
 
 export const updateBanner = async (req: Request, res: Response) => {
   const id = req.params.id;
   const {name, link, active} = req.body;
-
   const images: any = req.files;
-
   const updateData: BannerInterface | any = {
     name, link, active
   };
 
-  if (!ObjectId.isValid(id)) {
+  const isValidId = testeID(id)
+
+  if (isValidId) {
     res.status(422).json({
       message: "ID inválido, Banner não encontrada",
     });
@@ -63,17 +59,14 @@ try {
         }),
       );
     }
-    updateData.images = [];
 
     await uploads();
 
-    images.map((image: any) => {
-      updateData.images.push(image.filename);
-    });
+    updateData.imageMobile = images[0].filename;
+    updateData.imageDesktop = images[1].filename;
 
-    banner.images.forEach((image) => {
-      removeImageS3("banners", image);
-    });
+     await removeImageS3("banners", banner.imageDesktop);
+     await removeImageS3("banners", banner.imageMobile);
   }
 
   const newBanner = await BannersModel.findByIdAndUpdate(id, updateData);

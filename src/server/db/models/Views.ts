@@ -7,14 +7,15 @@ const { Schema } = mongoose;
     new Schema(
       {
         product: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Produto'
+            type: String,
+            ref: 'Produto',
+            required: true
           },
-          date: {
-            type: Date,
-            default: Date.now
-          }
-      }
+          userId: {
+            type: String,
+            ref: 'User'
+          },
+      }, {timestamps: true}
     ),
   );
 

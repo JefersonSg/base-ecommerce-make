@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import ProductModel from '../../../db/models/Product'
-import mongoose from "mongoose";
 import {  ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
 import { uploadToS3 } from "../../../shared/helpers/imageUpload";
 import CommentsModel from "../../../db/models/Comments";
+import testeID from "../../../shared/helpers/verifyId";
 
 export const createComment = async(req : Request,res : Response)=>{
     const  {userId, comment, stars, productId}  = req.body 
@@ -14,9 +14,9 @@ export const createComment = async(req : Request,res : Response)=>{
       message: 'insira as informações do comentario'
     })
   }
-    const ObjectId = mongoose.Types.ObjectId;
+    const isValidId = testeID(productId)
 
-    if (!ObjectId.isValid(productId)) {
+    if (!isValidId) {
         res.status(422).json({
           message: "ID inválido, produto não encontrado",
         });

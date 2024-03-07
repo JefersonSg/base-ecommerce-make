@@ -1,31 +1,22 @@
 import { Request, Response } from "express";
 import SubcategoryModel from "../../db/models/Subcategory";
-
-import mongoose from "mongoose";
 import {
   removeImageS3,
-  updateImageToS3,
   uploadToS3,
 } from "../../shared/helpers/imageUpload";
-const ObjectId = mongoose.Types.ObjectId;
-
-interface Subcategories {
-  name: string;
-  description: string;
-  category: string;
-  image: string;
-}
+import testeID from "../../shared/helpers/verifyId";
+import { SubcategoryInterface } from "../../shared/helpers/Interfaces";
 
 export const update = async (req: Request, res: Response) => {
   const id = req.params.id;
 
   const {name, description, category }  = req.body;
   const image: any = req.file;
-  const updateData: Subcategories | any = {
+  const updateData: SubcategoryInterface | any = {
     name, description, category
   };
 
-  if (!ObjectId.isValid(id)) {
+  if (!testeID(id)) {
     res.status(422).json({
       message: "ID inválido, Categoria não encontrada",
     });

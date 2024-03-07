@@ -12,6 +12,10 @@ import * as updateComment from "./comments/updateCommentById";
 import * as removeCommentById from "./comments/removeCommentById";
 import * as getAllActives from './getAllActives';
 import * as getByName from './getByName';
+import * as addView from './views/addView';
+import * as getViewsByProductId from './views/getViewsByProductId';
+import * as getAllProductsViews from './views/getAllProductsViews'
+import * as getBySales from './getBySales'
 
 export const ProductController = {
   ...create,
@@ -20,6 +24,7 @@ export const ProductController = {
   ...getAll,
   ...getByCategory,
   ...getBySubcategory,
+  ...getBySales,
   ...removeProductById,
   ...validationProduct,
   ...getComments,
@@ -27,5 +32,8 @@ export const ProductController = {
   ...updateComment,
   ...removeCommentById,
   ...getAllActives,
-  ...getByName
+  ...getByName,
+  ...addView,
+  ...getViewsByProductId,
+  ...getAllProductsViews
 };

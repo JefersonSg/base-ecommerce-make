@@ -1,11 +1,8 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
 import Product from "../../db/models/Product";
 import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 
-const ObjectId = mongoose.Types.ObjectId;
-
-export const getProductByCategory = async (req: Request, res: Response) => {
+export const getByName = async (req: Request, res: Response) => {
   const {name} = req.params;
 
   if (!name) {

@@ -3,7 +3,6 @@ import FavoriteModel from "../../db/models/Favorite";
 
 export const create = async (req: Request, res: Response) => {
   const {userId, productId} = req.body;
-
   const oldFavorite = await FavoriteModel.find({userId , productId})
   
   if(oldFavorite[0]) {
@@ -11,7 +10,6 @@ export const create = async (req: Request, res: Response) => {
       message: 'Favorito ja adicionado no sistema'
     })
   }
-
 
 const Favorite = new FavoriteModel(
     {

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
-import Category from "../../db/models/Category";
 import SubcategoryModel from "../../db/models/Subcategory";
 
 export const createSubcategory = async (req: Request, res: Response) => {

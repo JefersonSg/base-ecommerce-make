@@ -1,21 +1,14 @@
 import { Request, Response } from "express";
 
-import mongoose from "mongoose";
 import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import SubcategoryModel from "../../db/models/Subcategory";
-const ObjectId = mongoose.Types.ObjectId;
-
-
-interface SubcategoryInterface {
-  name: string;
-  description: string;
-  category: string;
-  image: string;
-}
+import testeID from "../../shared/helpers/verifyId";
+import { SubcategoryInterface } from "../../shared/helpers/Interfaces";
 
 export const getByCategory = async (req: Request, res: Response) => {
   const categoryId = req.params.id;
-  if (!ObjectId.isValid(categoryId)) {
+
+  if (!testeID(categoryId)) {
     res.status(422).json({
       message: "ID inválido, Categoria não encontrada",
     });
@@ -23,7 +16,7 @@ export const getByCategory = async (req: Request, res: Response) => {
   }
 
 try {
-  const subcategories = await SubcategoryModel.find({category: categoryId}) as SubcategoryInterface[];
+  const subcategories = await SubcategoryModel.find({category: categoryId});
 
   if (!subcategories) {
     res.status(422).json({
@@ -33,7 +26,7 @@ try {
   }
 
   for (const subcategory of subcategories) {
-    const url = await getUrlImageS3("subcategory", subcategory?.image);
+    const url = await getUrlImageS3("subcategory", subcategory.image);
 
     if (!subcategory?.image) {
       return;

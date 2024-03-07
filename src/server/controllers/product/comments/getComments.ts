@@ -1,16 +1,15 @@
 import { Request, Response } from "express";
 import ProductModel from "../../../db/models/Product";
-import mongoose from "mongoose";
 import { ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
 import getUrlImageS3 from "../../../shared/helpers/getUrlImageS3";
-import { getUserById } from "../../user/getById";
 import CommentsModel from "../../../db/models/Comments";
+import testeID from "../../../shared/helpers/verifyId";
 
 export const getAllComments = async (req: Request, res: Response) => {
   const { productId } = req.params;
-  const ObjectId = mongoose.Types.ObjectId;
+  const isValidId = testeID(productId)
 
-  if (!ObjectId.isValid(productId)) {
+  if (!isValidId) {
     res.status(422).json({
       message: "ID inválido, nenhum produco encontrado com esse ID",
     });

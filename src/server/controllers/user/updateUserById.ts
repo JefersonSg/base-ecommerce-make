@@ -16,7 +16,13 @@ interface User {
 
 export const editUser = async (req: Request, res: Response) => {
   const token = getToken(req);
-  const user = (await getUserByToken(res, token)) as unknown as User;
+  const user = await getUserByToken(res, token) as unknown as User;
+
+  if (!user) {
+    return res.status(404).json({
+      message: 'nenhum usuario encontrado'
+    })
+  }
 
   const { name, email, password, confirmpassword } = req.body;
   const { id } = req.params;

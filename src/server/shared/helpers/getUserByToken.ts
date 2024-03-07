@@ -10,8 +10,9 @@ interface DecodedToken {
 }
 
 const getUserByToken = async (res: Response, token: string) => {
+  
   if (!token) {
-    return res.status(401).json({ message: "Acesso Negado" });
+    return false
   }
   const secret = process.env.SECRET_JWT ?? "";
 
@@ -22,9 +23,7 @@ const getUserByToken = async (res: Response, token: string) => {
   const user = await User.findOne({ _id: userId });
 
   if (!user) {
-    return res.status(404).json({
-      message: "erro ao buscar usuario",
-    });
+    return false
   }
 
   return user;

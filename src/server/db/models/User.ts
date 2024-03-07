@@ -2,6 +2,9 @@ import mongoose from "../conn";
 
 const { Schema } = mongoose;
 
+const collectionName = process.env.MONGO_COLLECTION
+
+
 const User = mongoose.model(
   "user",
   new Schema(

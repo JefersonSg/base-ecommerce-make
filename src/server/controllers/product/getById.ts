@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import Product from "../../db/models/Product";
-import mongoose from "mongoose";
 import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
+import testeID from "../../shared/helpers/verifyId";
 
-const ObjectId = mongoose.Types.ObjectId;
 
 export const getProductById = async (req: Request, res: Response) => {
   const id = req.params.id;
-  if (!ObjectId.isValid(id)) {
+
+  const isValidId = testeID(id)
+
+  if (!isValidId) {
     res.status(422).json({
       message: "ID inválido, produto não encontrado",
     });

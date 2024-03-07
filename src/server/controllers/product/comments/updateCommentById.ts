@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import ProductModel from '../../../db/models/Product'
-import mongoose from "mongoose";
 import { CommentInterface, ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
 import { removeImageS3, uploadToS3 } from "../../../shared/helpers/imageUpload";
 import CommentsModel from "../../../db/models/Comments";
+import testeID from "../../../shared/helpers/verifyId";
 
 export const updateCommentById = async(req : Request,res : Response)=>{
     const { commentId, comment, stars} = req.body
     const image : any = req.file
 
-    const ObjectId = mongoose.Types.ObjectId;
-    if (!ObjectId.isValid(commentId)) {
+    const isValidId = testeID(commentId)
+
+    if (!isValidId) {
         res.status(422).json({
           message: "ID inválido, comentário não encontrado",
         });

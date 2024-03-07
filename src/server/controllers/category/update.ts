@@ -1,26 +1,22 @@
 import { Request, Response } from "express";
 import Category from "../../db/models/Category";
-import mongoose from "mongoose";
 import {
   removeImageS3,
   uploadToS3,
 } from "../../shared/helpers/imageUpload";
-const ObjectId = mongoose.Types.ObjectId;
+import testeID from "../../shared/helpers/verifyId";
+import { CategoryInterface } from "../../shared/helpers/Interfaces";
 
-interface Categories {
-  name: string;
-  description: string;
-  image: string;
-}
 
 export const updateCategory = async (req: Request, res: Response) => {
   const id = req.params.id;
   const {name, description} = req.body;
   const image: any = req.file;
 
-  const updateData: Categories | any = {name, description};
+  const updateData: CategoryInterface | any = {name, description};
+  const isValidId = testeID(id)
 
-  if (!ObjectId.isValid(id)) {
+  if (!isValidId) {
     res.status(422).json({
       message: "ID inválido, Categoria não encontrada",
     });

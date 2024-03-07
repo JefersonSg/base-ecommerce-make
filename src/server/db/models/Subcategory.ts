@@ -19,6 +19,7 @@ const SubcategoryModel = mongoose.model(
     },
     image: {
       type: String,
+      required: true
     },
   }),
 );

@@ -17,8 +17,12 @@ const BannersModel = mongoose.model(
       type: Boolean,
       required: true,
     },
-    images: {
-      type: Array,
+    imageMobile: {
+      type: String,
+      required: true
+    },
+    imageDesktop: {
+      type: String,
       required: true
     },
   }),

@@ -5,8 +5,6 @@ import createUserToken from "../../shared/helpers/createUserToken";
 import "dotenv/config";
 import { userInterface } from "./interfaceUser";
 
-const id_admin = process.env.ID_ADMIN ?? "";
-
 export const login = async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;

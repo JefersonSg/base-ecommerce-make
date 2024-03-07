@@ -5,7 +5,7 @@ export const getAll = async (req: Request, res: Response) => {
 try {
   let users = await User.find();
 
-  if (!users) {
+  if (!users[0]) {
     res.status(422).json({ message: "nenhum usuario encontrado!" });
     return;
   }

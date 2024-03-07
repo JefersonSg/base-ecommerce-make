@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
 import Product from "../../db/models/Product";
 import {
   removeImageS3,
-  updateImageToS3,
   uploadToS3,
 } from "../../shared/helpers/imageUpload";
 import { ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
+import testeID from "../../shared/helpers/verifyId";
 
-const ObjectId = mongoose.Types.ObjectId;
 
 export const updateProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -19,12 +17,14 @@ export const updateProduct = async (req: Request, res: Response) => {
   const updateData: ProductDataFrontEnd | any = {};
   // check if ID exists
 
-  if (!ObjectId.isValid(id)) {
+  const isValidId = testeID(id)
+  if (!isValidId) {
     res.status(422).json({
       message: "ID inválido, produto não encontrado",
     });
     return;
   }
+
   // check if Product exists
 
   const product = await Product.findOne({ _id: id });

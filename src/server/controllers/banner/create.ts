@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import BannersModel from "../../db/models/Banner";
-import { BannerInterface } from "../../shared/helpers/Interfaces";
 
 export const create = async (req: Request, res: Response) => {
   const {name, link, active} = req.body;
@@ -28,7 +27,6 @@ export const create = async (req: Request, res: Response) => {
     return;
   }
 
-
   async function uploads() {
     // Use `map` with `Promise.all` to wait for all uploads to complete
     await Promise.all(
@@ -39,19 +37,17 @@ export const create = async (req: Request, res: Response) => {
     );
   }
 
-const Banner = new BannersModel(
-    {
-      name,
-      link,
-      active,
-      images: [],
-    }
-  );
     await uploads()
 
-    await images?.map((image: any) => {
-      Banner?.images?.push(image?.filename);
-    });
+    const Banner = new BannersModel(
+      {
+        name,
+        link,
+        active,
+        imageMobile: images?.[0]?.filename,
+        imageDesktop: images?.[1]?.filename,
+      }
+    );
 
   try {
     const newBanner = await Banner.save();

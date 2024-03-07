@@ -1,11 +1,8 @@
 import { Request, Response } from "express";
-import User from "../../db/models/User";
 import getUserByToken from "../../shared/helpers/getUserByToken";
 import getToken from "../../shared/helpers/getToken";
 import "dotenv/config";
 import { userInterface } from "./interfaceUser";
-import mongoose from "mongoose";
-const ObjectId = mongoose.Types.ObjectId;
 
 const id_admin = process.env.ID_ADMIN ?? "";
 
