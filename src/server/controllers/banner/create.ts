@@ -6,7 +6,7 @@ export const create = async (req: Request, res: Response) => {
   const {name, link, active} = req.body;
   const images: any = req.files;
 
-  if (images && images.length === 0) {
+  if (images?.length === 0) {
     res.status(422).json({
       message: "A imagem é obrigatoria",
     });

@@ -10,7 +10,7 @@ import testeID from "../../shared/helpers/verifyId";
 
 export const updateBanner = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const {name, link, active} = req.body;
+  const {name, link, active, mobile, desktop} = req.body;
   const images: any = req.files;
   const updateData: BannerInterface | any = {
     name, link, active
@@ -18,7 +18,7 @@ export const updateBanner = async (req: Request, res: Response) => {
 
   const isValidId = testeID(id)
 
-  if (isValidId) {
+  if (!isValidId) {
     res.status(422).json({
       message: "ID inválido, Banner não encontrada",
     });
@@ -33,13 +33,6 @@ export const updateBanner = async (req: Request, res: Response) => {
     });
     return;
   }
-
-    if (images?.length === 1) {
-      res.status(422).json({
-        message: "São necessárias duas imagens, uma para Desktop e uma para Mobile",
-      });
-      return;
-    }
   
     if (images?.length > 2) {
       res.status(422).json({
@@ -62,11 +55,22 @@ try {
 
     await uploads();
 
-    updateData.imageMobile = images[0].filename;
-    updateData.imageDesktop = images[1].filename;
-
-     await removeImageS3("banners", banner.imageDesktop);
+    if (images?.[0] && mobile !== 'undefined') {
+      updateData.imageMobile = images[0].filename
      await removeImageS3("banners", banner.imageMobile);
+
+    } 
+
+    if (images?.[1] && desktop !== 'undefined') {
+      updateData.imageDesktop = images?.[1]?.filename
+     await removeImageS3("banners", banner.imageDesktop);
+    } 
+
+     if (images?.[0] && desktop !== 'undefined' && mobile === 'undefined') {
+      updateData.imageDesktop = images?.[0]?.filename
+     await removeImageS3("banners", banner.imageDesktop);
+    }
+    
   }
 
   const newBanner = await BannersModel.findByIdAndUpdate(id, updateData);
