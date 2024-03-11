@@ -22,7 +22,7 @@ export default async function getUrlImageS3(path: string, image: string) {
     };
 
     const command = new GetObjectCommand(getObjectParams);
-    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+    const url = await getSignedUrl(s3, command);
 
     return url;
   } catch (error) {
