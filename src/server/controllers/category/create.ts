@@ -3,7 +3,7 @@ import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import Category from "../../db/models/Category";
 
 export const createCategory = async (req: Request, res: Response) => {
-  const {name, description} = req.body;
+  const { name, description } = req.body;
   const image: any = req.file;
 
   if (image && image?.length === 0) {
@@ -27,7 +27,7 @@ export const createCategory = async (req: Request, res: Response) => {
     description,
     image: imageUpload,
   });
-  
+
   try {
     const newCategory = await category.save();
     res.status(200).json({
@@ -35,9 +35,10 @@ export const createCategory = async (req: Request, res: Response) => {
       newCategory,
     });
   } catch (error) {
-    console.log("erro no create category", error)
-return res.status(500).json({
-  message: "erro no create category", error
-})
+    console.log("erro no create category", error);
+    return res.status(500).json({
+      message: "erro no create category",
+      error,
+    });
   }
 };

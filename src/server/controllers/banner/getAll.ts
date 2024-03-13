@@ -5,7 +5,9 @@ import BannersModel from "../../db/models/Banner";
 import { BannerInterface } from "../../shared/helpers/Interfaces";
 
 export const getAll = async (req: Request, res: Response) => {
-  const banners = (await BannersModel.find().sort("-createdAt")) as unknown as BannerInterface[];
+  const banners = (await BannersModel.find().sort(
+    "-createdAt",
+  )) as unknown as BannerInterface[];
 
   if (!banners) {
     res.status(422).json({
@@ -18,19 +20,20 @@ export const getAll = async (req: Request, res: Response) => {
     const url1 = await getUrlImageS3("banners", banner?.imageMobile);
     const url2 = await getUrlImageS3("banners", banner?.imageDesktop);
 
-    banner.imageMobile= url1 ?? "";
-    banner.imageDesktop= url2 ?? "";
-}
+    banner.imageMobile = url1 ?? "";
+    banner.imageDesktop = url2 ?? "";
+  }
 
   try {
     res.status(200).json({
-        banners,
+      banners,
     });
     return;
   } catch (error) {
-    console.log("erro no getAll banner", error)
-return res.status(500).json({
-  message: "erro no getAll banner", error
-})
+    console.log("erro no getAll banner", error);
+    return res.status(500).json({
+      message: "erro no getAll banner",
+      error,
+    });
   }
 };

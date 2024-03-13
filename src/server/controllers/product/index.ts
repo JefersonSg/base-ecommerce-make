@@ -10,12 +10,12 @@ import * as getComments from "./comments/getComments";
 import * as createComment from "./comments/createComment";
 import * as updateComment from "./comments/updateCommentById";
 import * as removeCommentById from "./comments/removeCommentById";
-import * as getAllActives from './getAllActives';
-import * as getByName from './getByName';
-import * as addView from './views/addView';
-import * as getViewsByProductId from './views/getViewsByProductId';
-import * as getAllProductsViews from './views/getAllProductsViews'
-import * as getBySales from './getBySales'
+import * as getAllActives from "./getAllActives";
+import * as getByName from "./getByName";
+import * as addView from "./views/addView";
+import * as getViewsByProductId from "./views/getViewsByProductId";
+import * as getAllProductsViews from "./views/getAllProductsViews";
+import * as getBySales from "./getBySales";
 
 export const ProductController = {
   ...create,
@@ -35,5 +35,5 @@ export const ProductController = {
   ...getByName,
   ...addView,
   ...getViewsByProductId,
-  ...getAllProductsViews
+  ...getAllProductsViews,
 };

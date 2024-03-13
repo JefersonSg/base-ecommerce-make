@@ -19,11 +19,11 @@ const BannersModel = mongoose.model(
     },
     imageMobile: {
       type: String,
-      required: true
+      required: true,
     },
     imageDesktop: {
       type: String,
-      required: true
+      required: true,
     },
   }),
 );

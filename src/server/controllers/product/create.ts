@@ -63,7 +63,7 @@ export const create = async (req: Request, res: Response) => {
       newProduct,
     });
   } catch (error) {
-    console.log('erro ao criar produto', error)
+    console.log("erro ao criar produto", error);
     return res.status(500).json({ message: error });
   }
 };

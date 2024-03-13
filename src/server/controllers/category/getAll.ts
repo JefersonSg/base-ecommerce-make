@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import Category from "../../db/models/Category";
 import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 
-
 interface category {
   name: string;
   description: string;
@@ -30,9 +29,10 @@ export const getAll = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    console.log("erro no getAll categories", error)
-return res.status(500).json({
-  message: "erro no getAll categories", error
-})
+    console.log("erro no getAll categories", error);
+    return res.status(500).json({
+      message: "erro no getAll categories",
+      error,
+    });
   }
 };

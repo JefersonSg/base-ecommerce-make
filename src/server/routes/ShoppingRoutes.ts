@@ -10,14 +10,24 @@ import checkToken from "../shared/helpers/checkToken";
 router.get("/get-all/:userId", ShoppingCartControl.getAllItemsCart);
 
 // Item carrinho
-router.post("/create",checkToken, 
-ShoppingCartControl.validationCreateItemCart, 
-ShoppingCartControl.addNewItemCart);
+router.post(
+  "/create",
+  checkToken,
+  ShoppingCartControl.validationCreateItemCart,
+  ShoppingCartControl.addNewItemCart,
+);
 
-router.patch("/update/:itemId",checkToken, 
-ShoppingCartControl.validationEditItemCart, 
-ShoppingCartControl.updateItemCart);
+router.patch(
+  "/update/:itemId",
+  checkToken,
+  ShoppingCartControl.validationEditItemCart,
+  ShoppingCartControl.updateItemCart,
+);
 
-router.delete("/delete/:itemId", checkToken, ShoppingCartControl.removeItemCartById)
+router.delete(
+  "/delete/:itemId",
+  checkToken,
+  ShoppingCartControl.removeItemCartById,
+);
 
 export default router;

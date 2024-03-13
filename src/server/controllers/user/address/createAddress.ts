@@ -5,23 +5,34 @@ import getToken from "../../../shared/helpers/getToken";
 import { userInterface } from "../interfaceUser";
 
 export const createAddress = async (req: Request, res: Response) => {
-  const { nome, cidade, rua, bairro, cep, complemento, referencia, numero, telefone, uf } = req.body;
+  const {
+    nome,
+    cidade,
+    rua,
+    bairro,
+    cep,
+    complemento,
+    referencia,
+    numero,
+    telefone,
+    uf,
+  } = req.body;
 
-  const token = await getToken(req)
-  const user = await getUserByToken(res, token) as unknown as userInterface
+  const token = await getToken(req);
+  const user = (await getUserByToken(res, token)) as unknown as userInterface;
 
   if (!user) {
     return res.status(404).json({
-      message: 'Nenhum usuário encontrado com o id para registrar o endereço'
-    })
+      message: "Nenhum usuário encontrado com o id para registrar o endereço",
+    });
   }
 
-  const oldAddress = await AddressModel.find({userId: user?._id})
+  const oldAddress = await AddressModel.find({ userId: user?._id });
 
   if (oldAddress[0]) {
     return res.status(409).json({
-      message: 'Usuário ja tem endereço cadastrado'
-    })
+      message: "Usuário ja tem endereço cadastrado",
+    });
   }
 
   try {
@@ -37,7 +48,7 @@ export const createAddress = async (req: Request, res: Response) => {
       numero,
       referencia,
       complemento,
-    }).save()
+    }).save();
 
     if (!createAddress)
       return res.status(404).json({ message: "Erro ao atualizar" });
@@ -47,9 +58,10 @@ export const createAddress = async (req: Request, res: Response) => {
       data: createAddress,
     });
   } catch (error) {
-    console.log("erro no create Adress", error)
-return res.status(500).json({
-  message: "erro no create Adress", error
-})
+    console.log("erro no create Adress", error);
+    return res.status(500).json({
+      message: "erro no create Adress",
+      error,
+    });
   }
 };

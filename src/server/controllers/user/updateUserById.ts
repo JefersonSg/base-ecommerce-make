@@ -16,12 +16,12 @@ interface User {
 
 export const editUser = async (req: Request, res: Response) => {
   const token = getToken(req);
-  const user = await getUserByToken(res, token) as unknown as User;
+  const user = (await getUserByToken(res, token)) as unknown as User;
 
   if (!user) {
     return res.status(404).json({
-      message: 'nenhum usuario encontrado'
-    })
+      message: "nenhum usuario encontrado",
+    });
   }
 
   const { name, email, password, confirmpassword } = req.body;
@@ -75,9 +75,10 @@ export const editUser = async (req: Request, res: Response) => {
       data: updatedUser,
     });
   } catch (error) {
-    console.log("erro no updateUserById", error)
-return res.status(500).json({
-  message: "erro no updateUserById", error
-})
+    console.log("erro no updateUserById", error);
+    return res.status(500).json({
+      message: "erro no updateUserById",
+      error,
+    });
   }
 };

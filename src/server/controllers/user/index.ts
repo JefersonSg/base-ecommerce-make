@@ -5,12 +5,12 @@ import * as getUserById from "./getById";
 import * as checkUser from "./checkUser";
 import * as validationLogin from "./validationLogin";
 import * as validationRegister from "./validationRegister";
-import * as getByToken from './getByToken'
-import * as getAll from './getAll'
-import * as createAddress from './address/createAddress'
-import * as updateAddress from './address/updateAddressById'
-import * as getAddressById from './address/getById'
-import * as validationAddress from './address/validationAddress'
+import * as getByToken from "./getByToken";
+import * as getAll from "./getAll";
+import * as createAddress from "./address/createAddress";
+import * as updateAddress from "./address/updateAddressById";
+import * as getAddressById from "./address/getById";
+import * as validationAddress from "./address/validationAddress";
 
 export const UserController = {
   ...create,
@@ -25,5 +25,5 @@ export const UserController = {
   ...createAddress,
   ...updateAddress,
   ...getAddressById,
-  ...validationAddress
+  ...validationAddress,
 };

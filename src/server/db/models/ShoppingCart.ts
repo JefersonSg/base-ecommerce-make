@@ -4,15 +4,18 @@ const { Schema } = mongoose;
 
 const ShoppingCart = mongoose.model(
   "shopping-cart",
-  new Schema({
-    userId: {
-      type: String,
+  new Schema(
+    {
+      userId: {
+        type: String,
+      },
+      status: {
+        type: String,
+        required: true,
+      },
     },
-    status: {
-      type: String,
-      required: true,
-    },
-  }, {timestamps: true}),
+    { timestamps: true },
+  ),
 );
 
 export default ShoppingCart;

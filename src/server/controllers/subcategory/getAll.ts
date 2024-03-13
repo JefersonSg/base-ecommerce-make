@@ -3,12 +3,8 @@ import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import SubcategoryModel from "../../db/models/Subcategory";
 import { SubcategoryInterface } from "../../shared/helpers/Interfaces";
 
-
-
 export const getAll = async (req: Request, res: Response) => {
-  const subcategories = (await SubcategoryModel.find().sort(
-    "-createdAt",
-  ));
+  const subcategories = await SubcategoryModel.find().sort("-createdAt");
 
   if (!subcategories) {
     res.status(422).json({
@@ -21,10 +17,10 @@ export const getAll = async (req: Request, res: Response) => {
     if (subcategory.image) {
       const url = await getUrlImageS3("subcategory", subcategory?.image);
 
-    if (!subcategory?.image) {
-      return;
-    }
-    subcategory.image = url ?? "";
+      if (!subcategory?.image) {
+        return;
+      }
+      subcategory.image = url ?? "";
     }
   }
 
@@ -34,9 +30,10 @@ export const getAll = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    console.log("erro no getAll subcategory", error)
+    console.log("erro no getAll subcategory", error);
     return res.status(500).json({
-      message: "erro no getAll subcategory", error
-    })
+      message: "erro no getAll subcategory",
+      error,
+    });
   }
 };

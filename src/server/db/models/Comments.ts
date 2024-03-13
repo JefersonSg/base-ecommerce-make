@@ -15,27 +15,29 @@ export interface CommentInterface {
 
 const CommentsModel = mongoose.model(
   "comments",
-  new Schema({
-    productId: {
-      type: String,
-      required: true,
+  new Schema(
+    {
+      productId: {
+        type: String,
+        required: true,
+      },
+      userId: {
+        type: String,
+        required: true,
+      },
+      comment: {
+        type: String,
+        required: true,
+      },
+      image: {
+        type: Array,
+      },
+      stars: {
+        type: Number,
+      },
     },
-    userId: {
-      type: String,
-      required: true,
-    },
-    comment: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: Array,
-    },
-    stars: {
-      type: Number,
-    },
-
-  }, {timestamps: true}),
+    { timestamps: true },
+  ),
 );
 
 export default CommentsModel;

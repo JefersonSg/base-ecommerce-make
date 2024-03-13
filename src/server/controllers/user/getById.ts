@@ -20,20 +20,21 @@ export const getUserById = async (req: Request, res: Response) => {
     return;
   }
 
-try {
-  const user = (await User.findById(id)) as userInterface;
-  const isAdmin = user._id.toString() === id_admin;
+  try {
+    const user = (await User.findById(id)) as userInterface;
+    const isAdmin = user._id.toString() === id_admin;
 
-  if (!user) {
-    res.status(422).json({ message: "Usuário não encontrado!" });
-    return;
+    if (!user) {
+      res.status(422).json({ message: "Usuário não encontrado!" });
+      return;
+    }
+    user.password = "";
+    res.status(200).json({ user, isAdmin: isAdmin });
+  } catch (error) {
+    console.log("erro no getById users", error);
+    return res.status(500).json({
+      message: "erro no getById users",
+      error,
+    });
   }
-  user.password = "";
-  res.status(200).json({ user, isAdmin: isAdmin });
-} catch (error) {
-  console.log("erro no getById users", error)
-  return res.status(500).json({
-    message: "erro no getById users", error
-  })
-}
 };

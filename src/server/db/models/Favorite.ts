@@ -4,17 +4,18 @@ const { Schema } = mongoose;
 
 const FavoriteModel = mongoose.model(
   "favorite",
-  new Schema({
-    userId: {
-      type: String,
-      required: true,
+  new Schema(
+    {
+      userId: {
+        type: String,
+        required: true,
+      },
+      productId: {
+        type: String,
+        required: true,
+      },
     },
-    productId: {
-      type: String,
-      required: true,
-    },
-  },
-  { timestamps: true },
+    { timestamps: true },
   ),
 );
 

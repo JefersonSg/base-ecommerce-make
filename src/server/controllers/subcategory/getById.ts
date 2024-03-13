@@ -14,29 +14,30 @@ export const getById = async (req: Request, res: Response) => {
     return;
   }
 
-try {  const subcategory = await SubcategoryModel.findById(id);
+  try {
+    const subcategory = await SubcategoryModel.findById(id);
 
-  if (!subcategory) {
-    res.status(422).json({
-      message: "subcategoria não encontrada",
-    });
-    return;
-  }
+    if (!subcategory) {
+      res.status(422).json({
+        message: "subcategoria não encontrada",
+      });
+      return;
+    }
 
-  if (!subcategory.image) return res.status(200).json({ subcategory });
+    if (!subcategory.image) return res.status(200).json({ subcategory });
 
     const url = await getUrlImageS3("subcategory", subcategory?.image);
-    
-    subcategory.image = url ?? '';
 
-  res.status(200).json({
-    subcategory,
-  });
-  
-} catch (error) {
-  console.log(  "erro no getById subcategory", error)
-  return res.status(500).json({
-    message: "erro no getById subcategory", error
-  })
-}
+    subcategory.image = url ?? "";
+
+    res.status(200).json({
+      subcategory,
+    });
+  } catch (error) {
+    console.log("erro no getById subcategory", error);
+    return res.status(500).json({
+      message: "erro no getById subcategory",
+      error,
+    });
+  }
 };

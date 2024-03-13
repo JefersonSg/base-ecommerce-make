@@ -11,5 +11,5 @@ export const CategoryController = {
   ...getById,
   ...getAll,
   ...deleteCategory,
-  ...validationCategory
+  ...validationCategory,
 };

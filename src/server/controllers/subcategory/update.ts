@@ -1,19 +1,18 @@
 import { Request, Response } from "express";
 import SubcategoryModel from "../../db/models/Subcategory";
-import {
-  removeImageS3,
-  uploadToS3,
-} from "../../shared/helpers/imageUpload";
+import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 import testeID from "../../shared/helpers/verifyId";
 import { SubcategoryInterface } from "../../shared/helpers/Interfaces";
 
 export const update = async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const {name, description, category }  = req.body;
+  const { name, description, category } = req.body;
   const image: any = req.file;
   const updateData: SubcategoryInterface | any = {
-    name, description, category
+    name,
+    description,
+    category,
   };
 
   if (!testeID(id)) {
@@ -24,34 +23,35 @@ export const update = async (req: Request, res: Response) => {
   }
 
   try {
-  const subcategory = await SubcategoryModel.findById(id);
+    const subcategory = await SubcategoryModel.findById(id);
 
-  if (!subcategory) {
-    res.status(422).json({
-      message: "Subcategoria não encontrada",
+    if (!subcategory) {
+      res.status(422).json({
+        message: "Subcategoria não encontrada",
+      });
+      return;
+    }
+
+    // Validations
+
+    if (image && subcategory.image) {
+      const newImage = await uploadToS3("subcategory", image);
+
+      updateData.image = newImage;
+
+      await removeImageS3("subcategory", subcategory.image);
+    }
+
+    await SubcategoryModel.findByIdAndUpdate(id, updateData);
+
+    return res
+      .status(200)
+      .json({ subcategory, message: "Categoria atualizada com sucesso!" });
+  } catch (error) {
+    console.log("erro no update subcategory", error);
+    return res.status(500).json({
+      message: "erro no update subcategory",
+      error,
     });
-    return;
   }
-
-  // Validations
-
-if (image && subcategory.image) {
-  const newImage = await uploadToS3("subcategory", image);
-  
-  updateData.image = newImage;
-
-  await removeImageS3("subcategory", subcategory.image);
-}
-
-await SubcategoryModel.findByIdAndUpdate(id, updateData);
-
-return res
-  .status(200)
-  .json({ subcategory, message: "Categoria atualizada com sucesso!" });
-} catch (error) {
-  console.log("erro no update subcategory", error)
-  return res.status(500).json({
-    message: "erro no update subcategory", error
-  })
-}
 };

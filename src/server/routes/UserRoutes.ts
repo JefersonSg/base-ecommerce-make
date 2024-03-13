@@ -25,10 +25,12 @@ router.patch(
 
 // address
 router.get("/address", checkToken, UserController.getAddressById);
-router.post("/address/create", 
+router.post(
+  "/address/create",
   checkToken,
   UserController.validationCreateAddress,
-  UserController.createAddress);
+  UserController.createAddress,
+);
 
 router.patch(
   "/address/update/:addressId",

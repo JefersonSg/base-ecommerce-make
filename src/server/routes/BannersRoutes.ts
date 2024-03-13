@@ -10,7 +10,13 @@ import { BannersControl } from "../controllers";
 // middleware
 import checkToken from "../shared/helpers/checkToken";
 
-router.post("/create",  upload.array('images'),checkToken, BannersControl.validationBanner, BannersControl.create);
+router.post(
+  "/create",
+  upload.array("images"),
+  checkToken,
+  BannersControl.validationBanner,
+  BannersControl.create,
+);
 
 router.get("/", BannersControl.getAll);
 router.get("/actives", BannersControl.getAllActives);
@@ -21,8 +27,8 @@ router.patch(
   upload.array("images"),
   BannersControl.validationBanner,
   BannersControl.updateBanner,
-  );
-  
-  router.delete("/delete/:id", checkToken, BannersControl.deleteBanner)
+);
+
+router.delete("/delete/:id", checkToken, BannersControl.deleteBanner);
 
 export default router;

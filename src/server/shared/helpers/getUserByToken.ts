@@ -10,9 +10,8 @@ interface DecodedToken {
 }
 
 const getUserByToken = async (res: Response, token: string) => {
-  
   if (!token) {
-    return false
+    return false;
   }
   const secret = process.env.SECRET_JWT ?? "";
 
@@ -23,7 +22,7 @@ const getUserByToken = async (res: Response, token: string) => {
   const user = await User.findOne({ _id: userId });
 
   if (!user) {
-    return false
+    return false;
   }
 
   return user;

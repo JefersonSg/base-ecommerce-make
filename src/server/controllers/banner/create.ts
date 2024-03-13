@@ -3,7 +3,7 @@ import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import BannersModel from "../../db/models/Banner";
 
 export const create = async (req: Request, res: Response) => {
-  const {name, link, active} = req.body;
+  const { name, link, active } = req.body;
   const images: any = req.files;
 
   if (images?.length === 0) {
@@ -12,17 +12,19 @@ export const create = async (req: Request, res: Response) => {
     });
     return;
   }
-  
+
   if (images && images.length === 1) {
     res.status(422).json({
-      message: "São necessárias duas imagens, uma para Desktop e uma para Mobile",
+      message:
+        "São necessárias duas imagens, uma para Desktop e uma para Mobile",
     });
     return;
   }
 
   if (images && images.length > 2) {
     res.status(422).json({
-      message: "Maximo de imagens excedidas, envie uma para Desktok e uma para Mobile",
+      message:
+        "Maximo de imagens excedidas, envie uma para Desktok e uma para Mobile",
     });
     return;
   }
@@ -37,17 +39,15 @@ export const create = async (req: Request, res: Response) => {
     );
   }
 
-    await uploads()
+  await uploads();
 
-    const Banner = new BannersModel(
-      {
-        name,
-        link,
-        active,
-        imageMobile: images?.[0]?.filename,
-        imageDesktop: images?.[1]?.filename,
-      }
-    );
+  const Banner = new BannersModel({
+    name,
+    link,
+    active,
+    imageMobile: images?.[0]?.filename,
+    imageDesktop: images?.[1]?.filename,
+  });
 
   try {
     const newBanner = await Banner.save();
@@ -56,9 +56,10 @@ export const create = async (req: Request, res: Response) => {
       newBanner,
     });
   } catch (error) {
-    console.log("erro no create banner", error)
-return res.status(500).json({
-  message: "erro no create banner", error
-})
+    console.log("erro no create banner", error);
+    return res.status(500).json({
+      message: "erro no create banner",
+      error,
+    });
   }
 };

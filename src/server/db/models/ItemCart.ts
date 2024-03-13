@@ -7,7 +7,7 @@ const ItemCart = mongoose.model(
   new Schema({
     shoppingCartId: {
       type: String,
-      required: true
+      required: true,
     },
     productId: {
       type: String,

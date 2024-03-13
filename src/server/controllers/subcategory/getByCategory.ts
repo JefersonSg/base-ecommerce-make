@@ -15,32 +15,31 @@ export const getByCategory = async (req: Request, res: Response) => {
     return;
   }
 
-try {
-  const subcategories = await SubcategoryModel.find({category: categoryId});
+  try {
+    const subcategories = await SubcategoryModel.find({ category: categoryId });
 
-  if (!subcategories) {
-    res.status(422).json({
-      message: "nenhuma subcategoria encontrada",
-    });
-    return;
-  }
-
-  for (const subcategory of subcategories) {
-    const url = await getUrlImageS3("subcategory", subcategory.image);
-
-    if (!subcategory?.image) {
+    if (!subcategories) {
+      res.status(422).json({
+        message: "nenhuma subcategoria encontrada",
+      });
       return;
     }
-    subcategory.image = url ?? "";
-  }
 
-  res.status(200).json(
-     { subcategories},
-  );
-} catch (error) {
-  console.log("erro no delete getByCategory", error)
-  return res.status(500).json({
-    message: "erro no delete getByCategory", error
-  })
-}
+    for (const subcategory of subcategories) {
+      const url = await getUrlImageS3("subcategory", subcategory.image);
+
+      if (!subcategory?.image) {
+        return;
+      }
+      subcategory.image = url ?? "";
+    }
+
+    res.status(200).json({ subcategories });
+  } catch (error) {
+    console.log("erro no delete getByCategory", error);
+    return res.status(500).json({
+      message: "erro no delete getByCategory",
+      error,
+    });
+  }
 };

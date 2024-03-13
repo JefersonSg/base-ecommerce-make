@@ -13,25 +13,25 @@ export const login = async (req: Request, res: Response) => {
   try {
     const user = (await User.findOne({ email: email })) as userInterface;
 
-  if (!user) {
-    return res
-      .status(422)
-      .json({ message: "Não há usuário cadastrado com este e-mail!" });
-  }
+    if (!user) {
+      return res
+        .status(422)
+        .json({ message: "Não há usuário cadastrado com este e-mail!" });
+    }
 
-  // check if password match
-  const checkPassword = await bcrypt.compare(password, user.password);
+    // check if password match
+    const checkPassword = await bcrypt.compare(password, user.password);
 
-  if (!checkPassword) {
-    return res.status(422).json({ message: "Senha inválida" });
-  }
+    if (!checkPassword) {
+      return res.status(422).json({ message: "Senha inválida" });
+    }
 
-  await createUserToken(user, req, res);
+    await createUserToken(user, req, res);
   } catch (error) {
-    console.log("erro no login user", error)
-  return res.status(500).json({
-  message: "erro no login user", error
-})
+    console.log("erro no login user", error);
+    return res.status(500).json({
+      message: "erro no login user",
+      error,
+    });
   }
 };
-

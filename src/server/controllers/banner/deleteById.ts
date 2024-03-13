@@ -7,7 +7,7 @@ import testeID from "../../shared/helpers/verifyId";
 export const deleteBanner = async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const isValid = testeID(id)
+  const isValid = testeID(id);
 
   if (!isValid) {
     res.status(422).json({ message: "ID inválido!" });
@@ -21,17 +21,18 @@ export const deleteBanner = async (req: Request, res: Response) => {
   }
 
   try {
-    if (Banner.imageDesktop || Banner.imageMobile)  {
-        await removeImageS3("banners", Banner.imageMobile);
-        await removeImageS3("banners", Banner.imageDesktop);
+    if (Banner.imageDesktop || Banner.imageMobile) {
+      await removeImageS3("banners", Banner.imageMobile);
+      await removeImageS3("banners", Banner.imageDesktop);
     }
     await BannersModel.findByIdAndRemove(id);
 
     res.status(200).json({ message: "Banner removido com sucesso!" });
   } catch (error) {
-    console.log("erro no deleteById banner", error)
-return res.status(500).json({
-  message: "erro no deleteById banner", error
-})
+    console.log("erro no deleteById banner", error);
+    return res.status(500).json({
+      message: "erro no deleteById banner",
+      error,
+    });
   }
 };

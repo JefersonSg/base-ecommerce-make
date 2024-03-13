@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 
-
 import path from "path";
 import "dotenv/config";
 
@@ -24,7 +23,8 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
     "https://base-ecommerce-git-formularios-jefersonsg.vercel.app",
-    "https://basecommerce.vercel.app", "https://abayomimake.com"
+    "https://basecommerce.vercel.app",
+    "https://abayomimake.com",
   ];
 
   const origin = req.headers.origin ?? "";
