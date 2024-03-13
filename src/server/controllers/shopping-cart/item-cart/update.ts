@@ -31,7 +31,9 @@ export const updateItemCart = async (req: Request, res: Response) => {
       message: 'atulizado com sucesso: ' , newItemCart,
     });
   } catch (error) {
-    res.status(500).json({ message: error });
-    return;
+    console.log(error)
+    return res.status(404).json({
+      message: "erro no update item-cart", error
+    })
   }
 };

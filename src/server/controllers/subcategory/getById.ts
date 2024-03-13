@@ -34,8 +34,9 @@ try {  const subcategory = await SubcategoryModel.findById(id);
   });
   
 } catch (error) {
-  res.status(400).json({
-    message: "erro no get subcategory by id " + error
+  console.log(  "erro no getById subcategory", error)
+  return res.status(500).json({
+    message: "erro no getById subcategory", error
   })
 }
 };

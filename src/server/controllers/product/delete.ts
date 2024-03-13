@@ -31,7 +31,10 @@ export const removeProductById = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ message: "Produto removido com sucesso!" });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error)
+return res.status(404).json({
+  message: "erro no getByName", error
+})
   }
 };

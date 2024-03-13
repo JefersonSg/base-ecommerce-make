@@ -79,8 +79,9 @@ return res
   .status(200)
   .json({message: "Banner atualizado com sucesso!" ,  newBanner});
 } catch (error) {
-  return res.status(401).json({
-    message: 'erro ao atualizar' + error
-  })
+  console.log("erro no update banner", error)
+return res.status(500).json({
+  message: "erro no update banner", error
+})
 }
 };

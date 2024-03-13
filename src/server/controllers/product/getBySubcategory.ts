@@ -38,5 +38,8 @@ try {
   });
 } catch (error) {
   console.log(error)
+  return res.status(404).json({
+    message: "erro no getBySubcategory", error
+  })
 }
 };

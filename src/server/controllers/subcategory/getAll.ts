@@ -34,8 +34,9 @@ export const getAll = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error)
-    return;
+    console.log("erro no getAll subcategory", error)
+    return res.status(500).json({
+      message: "erro no getAll subcategory", error
+    })
   }
 };

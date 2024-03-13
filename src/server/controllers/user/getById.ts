@@ -31,8 +31,9 @@ try {
   user.password = "";
   res.status(200).json({ user, isAdmin: isAdmin });
 } catch (error) {
-  return res.status(404).json({
-    message: 'erro ao buscar usuário' + error
+  console.log("erro no getById users", error)
+  return res.status(500).json({
+    message: "erro no getById users", error
   })
 }
 };

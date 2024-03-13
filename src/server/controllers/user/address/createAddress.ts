@@ -47,6 +47,9 @@ export const createAddress = async (req: Request, res: Response) => {
       data: createAddress,
     });
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.log("erro no create Adress", error)
+return res.status(500).json({
+  message: "erro no create Adress", error
+})
   }
 };

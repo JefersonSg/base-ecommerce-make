@@ -25,6 +25,9 @@ const Favorite = new FavoriteModel(
       newFavorite,
     });
   } catch (error) {
-    return res.status(500).json({ message: error });
+    console.log("erro no create favoorite", error)
+return res.status(500).json({
+  message: "erro no create favoorite", error
+})
   }
 };

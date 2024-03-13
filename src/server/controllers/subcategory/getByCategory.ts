@@ -38,8 +38,9 @@ try {
      { subcategories},
   );
 } catch (error) {
-  res.status(400).json({
-    message: 'erro'  + error 
+  console.log("erro no delete getByCategory", error)
+  return res.status(500).json({
+    message: "erro no delete getByCategory", error
   })
 }
 };

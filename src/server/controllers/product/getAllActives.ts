@@ -8,6 +8,7 @@ export const getAllActives = async (req: Request, res: Response) => {
   const {skip} = req.params
 
 
+try {
   const products = (await Product.find({active: true}).sort(
     "-createdAt",
   )) as unknown as ProductDataBackEnd[];
@@ -29,4 +30,10 @@ export const getAllActives = async (req: Request, res: Response) => {
   return res.status(200).json({
     products,
   });
+} catch (error) {
+console.log(error)
+return res.status(404).json({
+  message: "erro no getByName", error
+})
+}
 };

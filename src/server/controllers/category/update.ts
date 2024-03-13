@@ -45,7 +45,7 @@ try {
     .json({ category, message: "Subcategoria atualizada com sucesso!" });
 } catch (error) {
   console.log(error)
-  return res.status(401).json({
+  return res.status(500).json({
   message: 'erro ao fazer update' + error
 })
 }};

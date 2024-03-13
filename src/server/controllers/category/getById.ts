@@ -16,6 +16,7 @@ export const getById = async (req: Request, res: Response) => {
     return;
   }
 
+try {
   const category = await Category.findById(id);
 
   if (!category) {
@@ -35,4 +36,12 @@ export const getById = async (req: Request, res: Response) => {
   res.status(200).json({
     category,
   });
+} catch (error) {
+  console.log("erro no getById category", error)
+return res.status(500).json({
+  message: "erro no getById category", error
+})
+}
 };
+
+

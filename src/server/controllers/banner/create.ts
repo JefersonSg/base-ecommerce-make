@@ -56,6 +56,9 @@ export const create = async (req: Request, res: Response) => {
       newBanner,
     });
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.log("erro no create banner", error)
+return res.status(500).json({
+  message: "erro no create banner", error
+})
   }
 };

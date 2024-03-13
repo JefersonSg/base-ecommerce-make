@@ -4,6 +4,7 @@ import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import { ProductDataBackEnd } from "../../shared/helpers/Interfaces";
 
 export const getAll = async (req: Request, res: Response) => {
+try {
   const products = (await Product.find().sort(
     "-createdAt",
   )) as unknown as ProductDataBackEnd[];
@@ -25,4 +26,12 @@ export const getAll = async (req: Request, res: Response) => {
   return res.status(200).json({
     products,
   });
+} catch (error) {
+  console.log(error)
+return res.status(404).json({
+  message: "erro no getByName", error
+})
+}
 };
+
+

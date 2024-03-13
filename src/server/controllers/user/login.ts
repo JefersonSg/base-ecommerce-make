@@ -10,7 +10,8 @@ export const login = async (req: Request, res: Response) => {
   const password = req.body.password;
 
   // check if user exists
-  const user = (await User.findOne({ email: email })) as userInterface;
+  try {
+    const user = (await User.findOne({ email: email })) as userInterface;
 
   if (!user) {
     return res
@@ -26,4 +27,11 @@ export const login = async (req: Request, res: Response) => {
   }
 
   await createUserToken(user, req, res);
+  } catch (error) {
+    console.log("erro no login user", error)
+  return res.status(500).json({
+  message: "erro no login user", error
+})
+  }
 };
+

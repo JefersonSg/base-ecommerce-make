@@ -41,6 +41,9 @@ export const create = async (req: Request, res: Response) => {
 
     await createUserToken(newUser, req, res);
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.log("erro no create user", error)
+    return res.status(500).json({
+      message: "erro no create user", error
+    })
   }
 };

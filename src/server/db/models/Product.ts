@@ -26,6 +26,7 @@ const Product = mongoose.model(
       },
       size: {
         type: String,
+        required: true
       },
       composition: {
         type: String,
@@ -54,13 +55,19 @@ const Product = mongoose.model(
       },
       promotion: {
         type: Boolean,
+        required: true,
+        default: false
       },
       promotionalPrice: {
         type: Number,
+        required: true,
+        default: 0,
       },
 
       active: {
         type: Boolean,
+        required: true,
+        default: true,
       },
       sales : {
         type: Number,
@@ -69,8 +76,9 @@ const Product = mongoose.model(
       },
       assessment : {
         type: Number,
-        required: true
-      },
+        required: true,
+        default: 0
+            },
     },
     { timestamps: true },
   ),

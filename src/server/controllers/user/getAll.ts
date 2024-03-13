@@ -16,8 +16,9 @@ try {
 
   res.status(200).json({ users });
 } catch (error) {
-  return res.status(404).json({
-    message: 'erro ao buscar usuário', error
+  console.log("erro no getAll users", error)
+  return res.status(500).json({
+    message: "erro no getAll users", error
   })
 }
 };

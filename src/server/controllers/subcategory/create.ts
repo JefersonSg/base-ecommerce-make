@@ -37,7 +37,9 @@ export const createSubcategory = async (req: Request, res: Response) => {
       newSubcategory,
     });
   } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error)
+    console.log("erro no create subcategory", error)
+    return res.status(500).json({
+      message: "erro no create subcategory", error
+    })
   }
 };

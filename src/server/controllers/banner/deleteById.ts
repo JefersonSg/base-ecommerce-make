@@ -28,7 +28,10 @@ export const deleteBanner = async (req: Request, res: Response) => {
     await BannersModel.findByIdAndRemove(id);
 
     res.status(200).json({ message: "Banner removido com sucesso!" });
-  } catch (erro) {
-    console.log(erro);
+  } catch (error) {
+    console.log("erro no deleteById banner", error)
+return res.status(500).json({
+  message: "erro no deleteById banner", error
+})
   }
 };

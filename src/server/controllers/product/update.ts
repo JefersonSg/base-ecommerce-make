@@ -16,6 +16,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
   const updateData: ProductDataFrontEnd | any = {};
   // check if ID exists
+  try {
 
   const isValidId = testeID(id)
   if (!isValidId) {
@@ -55,11 +56,9 @@ export const updateProduct = async (req: Request, res: Response) => {
   };
   updateData.stock = stock;
   updateData.promotion = productData.promotion;
-
-try {
-  if (productData.promotionalPrice) {
-    updateData.promotionalPrice = productData.promotionalPrice;
-  }
+  updateData.promotionalPrice = 
+  productData.promotionalPrice ??
+  product.promotionalPrice ?? 0;
 
   if (images?.length > 0) {
     async function uploads() {

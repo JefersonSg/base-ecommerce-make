@@ -75,6 +75,9 @@ export const editUser = async (req: Request, res: Response) => {
       data: updatedUser,
     });
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.log("erro no updateUserById", error)
+return res.status(500).json({
+  message: "erro no updateUserById", error
+})
   }
 };

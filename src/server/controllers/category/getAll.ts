@@ -29,8 +29,10 @@ export const getAll = async (req: Request, res: Response) => {
       categories,
     });
     return;
-  } catch (erro) {
-    res.status(500).json({ message: erro });
-    return;
+  } catch (error) {
+    console.log("erro no getAll categories", error)
+return res.status(500).json({
+  message: "erro no getAll categories", error
+})
   }
 };

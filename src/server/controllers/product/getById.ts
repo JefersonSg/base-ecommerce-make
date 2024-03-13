@@ -16,6 +16,7 @@ export const getProductById = async (req: Request, res: Response) => {
     return;
   }
 
+try {
   const product = await Product.findById(id);
 
   if (!product) {
@@ -33,4 +34,12 @@ export const getProductById = async (req: Request, res: Response) => {
   res.status(200).json({
     product,
   });
+} catch (error) {
+  console.log(error)
+return res.status(404).json({
+  message: "erro no getByName", error
+})
+}
 };
+
+

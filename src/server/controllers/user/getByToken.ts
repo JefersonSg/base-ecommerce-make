@@ -7,7 +7,9 @@ import { userInterface } from "./interfaceUser";
 const id_admin = process.env.ID_ADMIN ?? "";
 
 export const getByToken = async (req: Request, res: Response) => {
-  const token = await getToken(req);
+  
+  try {
+    const token = await getToken(req);
 
   if (token) {
     const userToken = (await getUserByToken(
@@ -23,5 +25,12 @@ export const getByToken = async (req: Request, res: Response) => {
     const isAdmin = userToken._id.toString() === id_admin;
     return res.status(200).json({ user: userToken, isAdmin: isAdmin });
   }
+  } catch (error) {
+    console.log("erro no getByToken user", error)
+return res.status(500).json({
+  message: "erro no getByToken user", error
+})
+  }
 
 };
+

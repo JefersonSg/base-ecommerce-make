@@ -27,8 +27,10 @@ export const getAllActives = async (req: Request, res: Response) => {
         banners,
     });
     return;
-  } catch (erro) {
-    res.status(500).json({ message: erro });
-    return;
+  } catch (error) {
+    console.log("erro no getAllActives banner", error)
+return res.status(500).json({
+  message: "erro no getAllActives banner", error
+})
   }
 };

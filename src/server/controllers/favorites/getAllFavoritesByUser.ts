@@ -13,7 +13,9 @@ export const getAllFavoritesUser = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    res.status(500).json({ message: error });
-    return;
+    console.log("erro no getAllFavoritesByUser", error)
+    return res.status(500).json({
+      message: "erro no getAllFavoritesByUser", error
+    })
   }
 };

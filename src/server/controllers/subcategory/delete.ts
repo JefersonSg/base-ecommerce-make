@@ -26,6 +26,9 @@ export const deleteSubcategory = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: "Subcategoria removida com sucesso!" });
   } catch (error) {
-    console.log(error);
+    console.log("erro no delete subcategory", error)
+    return res.status(500).json({
+      message: "erro no delete subcategory", error
+    })
   }
 };

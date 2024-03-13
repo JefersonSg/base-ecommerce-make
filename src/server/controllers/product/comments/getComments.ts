@@ -16,6 +16,7 @@ export const getAllComments = async (req: Request, res: Response) => {
     return;
   }
 
+try {
   let product = await ProductModel.findOne({ _id: productId }) as ProductDataBackEnd;
 
   if (!product) {
@@ -39,4 +40,11 @@ export const getAllComments = async (req: Request, res: Response) => {
   return res.status(200).json({
     comments: AllComments
   });
+} catch (error) {
+  console.log(error)
+return res.status(404).json({
+  message: "erro no getComment", error
+})
+}
 };
+

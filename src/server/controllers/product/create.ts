@@ -7,8 +7,6 @@ export const create = async (req: Request, res: Response) => {
   const productData: ProductDataFrontEnd = req.body;
   const images: any = req.files;
 
-  // generate a const stock with all infos products/
-
   const stock = {
     amount: productData.amount.split(",").map((amount) => {
       return +amount;
@@ -65,6 +63,7 @@ export const create = async (req: Request, res: Response) => {
       newProduct,
     });
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.log('erro ao criar produto', error)
+    return res.status(500).json({ message: error });
   }
 };

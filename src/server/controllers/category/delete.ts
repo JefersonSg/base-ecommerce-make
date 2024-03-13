@@ -25,7 +25,10 @@ export const deleteCategory = async (req: Request, res: Response) => {
     await Category.findByIdAndRemove(id);
 
     res.status(200).json({ message: "Categoria removida com sucesso!" });
-  } catch (erro) {
-    console.log(erro);
+  } catch (error) {
+    console.log("erro no delete category", error)
+return res.status(500).json({
+  message: "erro no delete category", error
+})
   }
 };

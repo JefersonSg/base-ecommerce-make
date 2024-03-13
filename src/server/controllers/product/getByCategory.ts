@@ -16,6 +16,7 @@ export const getProductByCategory = async (req: Request, res: Response) => {
     return;
   }
 
+try {
   const products = await Product.find({ category: category, active: true });
 
   if (!products) {
@@ -36,4 +37,12 @@ export const getProductByCategory = async (req: Request, res: Response) => {
   res.status(200).json({
     products,
   });
+} catch (error) {
+  console.log(error)
+return res.status(404).json({
+  message: "erro no getByName", error
+})
+}
 };
+
+

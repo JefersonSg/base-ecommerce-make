@@ -25,9 +25,9 @@ export const deleteById = async (req: Request, res: Response) => {
     return res.status(200).json({ message: "Favorito removido com sucesso!" });
 
   } catch (error) {
-    console.log(error);
-    return res.status(404).json({
-      message: 'erro ao fazer o delete' + error
-    })
+    console.log("erro no deleteById Favorites", error)
+return res.status(500).json({
+  message: "erro no deleteById Favorites", error
+})
   }
 };

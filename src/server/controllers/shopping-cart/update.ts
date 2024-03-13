@@ -14,7 +14,9 @@ export const update = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    res.status(500).json({ message: error });
-    return;
+    console.log(error)
+    return res.status(500).json({
+      message: "erro no update shopping-cart", error
+    })
   }
 };
