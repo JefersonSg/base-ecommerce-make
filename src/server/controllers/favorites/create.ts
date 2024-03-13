@@ -23,9 +23,9 @@ export const create = async (req: Request, res: Response) => {
       newFavorite,
     });
   } catch (error) {
-    console.log("erro no create favoorite", error);
+    console.log("erro no create favorite", error);
     return res.status(500).json({
-      message: "erro no create favoorite",
+      message: "erro no create favorite",
       error,
     });
   }
