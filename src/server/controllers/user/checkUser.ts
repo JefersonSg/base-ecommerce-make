@@ -35,8 +35,9 @@ export const checkUser = async (req: Request, res: Response) => {
       isAdmin: currentUser.admin,
     });
   } catch (error) {
-    return res.status(404).json({
-      message: "erro ao decodificar o token " + error,
-    });
+    console.log("erro no checkUser", error)
+    return res.status(500).json({
+      message: "erro no checkUser", error
+    })
   }
 };
