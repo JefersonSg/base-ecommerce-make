@@ -5,9 +5,6 @@ import { ProductDataBackEnd } from "../../shared/helpers/Interfaces";
 
 export const getAllActives = async (req: Request, res: Response) => {
 
-  const {skip} = req.params
-
-
 try {
   const products = (await Product.find({active: true}).sort(
     "-createdAt",
