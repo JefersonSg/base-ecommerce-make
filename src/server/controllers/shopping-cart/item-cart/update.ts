@@ -13,6 +13,12 @@ export const updateItemCart = async (req: Request, res: Response) => {
     });
     return;
   }
+  if (Number(amount) < 1) {
+    res.status(404).json({
+      message: "o item não pode ser menor do que zero",
+    });
+    return;
+  }
   const newItem = {
     shoppingCartId: ItemShoppingCart.shoppingCartId,
     productId: ItemShoppingCart.productId,
