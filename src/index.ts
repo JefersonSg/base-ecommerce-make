@@ -24,6 +24,7 @@ app.use((req, res, next) => {
     "http://localhost:3000",
     "https://base-ecommerce-git-formularios-jefersonsg.vercel.app",
     "https://basecommerce.vercel.app",
+    "https://base-ecommerce-pearl.vercel.app/",
     "https://abayomimake.com",
   ];
 
