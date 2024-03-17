@@ -4,6 +4,8 @@ import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 import BannersModel from "../../db/models/Banner";
 import { BannerInterface } from "../../shared/helpers/Interfaces";
 import testeID from "../../shared/helpers/verifyId";
+import { verifySizeImage } from "../../shared/helpers/verifySize";
+import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
 
 export const updateBanner = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -42,6 +44,18 @@ export const updateBanner = async (req: Request, res: Response) => {
   }
 
   try {
+    if (verifySizeImage(images)) {
+      return res.status(401).json({
+        message : verifySizeImage(images)
+      })
+    }
+
+    if (verifyMimetypeImage(images)) {
+      return res.status(401).json({
+        message : verifyMimetypeImage(images)
+      })
+    }
+
     if (images?.length > 0) {
       async function uploads() {
         // Use `map` with `Promise.all` to await for all uploads to complete

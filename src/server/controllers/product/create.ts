@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import Product from "../../db/models/Product";
 import { ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
+import { verifySizeImage } from "../../shared/helpers/verifySize";
+import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
 
 export const create = async (req: Request, res: Response) => {
   const productData: ProductDataFrontEnd = req.body;
@@ -19,7 +21,17 @@ export const create = async (req: Request, res: Response) => {
     });
     return;
   }
+  if (verifySizeImage(images)) {
+    return res.status(401).json({
+      message : verifySizeImage(images)
+    })
+  }
 
+  if (verifyMimetypeImage(images)) {
+    return res.status(401).json({
+      message : verifyMimetypeImage(images)
+    })
+  }
   async function uploads() {
     // Use `map` with `Promise.all` to wait for all uploads to complete
     await Promise.all(

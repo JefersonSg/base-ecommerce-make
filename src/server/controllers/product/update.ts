@@ -3,6 +3,8 @@ import Product from "../../db/models/Product";
 import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 import { ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
 import testeID from "../../shared/helpers/verifyId";
+import { verifySizeImage } from "../../shared/helpers/verifySize";
+import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
 
 export const updateProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -55,6 +57,20 @@ export const updateProduct = async (req: Request, res: Response) => {
       productData.promotionalPrice ?? product.promotionalPrice ?? 0;
 
     if (images?.length > 0) {
+      
+    if (verifySizeImage(images)) {
+      return res.status(401).json({
+        message : verifySizeImage(images)
+      })
+    }
+
+    if (verifyMimetypeImage(images)) {
+      return res.status(401).json({
+        message : verifyMimetypeImage(images)
+      })
+    }
+
+
       async function uploads() {
         // Use `map` with `Promise.all` to await for all uploads to complete
         await Promise.all(

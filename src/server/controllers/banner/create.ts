@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import BannersModel from "../../db/models/Banner";
+import { verifySizeImage } from "../../shared/helpers/verifySize";
+import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
 
 export const create = async (req: Request, res: Response) => {
   const { name, link, active } = req.body;
@@ -27,6 +29,17 @@ export const create = async (req: Request, res: Response) => {
         "Maximo de imagens excedidas, envie uma para Desktok e uma para Mobile",
     });
     return;
+  }
+  if (verifySizeImage(images)) {
+    return res.status(401).json({
+      message : verifySizeImage(images)
+    })
+  }
+
+  if (verifyMimetypeImage(images)) {
+    return res.status(401).json({
+      message : verifyMimetypeImage(images)
+    })
   }
 
   async function uploads() {

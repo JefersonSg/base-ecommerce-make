@@ -3,6 +3,8 @@ import Category from "../../db/models/Category";
 import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 import testeID from "../../shared/helpers/verifyId";
 import { CategoryInterface } from "../../shared/helpers/Interfaces";
+import { verifySizeImage } from "../../shared/helpers/verifySize";
+import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
 
 export const updateCategory = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -30,6 +32,18 @@ export const updateCategory = async (req: Request, res: Response) => {
 
   try {
     if (image && category.image) {
+      if (verifySizeImage(image)) {
+        return res.status(401).json({
+          message : verifySizeImage(image)
+        })
+      }
+  
+      if (verifyMimetypeImage(image)) {
+        return res.status(401).json({
+          message : verifyMimetypeImage(image)
+        })
+      }
+
       const newImage = await uploadToS3("category", image);
       await removeImageS3("category", category?.image);
       updateData.image = newImage;

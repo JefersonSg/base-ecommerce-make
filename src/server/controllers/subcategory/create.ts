@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import SubcategoryModel from "../../db/models/Subcategory";
+import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
+import { verifySizeImage } from "../../shared/helpers/verifySize";
 
 export const createSubcategory = async (req: Request, res: Response) => {
   const name = req.body.name;
@@ -13,6 +15,17 @@ export const createSubcategory = async (req: Request, res: Response) => {
       message: "A imagem é obrigatoria",
     });
     return;
+  }
+  if (verifySizeImage(image)) {
+    return res.status(401).json({
+      message : verifySizeImage(image)
+    })
+  }
+
+  if (verifyMimetypeImage(image)) {
+    return res.status(401).json({
+      message : verifyMimetypeImage(image)
+    })
   }
 
   const imageUpload = await uploadToS3("subcategory", image);

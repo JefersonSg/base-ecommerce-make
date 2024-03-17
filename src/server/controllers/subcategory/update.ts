@@ -3,6 +3,8 @@ import SubcategoryModel from "../../db/models/Subcategory";
 import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 import testeID from "../../shared/helpers/verifyId";
 import { SubcategoryInterface } from "../../shared/helpers/Interfaces";
+import { verifySizeImage } from "../../shared/helpers/verifySize";
+import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
 
 export const update = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -35,6 +37,18 @@ export const update = async (req: Request, res: Response) => {
     // Validations
 
     if (image && subcategory.image) {
+      if (verifySizeImage(image)) {
+        return res.status(401).json({
+          message : verifySizeImage(image)
+        })
+      }
+  
+      if (verifyMimetypeImage(image)) {
+        return res.status(401).json({
+          message : verifyMimetypeImage(image)
+        })
+      }
+      
       const newImage = await uploadToS3("subcategory", image);
 
       updateData.image = newImage;
