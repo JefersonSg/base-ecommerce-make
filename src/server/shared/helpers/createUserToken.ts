@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { ObjectId } from "mongoose";
 import "dotenv/config";
 import { userInterface } from "../../controllers/user/interfaceUser";
 
@@ -24,13 +23,14 @@ const createUserToken = async (
     },
     secret,
   );
+  const isAdmin = user._id.toString() === id_admin;
 
-  // return token
+
   return res.status(200).json({
     message: "Você está autenticado",
     token: token,
     userId: user._id,
-    admin: user.admin,
+    isAdmin: isAdmin,
   });
 };
 
