@@ -2,7 +2,6 @@ import {
   S3Client,
   PutObjectCommand,
   DeleteObjectCommand,
-  ObjectCannedACL,
 } from "@aws-sdk/client-s3";
 
 const bucketName = process.env.BUCKET_NAME ?? "";
@@ -26,13 +25,11 @@ async function uploadToS3(path: string, file: Express.Multer.File) {
 
     console.log(file.mimetype)
   const params: {
-    ACL: ObjectCannedACL;
     Bucket: string;
     Key: string;
     Body: Buffer;
     contentType: string;
   } = {
-    ACL: "public-read",
     Bucket: bucketName,
     Key: `${path}/${name}`,
     Body: file?.buffer,

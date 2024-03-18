@@ -27,8 +27,8 @@ export const getByCategory = async (req: Request, res: Response) => {
     }
 
     for (const subcategory of subcategories) {
-      subcategory.image = `${IMAGE_URL}/subcategory/${subcategory.image}`;
 
+      subcategory.image = `${IMAGE_URL}/subcategory/${subcategory.image}`;
 
     }
 
