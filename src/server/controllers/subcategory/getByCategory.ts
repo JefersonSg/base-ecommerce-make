@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-
-import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import SubcategoryModel from "../../db/models/Subcategory";
 import testeID from "../../shared/helpers/verifyId";
-import { SubcategoryInterface } from "../../shared/helpers/Interfaces";
+
+import ('dotenv/config')
+
+const IMAGE_URL = process.env.IMAGE_URL
 
 export const getByCategory = async (req: Request, res: Response) => {
   const categoryId = req.params.id;
@@ -26,12 +27,9 @@ export const getByCategory = async (req: Request, res: Response) => {
     }
 
     for (const subcategory of subcategories) {
-      const url = await getUrlImageS3("subcategory", subcategory.image);
+      
+      subcategory.image = `${IMAGE_URL}/products/${subcategory.image}`;
 
-      if (!subcategory?.image) {
-        return;
-      }
-      subcategory.image = url ?? "";
     }
 
     res.status(200).json({ subcategories });

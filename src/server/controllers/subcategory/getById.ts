@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 
-import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import SubcategoryModel from "../../db/models/Subcategory";
 import testeID from "../../shared/helpers/verifyId";
+
+
+import ('dotenv/config')
+
+const IMAGE_URL = process.env.IMAGE_URL
 
 export const getById = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -26,9 +30,7 @@ export const getById = async (req: Request, res: Response) => {
 
     if (!subcategory.image) return res.status(200).json({ subcategory });
 
-    const url = await getUrlImageS3("subcategory", subcategory?.image);
-
-    subcategory.image = url ?? "";
+    subcategory.image = `${IMAGE_URL}/products/${subcategory.image}`;
 
     res.status(200).json({
       subcategory,

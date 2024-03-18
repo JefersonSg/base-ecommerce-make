@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-import Category from "../../db/models/Category";
-import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import BannersModel from "../../db/models/Banner";
 import { BannerInterface } from "../../shared/helpers/Interfaces";
+
+import ('dotenv/config')
+
+const IMAGE_URL = process.env.IMAGE_URL
 
 export const getAll = async (req: Request, res: Response) => {
   const banners = (await BannersModel.find().sort(
@@ -17,11 +19,9 @@ export const getAll = async (req: Request, res: Response) => {
   }
 
   for (const banner of banners) {
-    const url1 = await getUrlImageS3("banners", banner?.imageMobile);
-    const url2 = await getUrlImageS3("banners", banner?.imageDesktop);
 
-    banner.imageMobile = url1 ?? "";
-    banner.imageDesktop = url2 ?? "";
+    banner.imageMobile = `${IMAGE_URL}/banners/${banner?.imageMobile}`;
+    banner.imageDesktop = `${IMAGE_URL}/banners/${banner?.imageDesktop}`;
   }
 
   try {

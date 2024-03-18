@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import Product from "../../db/models/Product";
-import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import { ProductDataBackEnd } from "../../shared/helpers/Interfaces";
+
+
+import ('dotenv/config')
+
+const IMAGE_URL = process.env.IMAGE_URL
 
 export const getAllActives = async (req: Request, res: Response) => {
 
@@ -18,9 +22,8 @@ try {
 
   for (const product of products) {
     for (let i = 0; i < product.images.length; i++) {
-      const url = await getUrlImageS3("products", product?.images[i]);
+      product.images[i] = `${IMAGE_URL}/products/${product.images[i]}`;
 
-      product.images[i] = url ?? "";
     }
   }
 

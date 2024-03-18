@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import Category from "../../db/models/Category";
-import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
+
+import ('dotenv/config')
+
+const IMAGE_URL = process.env.IMAGE_URL
 
 interface category {
   name: string;
@@ -18,9 +21,9 @@ export const getAll = async (req: Request, res: Response) => {
     return;
   }
   for (const category of categories) {
-    const url = await getUrlImageS3("category", category.image);
 
-    category.image = url ?? "";
+    category.image = `${IMAGE_URL}/category/${category.image}`;
+
   }
 
   try {

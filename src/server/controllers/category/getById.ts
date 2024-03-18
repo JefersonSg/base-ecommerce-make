@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 
 import Category from "../../db/models/Category";
-import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import testeID from "../../shared/helpers/verifyId";
+
+import ('dotenv/config')
+
+const IMAGE_URL = process.env.IMAGE_URL
 
 export const getById = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -30,9 +33,9 @@ export const getById = async (req: Request, res: Response) => {
         category,
       });
     }
-    const url = await getUrlImageS3("category", category?.image);
 
-    category.image = url;
+    category.image = `${IMAGE_URL}/category/${category.image}`;
+    
     res.status(200).json({
       category,
     });

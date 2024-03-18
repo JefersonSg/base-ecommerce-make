@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import getUrlImageS3 from "../../shared/helpers/getUrlImageS3";
 import SubcategoryModel from "../../db/models/Subcategory";
-import { SubcategoryInterface } from "../../shared/helpers/Interfaces";
+
+import ('dotenv/config')
+
+const IMAGE_URL = process.env.IMAGE_URL
 
 export const getAll = async (req: Request, res: Response) => {
   const subcategories = await SubcategoryModel.find().sort("-createdAt");
@@ -15,12 +17,9 @@ export const getAll = async (req: Request, res: Response) => {
 
   for (const subcategory of subcategories) {
     if (subcategory.image) {
-      const url = await getUrlImageS3("subcategory", subcategory?.image);
-
-      if (!subcategory?.image) {
-        return;
-      }
-      subcategory.image = url ?? "";
+      
+      
+      subcategory.image = `${IMAGE_URL}/products/${subcategory.image}`;
     }
   }
 
