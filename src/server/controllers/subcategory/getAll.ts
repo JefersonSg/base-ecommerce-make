@@ -19,7 +19,7 @@ export const getAll = async (req: Request, res: Response) => {
     if (subcategory.image) {
       
       
-      subcategory.image = `${IMAGE_URL}/products/${subcategory.image}`;
+      subcategory.image = `${IMAGE_URL}/subcategory/${subcategory.image}`;
     }
   }
 

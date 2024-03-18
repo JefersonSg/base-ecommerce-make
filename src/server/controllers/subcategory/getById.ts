@@ -30,7 +30,7 @@ export const getById = async (req: Request, res: Response) => {
 
     if (!subcategory.image) return res.status(200).json({ subcategory });
 
-    subcategory.image = `${IMAGE_URL}/products/${subcategory.image}`;
+    subcategory.image = `${IMAGE_URL}/subcategory/${subcategory.image}`;
 
     res.status(200).json({
       subcategory,
