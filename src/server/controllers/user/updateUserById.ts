@@ -10,7 +10,7 @@ interface User {
   name: string;
   surname: string;
   email: string;
-  image: string;
+  image?: string;
   password: string;
 }
 
@@ -24,7 +24,8 @@ export const editUser = async (req: Request, res: Response) => {
     });
   }
 
-  const { name, email, password, confirmpassword } = req.body;
+  const { name,surname, email, password, confirmpassword } = req.body;
+  const image = req.file
   const { id } = req.params;
 
   if (id && id !== user._id.toString()) {
@@ -33,20 +34,23 @@ export const editUser = async (req: Request, res: Response) => {
     });
   }
 
-  if (req.file) {
-    const fileName = await uploadToS3("users", req.file);
-    user.image = fileName;
-  }
+  const emailUsing = await User.findOne({ email: email });
 
-  user.name = name;
-  const userExists = await User.findOne({ email: email });
-
-  if (user?.email !== email && userExists) {
+  if (user?.email !== email && emailUsing) {
     res.status(422).json({ message: "E-mail em uso, utilize outro e-mail!" });
     return;
   }
 
-  user.email = email;
+    user.email = email ?? user.email;
+    user.surname = surname ?? user.surname;
+    user.name = name ?? user.name;
+  
+  if (image) {
+    const fileName = await uploadToS3("users", image);
+    user.image = fileName;
+  } else {
+    user.image = user.image
+  }
 
   if (password != confirmpassword) {
     res.status(422).json({ error: "As senhas não conferem." });

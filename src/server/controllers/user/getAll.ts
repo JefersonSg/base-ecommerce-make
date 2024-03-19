@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import User from "../../db/models/User";
+const IMAGE_URL = process.env.IMAGE_URL
+
+const id_admin = process.env.ID_ADMIN ?? "";
 
 export const getAll = async (req: Request, res: Response) => {
   try {
@@ -12,6 +15,8 @@ export const getAll = async (req: Request, res: Response) => {
 
     users.forEach((user) => {
       user.password = "";
+      user.image = `${IMAGE_URL}/users/${user.image}`;
+
     });
 
     res.status(200).json({ users });

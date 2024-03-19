@@ -3,6 +3,8 @@ import getUserByToken from "../../shared/helpers/getUserByToken";
 import getToken from "../../shared/helpers/getToken";
 import "dotenv/config";
 import { userInterface } from "./interfaceUser";
+import ('dotenv/config')
+const IMAGE_URL = process.env.IMAGE_URL
 
 const id_admin = process.env.ID_ADMIN ?? "";
 
@@ -21,6 +23,9 @@ export const getByToken = async (req: Request, res: Response) => {
       res.status(422).json({ message: "Usuário não encontrado!" });
     }
     userToken.password = "";
+
+    userToken.image = `${IMAGE_URL}/users/${userToken.image}`;
+
 
     const isAdmin = userToken._id.toString() === id_admin;
     return res.status(200).json({ user: userToken, isAdmin: isAdmin });
