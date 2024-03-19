@@ -15,7 +15,9 @@ export const getAll = async (req: Request, res: Response) => {
 
     users.forEach((user) => {
       user.password = "";
-      user.image = `${IMAGE_URL}/users/${user.image}`;
+      if (user.image) {
+        user.image = `${IMAGE_URL}/users/${user.image}`;
+      }
 
     });
 

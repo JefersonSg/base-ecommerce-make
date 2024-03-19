@@ -24,7 +24,9 @@ export const getByToken = async (req: Request, res: Response) => {
     }
     userToken.password = "";
 
-    userToken.image = `${IMAGE_URL}/users/${userToken.image}`;
+    if (userToken.image) {
+      userToken.image = `${IMAGE_URL}/users/${userToken.image}`;
+    }
 
 
     const isAdmin = userToken._id.toString() === id_admin;

@@ -4,11 +4,11 @@ import "dotenv/config";
 import { userInterface } from "./interfaceUser";
 import testeID from "../../shared/helpers/verifyId";
 import ('dotenv/config')
+const IMAGE_URL = process.env.IMAGE_URL
 
 const id_admin = process.env.ID_ADMIN ?? "";
 
 
-const IMAGE_URL = process.env.IMAGE_URL
 
 export const getUserById = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -28,7 +28,10 @@ export const getUserById = async (req: Request, res: Response) => {
     const user = (await User.findById(id)) as userInterface;
     const isAdmin = user._id.toString() === id_admin;
 
-    user.image = `${IMAGE_URL}/subcategory/${user.image}`;
+    if (user.image) {
+      user.image = `${IMAGE_URL}/users/${user.image}`;
+    }
+
        
     if (!user) {
       res.status(422).json({ message: "Usuário não encontrado!" });
