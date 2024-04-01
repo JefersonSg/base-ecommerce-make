@@ -14,6 +14,9 @@ export const validationCreateAddress = validate({
       .required("É necessário preencher o campo de telefone")
       .matches(phoneRegex, "O número de telefone invalido")
       .min(11, "O telefone deve ter no mínimo 11 caracteres"),
+      cpf: yup
+      .string()
+      .required("É necessário preencher o campo de CPF"),
     cep: yup
       .string()
       .required("É necessário preencher o campo de cep")

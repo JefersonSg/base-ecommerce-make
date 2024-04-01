@@ -4,11 +4,13 @@ import AddressModel from "../../../db/models/Address";
 export const updateAddressById = async (req: Request, res: Response) => {
   const {
     nome,
+    cpf,
+    telefone,
+    email,
     cidade,
     rua,
     bairro,
     cep,
-    telefone,
     complemento,
     referencia,
     numero,
@@ -28,7 +30,9 @@ export const updateAddressById = async (req: Request, res: Response) => {
     const createAddress = {
       userId: address.userId,
       nome: nome ?? address.nome,
+      cpf: cpf ?? address.cpf,
       telefone: telefone ?? address.telefone,
+      email: email ?? address.email,
       cep: cep ?? address.cep,
       cidade: cidade ?? address.cidade,
       uf: uf ?? address.uf,

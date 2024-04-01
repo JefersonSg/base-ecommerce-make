@@ -7,6 +7,9 @@ import { userInterface } from "../interfaceUser";
 export const createAddress = async (req: Request, res: Response) => {
   const {
     nome,
+    cpf,
+    telefone,
+    email,
     cidade,
     rua,
     bairro,
@@ -14,7 +17,6 @@ export const createAddress = async (req: Request, res: Response) => {
     complemento,
     referencia,
     numero,
-    telefone,
     uf,
   } = req.body;
 
@@ -39,7 +41,9 @@ export const createAddress = async (req: Request, res: Response) => {
     const createAddress = await new AddressModel({
       userId: user._id,
       nome,
+      cpf,
       telefone,
+      email,
       cep,
       cidade,
       uf,
