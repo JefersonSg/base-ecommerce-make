@@ -31,16 +31,13 @@ export const createComment = async(req : Request,res : Response)=>{
     }
     let alreadyCommented = await CommentsModel.find({userId, productId})
 
-
-
-
     if (alreadyCommented[0]) {
       return res.status(401).json({
         message: 'Usuário ja possui um comentário neste produto'
       })
     }
 
-    const imageUpload = await uploadToS3("comments", image);
+    const imageUpload = image ? await uploadToS3("comments", image) : '';
 
     const commentData = new CommentsModel ({
       productId,

@@ -8,13 +8,16 @@ interface ImageFile {
 }
 
 export function verifyMimetypeImage ( images: ImageFile[]) {
-    for (let i = 0; i < images.length; i++) {
+  if (!images.length) {
+    return 
+  }
+    for (let i = 0; i < images?.length; i++) {
 
         let mimeTypeOk = false
         const mimeTypes = ['image/jpeg' , 'image/png','image/webp', 'image/svg+xml']
 
-        for (let j = 0; j < mimeTypes.length; j++) {
-            if (mimeTypes[j] === images[i].mimetype) {
+        for (let j = 0; j < mimeTypes?.length; j++) {
+            if (mimeTypes?.[j] === images?.[i]?.mimetype) {
                mimeTypeOk = true;
             }
         }

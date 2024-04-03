@@ -38,7 +38,7 @@ export const updateCommentById = async (req: Request, res: Response) => {
     };
 
     if (image) {
-      const newImage = await uploadToS3("comments", image);
+      const newImage = image ? await uploadToS3("comments", image) : '';
 
       updateCommentData.image = [newImage];
       await removeImageS3("comments", commentData?.image[0]);
