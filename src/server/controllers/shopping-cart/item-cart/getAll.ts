@@ -27,7 +27,16 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
   const values : any[] | null = await Promise.all( itemsCart.map( async (item)=>{
     const productPrice = await Product.findOne({_id: item.productId})
 
+    
+
     if (productPrice) {
+      const colorIndex = productPrice.colors.indexOf(item.color)
+
+      if (colorIndex < 0) {
+         ItemCart.findByIdAndDelete(item._id)
+
+         return null
+      }
       if (productPrice.promotion && productPrice.promotionalPrice) {
         return  +productPrice.promotionalPrice
       }

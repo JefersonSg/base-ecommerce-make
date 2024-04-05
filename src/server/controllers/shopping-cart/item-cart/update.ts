@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import ItemCart from "../../../db/models/ItemCart";
-import { itemCart } from "../../../shared/helpers/Interfaces";
+import { ProductDataBackEnd, itemCart } from "../../../shared/helpers/Interfaces";
+import Product from "../../../db/models/Product";
+import { removeItemCartById } from "./removeById";
 
 export const updateItemCart = async (req: Request, res: Response) => {
   const { itemId } = req.params;
   const { color, amount, size } = req.body;
   const ItemShoppingCart = (await ItemCart.findById(itemId)) as itemCart;
+  
 
   if (!ItemShoppingCart) {
     res.status(404).json({
@@ -13,9 +16,33 @@ export const updateItemCart = async (req: Request, res: Response) => {
     });
     return;
   }
+  const product = await Product.findById(ItemShoppingCart?.productId) as ProductDataBackEnd
+
+  if (!product) {
+    return res.status(404).json({
+      message: 'Erro ao procurar pelo produto'
+    })
+  }
+
+  const colorIndex = product.colors.indexOf(color)
+
+  if (colorIndex < 0) {
+     res.status(400).json({
+      message: 'Erro ao atualizar o produto, está cor não está disponivel'
+    })
+
+    await ItemCart.findByIdAndDelete(itemId)
+    return
+  }
   if (Number(amount) < 1) {
     res.status(404).json({
       message: "o item não pode ser menor do que zero",
+    });
+    return;
+  }
+  if (Number(amount) > product.stock.amount[colorIndex]) {
+    res.status(404).json({
+      message: "Limite alcançado",
     });
     return;
   }
