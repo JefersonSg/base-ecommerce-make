@@ -18,11 +18,13 @@ const CommentsModel = mongoose.model(
   new Schema(
     {
       productId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'products',
         required: true,
       },
       userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
         required: true,
       },
       comment: {

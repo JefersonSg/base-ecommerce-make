@@ -6,11 +6,13 @@ const ItemCart = mongoose.model(
   "item_cart",
   new Schema({
     shoppingCartId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'shopping-carts',
       required: true,
     },
     productId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+        ref: 'products',
       required: true,
     },
     color: {

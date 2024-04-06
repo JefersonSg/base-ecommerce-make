@@ -7,7 +7,9 @@ const ShoppingCart = mongoose.model(
   new Schema(
     {
       userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+        required: true,
       },
       status: {
         type: String,

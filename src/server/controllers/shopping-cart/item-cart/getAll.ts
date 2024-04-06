@@ -27,13 +27,12 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
   const values : any[] | null = await Promise.all( itemsCart.map( async (item)=>{
     const productPrice = await Product.findOne({_id: item.productId})
 
-    
-
     if (productPrice) {
       const colorIndex = productPrice.colors.indexOf(item.color)
+      const sizeIndex = productPrice.size.indexOf(item.size)
 
-      if (colorIndex < 0) {
-         ItemCart.findByIdAndDelete(item._id)
+      if (colorIndex < 0 || sizeIndex < 0) {
+         await ItemCart.findByIdAndRemove(item._id)
 
          return null
       }

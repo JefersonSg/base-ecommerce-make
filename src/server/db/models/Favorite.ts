@@ -7,11 +7,13 @@ const FavoriteModel = mongoose.model(
   new Schema(
     {
       userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
         required: true,
       },
       productId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'products',
         required: true,
       },
     },

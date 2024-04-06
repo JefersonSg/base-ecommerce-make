@@ -7,13 +7,13 @@ const ViewsModel = mongoose.model(
   new Schema(
     {
       product: {
-        type: String,
-        ref: "Produto",
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "products",
         required: true,
       },
       userId: {
-        type: String,
-        ref: "User",
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
       },
     },
     { timestamps: true },

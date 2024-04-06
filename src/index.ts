@@ -11,6 +11,7 @@ import SubcategoryRoutes from "./server/routes/SubcategoryRoutes";
 import BannersRoutes from "./server/routes/BannersRoutes";
 import FavoritesRoutes from "./server/routes/FavoritesRoutes";
 import ShoppingRoutes from "./server/routes/ShoppingRoutes";
+import OrderRoutes from "./server/routes/OrderRoutes";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -54,6 +55,7 @@ app.use("/subcategories", SubcategoryRoutes);
 app.use("/banners", BannersRoutes);
 app.use("/favorites", FavoritesRoutes);
 app.use("/shopping", ShoppingRoutes);
+app.use("/order", OrderRoutes);
 
 // Routes
 app.listen(port);

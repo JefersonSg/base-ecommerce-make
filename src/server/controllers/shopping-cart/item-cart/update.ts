@@ -25,8 +25,9 @@ export const updateItemCart = async (req: Request, res: Response) => {
   }
 
   const colorIndex = product.colors.indexOf(color)
+  const sizeIndex = product.size.indexOf(size)
 
-  if (colorIndex < 0) {
+  if (colorIndex < 0 || sizeIndex < 0) {
      res.status(400).json({
       message: 'Erro ao atualizar o produto, está cor não está disponivel'
     })

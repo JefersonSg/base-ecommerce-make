@@ -17,11 +17,13 @@ const Product = mongoose.model(
         type: String,
       },
       category: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'categories',
         required: true,
       },
       subcategory: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'subcategories',
         required: true,
       },
       size: {
