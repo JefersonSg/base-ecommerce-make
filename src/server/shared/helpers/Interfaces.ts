@@ -1,6 +1,8 @@
+import { ObjectId } from "mongoose";
+
 export interface CommentInterface {
-  productId: string;
-  userId: string;
+  productId: ObjectId;
+  userId: ObjectId;
   comment: string;
   image?: string[];
   stars: number;
@@ -45,7 +47,7 @@ export interface ProductDataBackEnd {
   promotion: boolean;
   active: boolean;
   promotionalPrice: number;
-  comments: CommentInterface[];
+  sales: number
 }
 
 export interface CategoryInterface {
@@ -89,4 +91,19 @@ export interface AddressInterface {
   complemento: string;
   referencia: string;
   numero: string;
+}
+
+export interface OrderInterface {
+  _id: string;
+  userId: ObjectId,
+  address: [AddressInterface],
+  status: string,
+  productIds: ObjectId[], 
+  valueProducts: Number[],
+  productAmounts: number[],
+  productColors: string[],
+  totalPayment: number,
+  methodPayment: string,
+  discount:  Number,
+  orderTracking:  string
 }

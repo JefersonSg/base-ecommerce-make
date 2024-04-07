@@ -11,5 +11,15 @@ router.post(
   checkToken,
   orderController.createOrder,
 );
+router.patch(
+  "/cancel/:orderId",
+  checkToken,
+  orderController.cancelOrder,
+);
+router.patch(
+  "/confirm/:orderId",
+  checkToken,
+  orderController.confirmOrder,
+);
 
 export default router;

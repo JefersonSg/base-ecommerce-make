@@ -42,10 +42,31 @@ export const updateItemCart = async (req: Request, res: Response) => {
     return;
   }
   if (Number(amount) > product.stock.amount[colorIndex]) {
-    res.status(404).json({
-      message: "Limite alcançado",
-    });
+    try {
+      const newItem = {
+        shoppingCartId: ItemShoppingCart.shoppingCartId,
+        productId: ItemShoppingCart.productId,
+        color: color ?? ItemShoppingCart.color,
+        amount: product.stock.amount[colorIndex],
+        size: size ?? ItemShoppingCart.size,
+      };
+
+      const newItemCart = await ItemCart.findByIdAndUpdate(itemId, newItem);
+
+      res.status(200).json({
+        message: "Limite alcançado",
+      });
     return;
+
+    } catch (error) {
+      console.log('Erro ao atualizar o item-cart',error)
+      res.status(400).json({
+        message: "Limite alcançado",
+      });
+    }
+
+
+
   }
   const newItem = {
     shoppingCartId: ItemShoppingCart.shoppingCartId,

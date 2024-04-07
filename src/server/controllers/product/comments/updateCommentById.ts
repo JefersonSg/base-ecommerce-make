@@ -29,8 +29,8 @@ export const updateCommentById = async (req: Request, res: Response) => {
       });
     }
 
-    let updateCommentData: CommentInterface = {
-      userId: commentData?.userId ?? "",
+    let updateCommentData: any = {
+      userId: commentData?.userId,
       stars: stars ?? commentData?.stars ?? 5,
       productId: commentData.productId,
       image: [],

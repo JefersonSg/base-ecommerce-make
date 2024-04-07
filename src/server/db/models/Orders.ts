@@ -1,3 +1,4 @@
+import { AddressInterface } from "../../shared/helpers/Interfaces";
 import mongoose from "../conn";
 
 const { Schema } = mongoose;
@@ -11,9 +12,8 @@ const Orders = mongoose.model(
         ref: 'users',
         required: true,
       },
-      addressId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'addresses',
+      address: {
+        type: Array<AddressInterface>,
         required: true,
       },
       status: {
@@ -24,16 +24,16 @@ const Orders = mongoose.model(
         type: Array<String>,
         required: true,
       },
-      productPayment: {
+      valueProducts: {
         type: Array<Number>,
         required: true,
       },
       productAmounts: {
-        type: String,
+        type: Array<String>,
         required: true,
       },
       productColors: {
-        type: String,
+        type: Array<String>,
         required: true,
       },
       totalPayment: {
@@ -45,11 +45,10 @@ const Orders = mongoose.model(
         required: true,
       },
       discount: {
-        type: String,
+        type: Number,
       },
       orderTracking: {
-        type: String,
-        required: true,
+        type: String
       },
     },
     { timestamps: true },
