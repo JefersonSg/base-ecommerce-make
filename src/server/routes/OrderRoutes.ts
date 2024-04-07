@@ -21,5 +21,35 @@ router.patch(
   checkToken,
   orderController.confirmOrder,
 );
+router.patch(
+  "/dispatch/:orderId",
+  checkToken,
+  orderController.orderDispatched,
+);
+router.get(
+  "/get/All",
+  checkToken,
+  orderController.getAllOrders,
+);
+router.get(
+  "/get/:orderId",
+  checkToken,
+  orderController.getOrderById,
+);
+router.get(
+  "/get/canceled",
+  checkToken,
+  orderController.getCanceledOrders,
+);
+router.get(
+  "/get/confirmed",
+  checkToken,
+  orderController.getConfirmedOrders,
+);
+router.get(
+  "/get/dispatched",
+  checkToken,
+  orderController.getDispatchedOrders,
+);
 
 export default router;
