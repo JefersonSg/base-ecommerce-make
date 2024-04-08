@@ -38,7 +38,7 @@ export const createOrder = async (req: Request, res: Response) =>{
   
     const itemsCart = await ItemCart.find({ shoppingCartId: shoppingCart._id });
   
-    if (!itemsCart) {
+    if (!itemsCart[0]) {
       res.status(404).json({
         message: "nenhum item encontrado no carrinho",
       });
@@ -102,7 +102,7 @@ export const createOrder = async (req: Request, res: Response) =>{
       address: address,
       userId,
       methodPayment,
-      status: 'Pendente',
+      status: 'pendente',
       productIds: produtosId,
       productAmounts: produtosQuantidade,
       productColors: produtosCores,

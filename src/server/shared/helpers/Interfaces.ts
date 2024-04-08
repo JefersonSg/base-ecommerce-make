@@ -95,15 +95,15 @@ export interface AddressInterface {
 
 export interface OrderInterface {
   _id: string;
-  userId: ObjectId,
-  address: [AddressInterface],
-  status: string,
-  productIds: ObjectId[], 
-  valueProducts: Number[],
-  productAmounts: number[],
-  productColors: string[],
-  totalPayment: number,
-  methodPayment: string,
-  discount:  Number,
+  userId: ObjectId;
+  address: [AddressInterface];
+  status: string;
+  productIds: ObjectId[]; 
+  valueProducts: Number[];
+  productAmounts: number[];
+  productColors: string[];
+  totalPayment: number;
+  methodPayment: string;
+  discount:  Number;
   orderTracking:  string
 }

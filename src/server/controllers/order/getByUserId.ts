@@ -14,7 +14,7 @@ export const getOrderByUserId = async (req: Request, res: Response) =>{
     }
 
     try {
-    const orders = await Orders.find({userId: userId}) as OrderInterface[]
+    const orders = await Orders.find({userId: userId}).sort({createdAt: -1})
 
     
     if (!orders[0]) {

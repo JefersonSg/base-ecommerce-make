@@ -6,6 +6,37 @@ import { orderController } from "../controllers";
 // middleware
 import checkToken from "../shared/helpers/checkToken";
 
+
+//  gets
+router.get(
+  "/get-all",
+  checkToken,
+  orderController.getAllOrders,
+);
+router.get(
+  "/get-by-user-id/:userId",
+  orderController.getOrderByUserId,
+);
+router.get(
+  "/get-by-order-id/:orderId",
+  checkToken,
+  orderController.getOrderById,
+);
+router.get(
+  "/get-canceled",
+  checkToken,
+  orderController.getCanceledOrders,
+);
+router.get(
+  "/get-confirmed",
+  checkToken,
+  orderController.getConfirmedOrders,
+);
+router.get(
+  "/get-dispatched",
+  checkToken,
+  orderController.getDispatchedOrders,
+);
 router.post(
   "/create/:userId",
   checkToken,
@@ -26,30 +57,6 @@ router.patch(
   checkToken,
   orderController.orderDispatched,
 );
-router.get(
-  "/get/All",
-  checkToken,
-  orderController.getAllOrders,
-);
-router.get(
-  "/get/:orderId",
-  checkToken,
-  orderController.getOrderById,
-);
-router.get(
-  "/get/canceled",
-  checkToken,
-  orderController.getCanceledOrders,
-);
-router.get(
-  "/get/confirmed",
-  checkToken,
-  orderController.getConfirmedOrders,
-);
-router.get(
-  "/get/dispatched",
-  checkToken,
-  orderController.getDispatchedOrders,
-);
+
 
 export default router;
