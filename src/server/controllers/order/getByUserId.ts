@@ -14,7 +14,9 @@ export const getOrderByUserId = async (req: Request, res: Response) =>{
     }
 
     try {
-    const orders = await Orders.find({userId: userId}).sort({createdAt: -1})
+    const orders = await Orders.find({userId: userId}).sort(
+      "-createdAt"
+    )
 
     
     if (!orders[0]) {

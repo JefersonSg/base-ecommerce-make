@@ -105,5 +105,6 @@ export interface OrderInterface {
   totalPayment: number;
   methodPayment: string;
   discount:  Number;
-  orderTracking:  string
+  orderTracking:  string;
+  createdAt: string;
 }

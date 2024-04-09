@@ -5,6 +5,7 @@ import { NextFunction, Request, Response } from "express";
 // middleware to validate token
 const checkToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
+  console.log(req)
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) return res.status(401).json({ message: "Acesso negado!" });
