@@ -13,6 +13,7 @@ interface newUser {
 
 export const create = async (req: Request, res: Response) => {
   const name = req.body.name;
+  const surname = req.body.surname;
   const email = req.body.email;
   const password = req.body.password;
 
@@ -31,7 +32,7 @@ export const create = async (req: Request, res: Response) => {
   // create user
   const user = new User({
     name: name,
-    surname: name,
+    surname: surname,
     email: email,
     password: passwordHash,
   });

@@ -6,7 +6,7 @@ import { NextFunction, Request, Response } from "express";
 const checkToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-
+  
   if (!token) return res.status(401).json({ message: "Acesso negado!" });
   const secret: string = process.env.SECRET_JWT || "";
 
