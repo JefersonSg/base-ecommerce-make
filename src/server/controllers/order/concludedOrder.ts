@@ -4,20 +4,15 @@ import Product from "../../db/models/Product";
 import { OrderInterface, ProductDataBackEnd } from "../../shared/helpers/Interfaces";
 import Orders from "../../db/models/Orders";
 
-export const orderDispatched = async (req: Request, res: Response) =>{
+export const concludedOrder = async (req: Request, res: Response) =>{
     const { orderId } = req.params;
-    const {orderTracking} = req.body
 
     if (!orderId) {
         return res.status(400).json({
             message: 'É necessário o id do pedido'
         })
     }
-    if (!orderTracking) {
-        return res.status(400).json({
-            message: 'É necessário o código de rastreio do pedido'
-        })
-    }
+
     try {
     const order = await Orders.findById(orderId) as OrderInterface
 
@@ -35,17 +30,17 @@ export const orderDispatched = async (req: Request, res: Response) =>{
     }
 
    const pedidoConfirmado = await Orders.findOneAndUpdate({_id: orderId}, {
-    $set: {status: 'Enviado', orderTracking}
+    $set: {status: 'concluido'}
    })
 
     return res.status(200).json({
-      message: 'Pedido atualizado com sucesso', pedidoConfirmado
+      message: 'Pedido confirmado com sucesso', pedidoConfirmado
   })
     } catch (error) {
       res.status(
         400
       ).json({
-        message: 'Erro ao atualizar o pedido para enviado', error
+        message: 'Erro ao cancelar o pedido', error
       })
     }
 

@@ -4,7 +4,7 @@ import Product from "../../db/models/Product";
 import { OrderInterface, ProductDataBackEnd } from "../../shared/helpers/Interfaces";
 import Orders from "../../db/models/Orders";
 
-export const reversalOrder = async (req: Request, res: Response) =>{
+export const cancelOrder = async (req: Request, res: Response) =>{
     const { orderId } = req.params;
 
     if (!orderId) {
@@ -23,12 +23,6 @@ export const reversalOrder = async (req: Request, res: Response) =>{
       })
     }
     if (order.status === 'cancelado') {
-      return res.status(404).json({
-        message: 'O pedido já foi cancelado anteriormente'
-      })
-
-    }
-    if (order.status === 'devolvido') {
       return res.status(404).json({
         message: 'O pedido já foi cancelado anteriormente'
       })
@@ -58,7 +52,7 @@ export const reversalOrder = async (req: Request, res: Response) =>{
   }
 
    const pedidoCancelado = await Orders.findOneAndUpdate({_id: orderId}, {
-    $set: {status: 'devolvido'}
+    $set: {status: 'cancelado'}
    })
 
 

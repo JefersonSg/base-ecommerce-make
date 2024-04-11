@@ -55,7 +55,17 @@ router.patch(
 router.patch(
   "/dispatch/:orderId",
   checkToken,
-  orderController.orderDispatched,
+  orderController.dispatchedOrder,
+);
+router.patch(
+  "/reversal/:orderId",
+  checkToken,
+  orderController.dispatchedOrder,
+);
+router.patch(
+  "/concluded/:orderId",
+  checkToken,
+  orderController.concludedOrder,
 );
 
 

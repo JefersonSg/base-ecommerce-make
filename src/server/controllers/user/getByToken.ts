@@ -34,7 +34,7 @@ export const getByToken = async (req: Request, res: Response) => {
   }
   } catch (error) {
     console.log("erro no getByToken user", error)
-    return res.status(500).json({
+     res.status(500).json({
   message: "erro no getByToken user", error
 })
   }

@@ -3,7 +3,7 @@ import User from "../../db/models/User";
 import getToken from "../../shared/helpers/getToken";
 import getUserByToken from "../../shared/helpers/getUserByToken";
 import bcrypt from "bcrypt";
-import { uploadToS3 } from "../../shared/helpers/imageUpload";
+import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 
 interface User {
   _id: string;
@@ -47,6 +47,9 @@ export const editUser = async (req: Request, res: Response) => {
   
   if (image) {
     const fileName = await uploadToS3("users", image);
+    if (user.image) {
+      await removeImageS3('users', user?.image)
+    }
     user.image = fileName;
   } else {
     user.image = user.image

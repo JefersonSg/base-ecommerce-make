@@ -4,8 +4,9 @@ import Product from "../../db/models/Product";
 import { OrderInterface, ProductDataBackEnd } from "../../shared/helpers/Interfaces";
 import Orders from "../../db/models/Orders";
 
-export const confirmOrder = async (req: Request, res: Response) =>{
+export const dispatchedOrder = async (req: Request, res: Response) =>{
     const { orderId } = req.params;
+    const {orderTracking} = req.body
 
     if (!orderId) {
         return res.status(400).json({
@@ -28,18 +29,18 @@ export const confirmOrder = async (req: Request, res: Response) =>{
         message: 'O pedido já foi cancelado anteriormente'
       })
     }
-    if (order.status !== 'pendente') {
+    if (!orderTracking) {
       return res.status(404).json({
-        message: 'O pedido não pode ser confirmado / status superior'
+        message: 'É necessário o código de rastreio'
       })
     }
 
    const pedidoConfirmado = await Orders.findOneAndUpdate({_id: orderId}, {
-    $set: {status: 'confirmado'}
+    $set: {status: 'enviado', orderTracking}
    })
 
     return res.status(200).json({
-      message: 'Pedido confirmado com sucesso', pedidoConfirmado
+      message: 'Pedido atualizado com sucesso', pedidoConfirmado
   })
     } catch (error) {
       res.status(
