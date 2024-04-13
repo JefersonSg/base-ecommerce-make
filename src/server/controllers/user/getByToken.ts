@@ -22,14 +22,17 @@ export const getByToken = async (req: Request, res: Response) => {
     if (!userToken) {
       res.status(422).json({ message: "Usuário não encontrado!" });
     }
+    if (!userToken.password) {
+      return false
+    }
     userToken.password = "";
-
+    
     if (userToken.image) {
       userToken.image = `${IMAGE_URL}/users/${userToken.image}`;
     }
 
 
-    const isAdmin = userToken._id.toString() === id_admin;
+    const isAdmin = userToken?._id?.toString() === id_admin;
     return res.status(200).json({ user: userToken, isAdmin: isAdmin });
   }
   } catch (error) {

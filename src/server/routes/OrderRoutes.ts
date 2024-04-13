@@ -14,11 +14,11 @@ router.get(
   orderController.getAllOrders,
 );
 router.get(
-  "/get-by-user-id/:userId",
+  "/get-order-by-user-id/:userId",
   orderController.getOrderByUserId,
 );
 router.get(
-  "/get-by-order-id/:orderId",
+  "/get-order-by-id/:orderId",
   checkToken,
   orderController.getOrderById,
 );

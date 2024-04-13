@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 
 import Product from "../../db/models/Product";
-import { OrderInterface, ProductDataBackEnd } from "../../shared/helpers/Interfaces";
+import { OrderInterface } from "../../shared/helpers/Interfaces";
 import Orders from "../../db/models/Orders";
+import testeID from "../../shared/helpers/verifyId";
 
 export const getOrderById = async (req: Request, res: Response) =>{
     const { orderId } = req.params;
@@ -12,11 +13,16 @@ export const getOrderById = async (req: Request, res: Response) =>{
             message: 'É necessário o id do pedido'
         })
     }
-
-    try {
-    const order = await Orders.findById(orderId) as OrderInterface
-
+    if (!testeID(orderId)) {
+      return res.status(400).json({
+        error: 'ID não correspondente'
+      })
+    }
     
+    try {
+
+    const order = await Orders.findById(orderId.toString()) as OrderInterface
+
     if (!order) {
       return res.status(404).json({
         message: 'Nenhum pedido encontrado'
@@ -27,10 +33,11 @@ export const getOrderById = async (req: Request, res: Response) =>{
       pedido: order
   })
     } catch (error) {
+      console.log(error)
       res.status(
         400
       ).json({
-        message: 'Erro ao cancelar o pedido', error
+        message: 'Erro ao buscar o pedido', error
       })
     }
 

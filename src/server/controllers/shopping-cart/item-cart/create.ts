@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import ShoppingCart from "../../../db/models/ShoppingCart";
 import ItemCart from "../../../db/models/ItemCart";
+import Product from "../../../db/models/Product";
+import { ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
 
 export const addNewItemCart = async (req: Request, res: Response) => {
   const { userId, productId, color, amount, size } = req.body;
@@ -13,6 +15,47 @@ export const addNewItemCart = async (req: Request, res: Response) => {
         userId,
         status: "aberto",
       }).save();
+    }
+
+    const product = await Product.findById(productId) as ProductDataBackEnd
+
+    if (!product) {
+      return res.status(404).json({
+        message: 'Erro ao procurar pelo produto'
+      })
+    }
+    const colorIndex = product.colors.indexOf(color)
+    const sizeIndex = product.size.indexOf(size)
+  
+    if (colorIndex < 0 || sizeIndex < 0) {
+       return res.status(400).json({
+        message: 'Erro ao atualizar o produto, está cor / tamanho não está disponível'
+      })
+    }
+    
+    if (Number(amount) < 1) {
+      res.status(404).json({
+        message: "o item não pode ser menor do que zero",
+      });
+      return;
+    }
+    
+    if (Number(amount) > product.stock.amount[colorIndex]) {
+      try {
+        res.status(400).json({
+          error: "Limite alcançado /  sem estoque",
+        });
+      return;
+  
+      } catch (error) {
+        console.log('Erro ao atualizar o item-cart',error)
+        res.status(400).json({
+          message: "Limite alcançado",
+        });
+      }
+  
+  
+  
     }
 
     let checkItemCart = await ItemCart.findOne({
