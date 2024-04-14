@@ -44,7 +44,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     updateData.codeColors = productData.codeColors.split(",");
     updateData.composition = productData.composition;
     updateData.characteristic = productData.characteristic;
-    updateData.hotToUse = productData.howToUse;
+    updateData.howToUse = productData.howToUse;
     updateData.active = productData.active;
     const stock = {
       amount: productData.amount.split(",").map((amount) => {
