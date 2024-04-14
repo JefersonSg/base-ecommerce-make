@@ -36,6 +36,9 @@ const Product = mongoose.model(
       characteristic: {
         type: String,
       },
+      howToUse: {
+        type: String,
+      },
       price: {
         type: Number,
         required: true,
@@ -65,7 +68,6 @@ const Product = mongoose.model(
         required: true,
         default: 0,
       },
-
       active: {
         type: Boolean,
         required: true,

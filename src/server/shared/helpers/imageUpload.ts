@@ -23,7 +23,6 @@ async function uploadToS3(path: string, file: Express.Multer.File) {
     String(Math.floor(Math.random() * 1000)) +
     file?.originalname;
 
-    console.log(file.mimetype)
   const params: {
     Bucket: string;
     Key: string;

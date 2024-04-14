@@ -14,7 +14,7 @@ export const create = async (req: Request, res: Response) => {
       return +amount;
     }),
   };
-
+console.log(productData.howToUse)
   if (images && images.length === 0) {
     res.status(422).json({
       message: "A imagem é obrigatoria",
@@ -53,6 +53,7 @@ export const create = async (req: Request, res: Response) => {
     colors: productData.colors.split(","),
     codeColors: productData.codeColors.split(","),
     composition: productData.composition,
+    howToUse: productData.howToUse,
     size: productData.size,
     characteristic: productData.characteristic,
     stock: stock,

@@ -16,8 +16,9 @@ export interface ProductDataFrontEnd {
   category: string;
   subcategory: string;
   description: string;
-  composition: string;
-  characteristic: string;
+  composition?: string;
+  characteristic?: string;
+  howToUse?: string;
   images: Object[];
   colors: string;
   codeColors: string;
@@ -38,6 +39,7 @@ export interface ProductDataBackEnd {
   description: string;
   composition: string;
   characteristic: string;
+  hotToUse?: string;
   images: string[];
   colors: string[];
   codeColors: string[];
