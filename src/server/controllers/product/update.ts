@@ -36,12 +36,12 @@ export const updateProduct = async (req: Request, res: Response) => {
     updateData.name = productData.name;
     updateData.brand = productData.brand;
     updateData.category = productData.category;
-    updateData.subcategory = productData.subcategory;
+    updateData.subcategory = productData?.subcategory;
     updateData.description = productData.description;
     updateData.price = productData.price;
     updateData.size = productData.size;
-    updateData.colors = productData.colors.split(",");
-    updateData.codeColors = productData.codeColors.split(",");
+    updateData.colors = productData?.colors?.split(",");
+    updateData.codeColors = productData?.codeColors?.split(",");
     updateData.composition = productData.composition;
     updateData.characteristic = productData.characteristic;
     updateData.howToUse = productData.howToUse;

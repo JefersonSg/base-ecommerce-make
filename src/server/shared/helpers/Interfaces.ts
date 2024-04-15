@@ -14,14 +14,14 @@ export interface ProductDataFrontEnd {
   price: number;
   size: string;
   category: string;
-  subcategory: string;
+  subcategory?: string;
   description: string;
   composition?: string;
   characteristic?: string;
   howToUse?: string;
   images: Object[];
-  colors: string;
-  codeColors: string;
+  colors?: string;
+  codeColors?: string;
   amount: string;
   promotion: boolean;
   active: boolean;

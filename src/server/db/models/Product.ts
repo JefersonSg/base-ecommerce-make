@@ -24,7 +24,6 @@ const Product = mongoose.model(
       subcategory: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'subcategories',
-        required: true,
       },
       size: {
         type: String,
@@ -45,11 +44,9 @@ const Product = mongoose.model(
       },
       colors: {
         type: Array,
-        required: true,
       },
       codeColors: {
         type: Array,
-        required: true,
       },
       images: {
         type: Array,
