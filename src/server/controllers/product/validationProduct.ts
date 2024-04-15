@@ -15,7 +15,7 @@ export const validationProduct = validate({
     composition: yup.string(),
     characteristic: yup.string(),
     colors: yup.string(),
-    codeColors: yup.string().required(),
+    codeColors: yup.string(),
     amount: yup.string().required(),
     active: yup.boolean().required(),
   }),

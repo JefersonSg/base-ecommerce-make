@@ -6,4 +6,3 @@ export * from "./banner";
 export * from "./favorites";
 export * from "./shopping-cart";
 export * from './order';
-export * from './whatsapp';

@@ -12,7 +12,6 @@ import BannersRoutes from "./server/routes/BannersRoutes";
 import FavoritesRoutes from "./server/routes/FavoritesRoutes";
 import ShoppingRoutes from "./server/routes/ShoppingRoutes";
 import OrderRoutes from "./server/routes/OrderRoutes";
-import WhatsappRoutes from "./server/routes/WhatsappRouter";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -57,7 +56,6 @@ app.use("/banners", BannersRoutes);
 app.use("/favorites", FavoritesRoutes);
 app.use("/shopping", ShoppingRoutes);
 app.use("/order", OrderRoutes);
-app.use("/whatsapp", WhatsappRoutes);
 
 // Routes
 app.listen(port);
