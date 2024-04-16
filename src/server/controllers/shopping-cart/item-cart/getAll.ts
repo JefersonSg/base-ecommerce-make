@@ -32,7 +32,10 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
       const sizeIndex = productPrice.size.indexOf(item.size)
 
       if (colorIndex < 0 || sizeIndex < 0) {
-         await ItemCart.findByIdAndRemove(item._id)
+         const itemRemovido = await ItemCart.findByIdAndRemove(item._id)
+
+         console.log(itemRemovido, colorIndex)
+         console.log(productPrice.colors)
 
          return null
       }

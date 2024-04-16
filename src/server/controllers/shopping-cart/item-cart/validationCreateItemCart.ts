@@ -7,6 +7,6 @@ export const validationCreateItemCart = validate({
     userId: yup.string().required().min(3),
     size: yup.string().required().min(1),
     amount: yup.number().required().min(1),
-    color: yup.string().required().min(1),
+    color: yup.string(),
   }),
 });

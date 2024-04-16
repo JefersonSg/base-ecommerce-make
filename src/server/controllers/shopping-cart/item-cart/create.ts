@@ -26,7 +26,7 @@ export const addNewItemCart = async (req: Request, res: Response) => {
     }
     const colorIndex = product.colors.indexOf(color)
     const sizeIndex = product.size.indexOf(size)
-  
+
     if (colorIndex < 0 || sizeIndex < 0) {
        return res.status(400).json({
         message: 'Erro ao atualizar o produto, está cor / tamanho não está disponível'
@@ -81,7 +81,7 @@ export const addNewItemCart = async (req: Request, res: Response) => {
     const itemCart = await new ItemCart({
       shoppingCartId: shoppingCart._id,
       productId,
-      color,
+      color: color.length > 0 ? color: '',
       amount,
       size,
     }).save();

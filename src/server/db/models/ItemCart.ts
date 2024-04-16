@@ -17,7 +17,6 @@ const ItemCart = mongoose.model(
     },
     color: {
       type: String,
-      required: true,
     },
     size: {
       type: String,
