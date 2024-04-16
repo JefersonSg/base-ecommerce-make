@@ -60,7 +60,7 @@ export const createOrder = async (req: Request, res: Response) =>{
       }
   
       if (productPrice) {
-        const colorIndex = productPrice.colors.indexOf(item.color)
+        const colorIndex = productPrice.colors.indexOf(item?.color ?? '')
         const sizeIndex = productPrice.size.indexOf(item.size)
   
         if (colorIndex < 0 || sizeIndex < 0) {
@@ -70,7 +70,7 @@ export const createOrder = async (req: Request, res: Response) =>{
         }
         if (productPrice.promotion && productPrice.promotionalPrice) {
             produtosId.push(productPrice._id)
-            produtosCores.push(item.color)
+            produtosCores.push(item?.color ?? '')
             produtosQuantidade.push(+item.amount)
 
             produtosValores.push(+productPrice.promotionalPrice)
@@ -78,7 +78,7 @@ export const createOrder = async (req: Request, res: Response) =>{
           return  +productPrice.promotionalPrice
         }
         produtosId.push(productPrice._id)
-        produtosCores.push(item.color)
+        produtosCores.push(item?.color ?? '')
         produtosQuantidade.push(+item.amount)
         produtosValores.push(+productPrice.price)
 
@@ -121,7 +121,7 @@ export const createOrder = async (req: Request, res: Response) =>{
         _id: string
       }
 
-      const indexColor = productPrice.colors.indexOf(item.color)
+      const indexColor = productPrice.colors.indexOf(item?.color ?? '')
 
       let newAmount = [...productPrice.stock.amount]
 
