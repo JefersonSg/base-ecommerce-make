@@ -14,6 +14,7 @@ export const createCategory = async (req: Request, res: Response) => {
     });
     return;
   }
+  
   if (verifySizeImage(image)) {
     return res.status(401).json({
       message : verifySizeImage(image)

@@ -8,6 +8,6 @@ export const validationEditItemCart = validate({
   body: yup.object().shape({
     size: yup.string().required().min(1),
     amount: yup.string().required().min(1),
-    color: yup.string().required(),
+    color: yup.string(),
   }),
 });
