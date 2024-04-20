@@ -29,7 +29,7 @@ try {
                 "postal_code": "28470000"
             },
             "to": {
-                "postal_code": '28300000'
+                "postal_code": cepLimpo
             },
             "products": [
                 {
