@@ -24,10 +24,8 @@ app.use(express.json());
 app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
-    "https://base-ecommerce-git-formularios-jefersonsg.vercel.app",
+    "http://lojamayse.com",
     "https://basecommerce.vercel.app",
-    "https://base-ecommerce-pearl.vercel.app",,
-    "http://localhost:3000",
     "https://abayomimake.com",
   ];
 
