@@ -26,7 +26,7 @@ try {
 
         const args = {
             "from": {
-                "postal_code": "28470000"
+                "postal_code": `${process.env.CEP_ORIGIN}`
             },
             "to": {
                 "postal_code": cepLimpo
