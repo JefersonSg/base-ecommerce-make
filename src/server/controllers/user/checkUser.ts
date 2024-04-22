@@ -28,8 +28,6 @@ export const checkUser = async (req: Request, res: Response) => {
     // Converte o mongoose document para objeto JavaScript
     currentUser.password = "";
 
-    currentUser.admin = currentUser._id.toString() === id_admin;
-
     return res.status(200).json({
       user: currentUser,
       isAdmin: currentUser.admin,

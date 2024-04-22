@@ -35,10 +35,15 @@ async function uploadToS3(path: string, file: Express.Multer.File) {
     contentType: file?.mimetype,
   };
 
-  const command = new PutObjectCommand(params);
+  try {
+    const command = new PutObjectCommand(params);
   await s3.send(command);
 
   return name;
+  } catch (error) {
+    console.log(error)
+    return false
+  }
 }
 async function updateImageToS3(file: Express.Multer.File, pathImage: string) {
   const params = {

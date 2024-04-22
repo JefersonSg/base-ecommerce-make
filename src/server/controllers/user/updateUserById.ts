@@ -47,10 +47,12 @@ export const editUser = async (req: Request, res: Response) => {
   
   if (image) {
     const fileName = await uploadToS3("users", image);
-    if (user.image) {
+    if (user.image && fileName) {
       await removeImageS3('users', user?.image)
     }
-    user.image = fileName;
+    if (fileName) {
+      user.image = fileName;  
+    }
   } else {
     user.image = user.image
   }

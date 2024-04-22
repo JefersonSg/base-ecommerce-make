@@ -73,7 +73,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
       async function uploads() {
         // Use `map` with `Promise.all` to await for all uploads to complete
-        await Promise.all(
+       const newImages = await Promise.all(
           images?.map(async (image: any, index: number) => {
             const data = await uploadToS3("products", image);
             image.filename = data;
@@ -81,9 +81,11 @@ export const updateProduct = async (req: Request, res: Response) => {
         );
 
         // delete Old Images
-        product?.images.forEach((image) => {
-          removeImageS3("products", image);
-        });
+        if (newImages.length > 0) {
+          product?.images.forEach((image) => {
+            removeImageS3("products", image);
+          });
+        }
       }
 
       updateData.images = [];
