@@ -2,9 +2,15 @@ import { Request, Response } from "express";
 import ShoppingCart from "../../../db/models/ShoppingCart";
 import ItemCart from "../../../db/models/ItemCart";
 import Product from "../../../db/models/Product";
+import { calculateDeliveryFunc } from "../../../shared/helpers/calculateDeliveryFunc";
+import { ItemsCartInterface } from "../../../shared/helpers/Interfaces";
+
+
 
 export const getAllItemsCart = async (req: Request, res: Response) => {
   const { userId } = req.params;
+
+  const {cep} = req.body
 
   const shoppingCart = await ShoppingCart.findOne({ userId, status: "aberto" });
 
@@ -15,7 +21,7 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
     return;
   }
 
-  const itemsCart = await ItemCart.find({ shoppingCartId: shoppingCart._id });
+  const itemsCart = await ItemCart.find({ shoppingCartId: shoppingCart._id }) as unknown as ItemsCartInterface[];
 
   if (!itemsCart) {
     res.status(404).json({
@@ -34,9 +40,6 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
       if (colorIndex < 0 || sizeIndex < 0) {
          const itemRemovido = await ItemCart.findByIdAndRemove(item._id)
 
-         console.log(itemRemovido, colorIndex)
-         console.log(productPrice.colors)
-
          return null
       }
       if (productPrice.promotion && productPrice.promotionalPrice) {
@@ -50,11 +53,14 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
 
   const actualValue = values.map((value, index)=> itemsCart[index].amount * value)
 
+  const entrega = await calculateDeliveryFunc(cep, itemsCart, actualValue)
+
+
   const totalValue = actualValue.reduce((i : number, value) => i + value, 0);
 
   try {
     return res.status(200).json({
-      itemsCart, prices : actualValue, totalValue
+      itemsCart, prices : actualValue, totalValue, shippingOptions: entrega
     });
   } catch (error) {
     res.status(500).json({ message: error });

@@ -48,8 +48,21 @@ const Orders = mongoose.model(
         type: Number,
       },
       orderTracking: {
-        type: String
+        type: String,
       },
+      shippingMethod: {
+        type: String,
+        required: true
+      },
+      shippingValue:  {
+        type: Number,
+        required: true
+      },
+      shippingCompany: {
+        type: String,
+        required: true
+      }
+
     },
     { timestamps: true },
   ),

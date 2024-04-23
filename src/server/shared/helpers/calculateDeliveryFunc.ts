@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
 import axios from 'axios'
-
 import 'dotenv/config'
+import { ItemsCartInterface } from './Interfaces';
 
 
 const config = {
@@ -14,10 +13,23 @@ const config = {
   };
 
 
-export const calculateDelivery = async(req: Request, res: Response)=>{
+export const calculateDeliveryFunc = async(cep: string, itemsCart: ItemsCartInterface[], actualValue: number[], serviceNumber?: string)=>{
 try {
-    const { cep } = req.body
+
     const cepLimpo = cep.replace('-','')
+    
+
+    const productInfos = await itemsCart.map((item: ItemsCartInterface, index)=>{
+        return {
+            "id": item.productId.toString(),
+            "width": 11,
+            "height": 10,
+            "length": 11,
+            "weight": 0.15,
+            "insurance_value": actualValue[index] / item.amount,
+            "quantity": item.amount
+        }
+    })
 
     if (cepLimpo.length === 8 ) {
 
@@ -28,22 +40,12 @@ try {
             "to": {
                 "postal_code": cepLimpo
             },
-            "products": [
-                {
-                    "id": "x",
-                    "width": 11,
-                    "height": 17,
-                    "length": 11,
-                    "weight": 0.1,
-                    "insurance_value": 10.1,
-                    "quantity": 1
-                }
-            ],
+            "products": productInfos,
             "options": {
                 "receipt": false,
                 "own_hand": false
             },
-            "services": "1,2,3,4"
+            "services": `${serviceNumber ?? "1,2,3,4"}`
         }
 
         const apiEnvio = 'https://www.melhorenvio.com.br/api/v2/me/shipment/calculate'
@@ -51,18 +53,13 @@ try {
        const calculo = await axios.post(apiEnvio, args, config)
 
        const response = await calculo.data
-       return res.status(200).json({
-        response
-       })
+
+       return  response
     } else {
-        return res.status(400).json({
-            erro: 'verifique o cep digitado'
-        })
+            return { erro: 'verifique o cep digitado'}
     }
 } catch (error ) {
-    return res.status(400).json({
-        erro: 'Nenhum cep', error
-    })
+    return { erro: 'Nenhum cep', error }
 }
 
 }

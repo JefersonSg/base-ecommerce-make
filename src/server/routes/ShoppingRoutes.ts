@@ -7,7 +7,7 @@ import { ShoppingCartControl } from "../controllers";
 import checkToken from "../shared/helpers/checkToken";
 
 // Carrinho
-router.get("/get-all/:userId", ShoppingCartControl.getAllItemsCart);
+router.post("/get-all/:userId", ShoppingCartControl.getAllItemsCart);
 
 // Item carrinho
 router.post(

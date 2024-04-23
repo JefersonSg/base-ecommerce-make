@@ -3,14 +3,15 @@ import { Request, Response } from "express";
 import ShoppingCart from "../../db/models/ShoppingCart";
 import ItemCart from "../../db/models/ItemCart";
 import Product from "../../db/models/Product";
-import { ProductDataBackEnd } from "../../shared/helpers/Interfaces";
+import { AddressInterface, ItemsCartInterface, ProductDataBackEnd, delivery } from "../../shared/helpers/Interfaces";
 import Orders from "../../db/models/Orders";
 import AddressModel from "../../db/models/Address";
+import { calculateDeliveryFunc } from "../../shared/helpers/calculateDeliveryFunc";
 
 export const createOrder = async (req: Request, res: Response) =>{
     const { userId } = req.params;
 
-    const { cupom, methodPayment } = req.body
+    const { cupom, methodPayment, serviceShippingId } = req.body
 
     let itemNoStock : any = []
 
@@ -19,13 +20,23 @@ export const createOrder = async (req: Request, res: Response) =>{
             message: 'É necessário o id do usuário'
         })
     }
+    
     if (!methodPayment) {
       return res.status(400).json({
-          message: 'É necessário preencher o Metodo de pagamento'
+          message: 'É necessário preencher o Método de pagamento'
       })
+      
   }
+  if (!serviceShippingId) {
+    return res.status(400).json({
+        message: 'É necessário preencher o Método de envio'
+    })
+    
+}
+
+
     try {
-    const address = await AddressModel.findOne({userId})
+    const address = await AddressModel.findOne({userId}) as AddressInterface
 
     const shoppingCart = await ShoppingCart.findOne({ userId, status: "aberto" });
   
@@ -36,7 +47,7 @@ export const createOrder = async (req: Request, res: Response) =>{
       return;
     }
   
-    const itemsCart = await ItemCart.find({ shoppingCartId: shoppingCart._id });
+    const itemsCart = await ItemCart.find({ shoppingCartId: shoppingCart._id }) as ItemsCartInterface[];
   
     if (!itemsCart[0]) {
       res.status(404).json({
@@ -95,7 +106,14 @@ export const createOrder = async (req: Request, res: Response) =>{
     }
 
     const actualValue = values.map((value, index)=> itemsCart[index].amount * value)
-  
+
+    const shippingOrder = await calculateDeliveryFunc(address.cep, itemsCart, actualValue, serviceShippingId) as delivery
+
+    if (!shippingOrder.price) {
+      return res.status(400).json({
+        error: 'Erro ao buscar o valor do frete selecionado'
+      })
+    }
     const totalValue = actualValue.reduce((i : number, value) => i + value, 0);
 
     const newOrder = new Orders({
@@ -108,9 +126,14 @@ export const createOrder = async (req: Request, res: Response) =>{
       productColors: produtosCores,
       valueProducts: produtosValores,
       orderTracking: '',
-      totalPayment: totalValue,
-      discount: 0,
+      totalPayment: Number((totalValue + +shippingOrder.price).toFixed(2)),
+      discount: 0, 
+      shippingValue: shippingOrder.price,
+      shippingMethod: shippingOrder?.name,
+      shippingCompany: shippingOrder?.company?.name
+
     })
+
     const createOrder = await newOrder.save()
 
     // Update amount
