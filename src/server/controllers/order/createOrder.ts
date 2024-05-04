@@ -7,6 +7,8 @@ import { AddressInterface, ItemsCartInterface, ProductDataBackEnd, delivery } fr
 import Orders from "../../db/models/Orders";
 import AddressModel from "../../db/models/Address";
 import { calculateDeliveryFunc } from "../../shared/helpers/calculateDeliveryFunc";
+import { Payment } from "../payment/methods/payment";
+import { v4 as uuidv4 } from 'uuid';
 
 export const createOrder = async (req: Request, res: Response) =>{
     const { userId } = req.params;
@@ -57,6 +59,7 @@ export const createOrder = async (req: Request, res: Response) =>{
     }
   
     const produtosId: string[] = []
+    const produtosNames: string[] = []
     const produtosCores: string[] = []
     const produtosQuantidade: number[] = []
     const produtosValores: number[] = []
@@ -83,7 +86,7 @@ export const createOrder = async (req: Request, res: Response) =>{
             produtosId.push(productPrice._id)
             produtosCores.push(item?.color ?? '')
             produtosQuantidade.push(+item.amount)
-
+            produtosNames.push(productPrice.name)
             produtosValores.push(+productPrice.promotionalPrice)
 
           return  +productPrice.promotionalPrice
@@ -92,6 +95,8 @@ export const createOrder = async (req: Request, res: Response) =>{
         produtosCores.push(item?.color ?? '')
         produtosQuantidade.push(+item.amount)
         produtosValores.push(+productPrice.price)
+        produtosNames.push(productPrice.name)
+
 
         return  +productPrice.price
       }
@@ -116,7 +121,38 @@ export const createOrder = async (req: Request, res: Response) =>{
     }
     const totalValue = actualValue.reduce((i : number, value) => i + value, 0);
 
+    const allItemsToPayment = itemsCart.map((item, index)=>{
+      return {
+        id: item.productId.toString(),
+        title: produtosNames[index],
+        quantity: item.amount,
+        unit_price: produtosValores[index]
+      }
+    })
+
+    const fretePayment = {
+      id: `${shippingOrder.id}`,
+      title: shippingOrder.company.name,
+      quantity: 1,
+      unit_price: Number(shippingOrder.price)
+    }
+    const paymentId = uuidv4();
+
+    const payment = await Payment(allItemsToPayment, fretePayment, paymentId)
+    
+
+    if (!payment) {
+      return res.status(500).json({
+        error: 'Erro ao gerar o pagamento do pedido'
+      })
+    }
+
+    console.log(payment)
+
+
     const newOrder = new Orders({
+      paymentId: paymentId,
+      paymentLink: payment.paymentLink,
       address: address,
       userId,
       methodPayment,
@@ -131,12 +167,12 @@ export const createOrder = async (req: Request, res: Response) =>{
       shippingValue: shippingOrder.price,
       shippingMethod: shippingOrder?.name,
       shippingCompany: shippingOrder?.company?.name
-
     })
 
     const createOrder = await newOrder.save()
 
     // Update amount
+
     for (let i = 0; i < itemsCart.length; i++) {
       const item = itemsCart[i];
 
@@ -157,7 +193,7 @@ export const createOrder = async (req: Request, res: Response) =>{
       newAmount[indexColor] = newAmount[indexColor] - item.amount
 
       const options = { new: true, runValidators: true };
-      const update = await Product.findByIdAndUpdate(
+       await Product.findByIdAndUpdate(
         item.productId, 
       { $set: { 'stock.amount': newAmount , sales: productPrice.sales + item.amount}}, options
   );
@@ -176,9 +212,8 @@ export const createOrder = async (req: Request, res: Response) =>{
       }
     }
 
-
     return res.status(200).json({
-      message: 'Pedido criado com sucesso', createOrder
+      message: 'Pedido criado com sucesso', createOrder,
   })
     } catch (error) {
       res.status(

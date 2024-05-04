@@ -13,6 +13,7 @@ import FavoritesRoutes from "./server/routes/FavoritesRoutes";
 import ShoppingRoutes from "./server/routes/ShoppingRoutes";
 import OrderRoutes from "./server/routes/OrderRoutes";
 import DeliveryRoutes from "./server/routes/deliveryRoutes";
+import PaymentRoutes from "./server/routes/PaymentRouter";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -56,6 +57,7 @@ app.use("/favorites", FavoritesRoutes);
 app.use("/shopping", ShoppingRoutes);
 app.use("/order", OrderRoutes);
 app.use("/delivery", DeliveryRoutes);
+app.use("/payment", PaymentRoutes);
 
 // Routes
 app.listen(port);

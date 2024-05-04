@@ -12,6 +12,14 @@ const Orders = mongoose.model(
         ref: 'users',
         required: true,
       },
+      paymentId: {
+        type: String,
+        required: true,
+      },
+      paymentLink: {
+        type: String, 
+        required: true,
+      },
       address: {
         type: Array<AddressInterface>,
         required: true,

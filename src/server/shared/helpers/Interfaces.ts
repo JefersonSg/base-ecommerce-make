@@ -93,11 +93,18 @@ export interface AddressInterface {
   complemento: string;
   referencia: string;
   numero: string;
+  email: string;
+  nome: string;
+  cpf: string;
+  uf: string;
+  telefone: string;
 }
 
 export interface OrderInterface {
   _id: string;
   userId: ObjectId;
+  paymentId: string;
+  paymentLink: string;
   address: [AddressInterface];
   status: string;
   productIds: ObjectId[]; 
