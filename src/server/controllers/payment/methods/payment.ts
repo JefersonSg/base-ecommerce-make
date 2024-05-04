@@ -28,7 +28,7 @@ export async function Payment(items: Itens[], frete: Itens, paymentId: string) {
           failure:`${process.env.FRONT_URL}/minha-conta/pedidos` ,
           pending:`${process.env.FRONT_URL}/minha-conta/pedidos` ,
         },
-        notification_url: `mayse.fun/payment/webhook/${paymentId}`
+        notification_url: `https://mayse.fun/payment/webhook/${paymentId}`
       } ,
     }, )
 
