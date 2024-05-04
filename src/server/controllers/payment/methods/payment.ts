@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import 'dotenv/config'
 
 import { MercadoPagoConfig, Preference } from 'mercadopago'
-import { AddressInterface } from "../../../shared/helpers/Interfaces";
+import 'dotenv/config'
 
 interface Itens {
   id: string;
@@ -24,11 +24,11 @@ export async function Payment(items: Itens[], frete: Itens, paymentId: string) {
           frete
         ],
         back_urls: {
-          success: 'http://localhost:3000/minha-conta/pedidos',
-          failure:'http://localhost:3000/minha-conta/pedidos' ,
-          pending:'http://localhost:3000/minha-conta/pedidos' ,
+          success: `${process.env.FRONT_URL}/minha-conta/pedidos`,
+          failure:`${process.env.FRONT_URL}/minha-conta/pedidos` ,
+          pending:`${process.env.FRONT_URL}/minha-conta/pedidos` ,
         },
-        notification_url: `https://cc6e-2804-56c-d506-8500-702e-3900-b916-cb78.ngrok-free.app/payment/webhook/${paymentId}`
+        notification_url: `mayse.fun/payment/webhook/${paymentId}`
       } ,
     }, )
 
