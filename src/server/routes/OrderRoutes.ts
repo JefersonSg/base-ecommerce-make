@@ -5,12 +5,13 @@ import { orderController } from "../controllers";
 
 // middleware
 import checkToken from "../shared/helpers/checkToken";
+import checkAdminToken from "../shared/helpers/checkAdminToken";
 
 
 //  gets
 router.get(
   "/get-all",
-  checkToken,
+  checkAdminToken,
   orderController.getAllOrders,
 );
 router.get(
@@ -44,27 +45,27 @@ router.post(
 );
 router.patch(
   "/cancel/:orderId",
-  checkToken,
+  checkAdminToken,
   orderController.cancelOrder,
 );
 router.patch(
   "/confirm/:orderId",
-  checkToken,
+  checkAdminToken,
   orderController.confirmOrder,
 );
 router.patch(
   "/dispatch/:orderId",
-  checkToken,
+  checkAdminToken,
   orderController.dispatchedOrder,
 );
 router.patch(
   "/reversal/:orderId",
-  checkToken,
+  checkAdminToken,
   orderController.dispatchedOrder,
 );
 router.patch(
   "/concluded/:orderId",
-  checkToken,
+  checkAdminToken,
   orderController.concludedOrder,
 );
 

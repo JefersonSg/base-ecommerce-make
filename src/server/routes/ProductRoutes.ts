@@ -8,6 +8,7 @@ import { ProductController } from "../controllers";
 
 // middleware
 import checkToken from "../shared/helpers/checkToken";
+import checkAdminToken from "../shared/helpers/checkAdminToken";
 
 // GETS
 router.get("/", ProductController.getAll);
@@ -17,7 +18,7 @@ router.get("/category/:id", ProductController.getProductByCategory);
 router.get("/name/:name", ProductController.getByName);
 router.get("/subcategory/:id", ProductController.getBySubcategory);
 router.get("/sales/get-all", ProductController.getBySales);
-router.get("/promotion/get-all", ProductController.getByPromotion);
+router.get("/promotion/get-all", checkAdminToken ,ProductController.getByPromotion);
 
 // comments
 router.get("/comments/get-all/:productId", ProductController.getAllComments);
@@ -25,7 +26,7 @@ router.get("/comments/get-all/:productId", ProductController.getAllComments);
 // POST
 router.post(
   "/create",
-  checkToken,
+  checkAdminToken,
   upload.array("images"),
   ProductController.validationProduct,
   ProductController.create,
@@ -42,7 +43,7 @@ router.post(
 // UPDATE
 router.patch(
   "/edit/:id",
-  checkToken,
+  checkAdminToken,
   upload.array("images"),
   ProductController.validationProduct,
   ProductController.updateProduct,
@@ -56,7 +57,7 @@ router.patch(
 );
 
 // DELETE
-router.delete("/delete/:id", checkToken, ProductController.removeProductById);
+router.delete("/delete/:id", checkAdminToken, ProductController.removeProductById);
 
 // comment
 router.delete(

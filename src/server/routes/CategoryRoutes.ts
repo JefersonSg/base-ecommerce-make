@@ -9,6 +9,7 @@ const upload = multer({ storage: storage });
 import checkToken from "../shared/helpers/checkToken";
 
 import { CategoryController } from "../controllers";
+import checkAdminToken from "../shared/helpers/checkAdminToken";
 
 // GET
 router.get("/", CategoryController.getAll);
@@ -17,7 +18,7 @@ router.get("/:id", CategoryController.getById);
 // POST
 router.post(
   "/create",
-  checkToken,
+  checkAdminToken,
   upload.single("image"),
   CategoryController.validationCategory,
   CategoryController.createCategory,
@@ -26,13 +27,13 @@ router.post(
 // UPDATE
 router.patch(
   "/edit/:id",
-  checkToken,
+  checkAdminToken,
   upload.single("image"),
   CategoryController.validationCategory,
   CategoryController.updateCategory,
 );
 
 // DELETE
-router.delete("/delete/:id", checkToken, CategoryController.deleteCategory);
+router.delete("/delete/:id", checkAdminToken, CategoryController.deleteCategory);
 
 export default router;

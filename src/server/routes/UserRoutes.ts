@@ -9,12 +9,13 @@ import { UserController } from "../controllers";
 
 // middleware
 import checkToken from "../shared/helpers/checkToken";
+import checkAdminToken from "../shared/helpers/checkAdminToken";
 
 router.post("/register", UserController.validationUser, UserController.create);
 router.post("/login", UserController.validationLoginUser, UserController.login);
 router.get("/check-user", UserController.checkUser);
 router.get("/get/:id", UserController.getUserById);
-router.get("/get-all-users", checkToken, UserController.getAll);
+router.get("/get-all-users", checkAdminToken, UserController.getAll);
 router.get("/token", UserController.getByToken);
 router.patch(
   "/edit/:id",

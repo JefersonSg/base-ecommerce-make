@@ -34,7 +34,7 @@ export const getAllOrders = async (req: Request, res: Response) =>{
       res.status(
         400
       ).json({
-        message: 'Erro ao cancelar o pedido', error
+        message: 'Erro ao buscar o pedidos', error
       })
     }
 

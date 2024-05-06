@@ -9,11 +9,12 @@ import { BannersControl } from "../controllers";
 
 // middleware
 import checkToken from "../shared/helpers/checkToken";
+import checkAdminToken from "../shared/helpers/checkAdminToken";
 
 router.post(
   "/create",
   upload.array("images"),
-  checkToken,
+  checkAdminToken,
   BannersControl.validationBanner,
   BannersControl.create,
 );
@@ -23,12 +24,12 @@ router.get("/actives", BannersControl.getAllActives);
 
 router.patch(
   "/update/:id",
-  checkToken,
+  checkAdminToken,
   upload.array("images"),
   BannersControl.validationBanner,
   BannersControl.updateBanner,
 );
 
-router.delete("/delete/:id", checkToken, BannersControl.deleteBanner);
+router.delete("/delete/:id", checkAdminToken, BannersControl.deleteBanner);
 
 export default router;
