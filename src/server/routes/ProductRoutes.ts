@@ -17,6 +17,7 @@ router.get("/category/:id", ProductController.getProductByCategory);
 router.get("/name/:name", ProductController.getByName);
 router.get("/subcategory/:id", ProductController.getBySubcategory);
 router.get("/sales/get-all", ProductController.getBySales);
+router.get("/promotion/get-all", ProductController.getByPromotion);
 
 // comments
 router.get("/comments/get-all/:productId", ProductController.getAllComments);
