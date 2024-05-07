@@ -2,22 +2,16 @@ import { Request, Response } from "express";
 import testeID from "../../../shared/helpers/verifyId";
 import ViewsModel from "../../../db/models/Views";
 
-export const getViewsByProductId = async (req: Request, res: Response) => {
-  const productId = req.params.productId;
-
-  const testeId = testeID(productId);
-
-  if (!testeId) {
-    return res.status(401).json({
-      message: "Id do produto e invalido",
-    });
-  }
+export const getAllViews = async (req: Request, res: Response) => {
+    const hoje = new Date(); // Data de hoje
+    const inicioDoDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()); // Define a hora 00:00:00 de hoje
+    const fimDoDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate(), 23, 59, 59);
   try {
     try {
       const totalViews = await ViewsModel.aggregate([
         {
           $match: {
-            product: productId,
+            createdAt: { $gte: inicioDoDia, $lte: fimDoDia },
           },
         },
         {
