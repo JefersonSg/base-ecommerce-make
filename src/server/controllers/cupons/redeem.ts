@@ -11,7 +11,7 @@ export const redeemCupom = async(req: Request, res: Response)=>{
 
     const token = await getToken(req)
     const user = await getUserByToken(res,token) as userInterface
-
+    const hoje = new Date();
 
     try {
         if (!code) {
@@ -29,12 +29,22 @@ export const redeemCupom = async(req: Request, res: Response)=>{
                 erro: 'nenhum cupom foi encontrado'
             })
         }
+            
+        if (!checkCode.active) {
+            return res.status(500).json({
+                erro: 'nenhum cupom foi encontrado'
+            })
+        }
         if (checkIfAlreadyUsed?.[0]) {
             return res.status(500).json({
                 erro: 'Você já resgatou esse cupom antes'
             })
         }
-
+        if (checkCode?.expiration && checkCode.expiration < hoje) {
+            return res.status(400).json({
+                erro: 'Cupom expirado'
+            })
+        }
         if (checkCode?.limitUses && checkCode.uses >= checkCode?.limitUses) {
             return res.status(500).json({
                 erro: 'Todos os cupons já foram resgatados'

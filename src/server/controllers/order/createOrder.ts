@@ -16,6 +16,7 @@ export const createOrder = async (req: Request, res: Response) =>{
     const { userId } = req.params;
 
     const { cupom, methodPayment, serviceShippingId } = req.body
+    const hoje = new Date();
 
     let itemNoStock : any = []
 
@@ -70,17 +71,12 @@ export const createOrder = async (req: Request, res: Response) =>{
         return res.status(404).json({
           erro: 'Você está usando um cupom que já foi usado antes'
       })
-    } else {
-     await new CuponsUsed({
-      code: getCupom.code,
-      idCupom: getCupom._id,
-      userId
-     }).save()
-
-     await CuponsModel.findOneAndUpdate({code: cupom},{
-      $set: {uses: getCupom.uses + 1}
-     })
     }
+    if (getCupom?.expiration && getCupom.expiration < hoje) {
+      return res.status(400).json({
+          erro: 'Cupom expirado'
+      })
+  }
     }
 
     const produtosId: string[] = []
@@ -90,8 +86,6 @@ export const createOrder = async (req: Request, res: Response) =>{
     const produtosValores: number[] = []
 
     const valorDescontoPorcentagem = getCupom?.percentageDiscount ? (getCupom?.percentageDiscount / 100) : undefined;
-
-    const valorDescontoFixo = getCupom?.valueFixDiscount
 
     const values : any[] | null = await Promise.all( itemsCart.map( async (item)=>{
       const productPrice = await Product.findOne({_id: item.productId}) as ProductDataBackEnd & {
@@ -154,7 +148,7 @@ export const createOrder = async (req: Request, res: Response) =>{
     let totalValue = actualValue.reduce((i : number, value) => i + value, 0);
 
     const allItemsToPayment = await itemsCart.map((item, index)=>{
-      const price = valorDescontoPorcentagem ? +( produtosValores[index] - (produtosValores[index] * valorDescontoPorcentagem)).toFixed(2) : valorDescontoFixo ? +(produtosValores[index] - valorDescontoFixo).toFixed(2) : produtosValores[index]
+      const price = valorDescontoPorcentagem ? +( produtosValores[index] - (produtosValores[index] * valorDescontoPorcentagem)).toFixed(2) : produtosValores[index]
      
       return {
         id: item.productId.toString(),
@@ -163,8 +157,6 @@ export const createOrder = async (req: Request, res: Response) =>{
         unit_price: price,
       }
     })
-
-
 
 
     const fretePayment = {
@@ -198,7 +190,7 @@ export const createOrder = async (req: Request, res: Response) =>{
       valueProducts: produtosValores,
       orderTracking: '',
       totalPayment: Number((totalValue + +shippingOrder.price).toFixed(2)),
-      discount: valorDescontoPorcentagem ? +(totalValue * valorDescontoPorcentagem).toFixed(2) : valorDescontoFixo ? +(totalValue - valorDescontoFixo).toFixed(2) : 0, 
+      discount: valorDescontoPorcentagem ? +(totalValue * valorDescontoPorcentagem).toFixed(2) : 0, 
       shippingValue: shippingOrder.price,
       shippingMethod: shippingOrder?.name,
       shippingCompany: shippingOrder?.company?.name
@@ -207,7 +199,17 @@ export const createOrder = async (req: Request, res: Response) =>{
     
     const createOrder = await newOrder.save()
 
-    // Update amount
+    if (cupom && getCupom.code) {
+      await new CuponsUsed({
+        code: getCupom.code,
+        idCupom: getCupom._id,
+        userId
+       }).save()
+  
+       await CuponsModel.findOneAndUpdate({code: cupom},{
+        $set: {uses: getCupom.uses + 1}
+       })
+    }
 
 
     for (let i = 0; i < itemsCart.length; i++) {

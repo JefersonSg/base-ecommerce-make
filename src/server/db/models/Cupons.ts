@@ -30,9 +30,6 @@ export const CuponsModel = mongoose.model(
         percentageDiscount: {
           type: Number,
         },
-        valueFixDiscount: {
-            type: Number
-        },
         minimumValue: {
             type: Number,
         },

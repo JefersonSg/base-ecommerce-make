@@ -180,6 +180,5 @@ export interface cuponsInterface {
   limitUses: number;
   uses: number;
   percentageDiscount: number;
-  valueFixDiscount: number;
   minimumValue: number;
 }
