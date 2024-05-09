@@ -32,7 +32,6 @@ export async function Payment(items: Itens[], frete: Itens, paymentId: string) {
       } ,
     }, )
 
-    console.log(newPayment)
     return { paymentLink: newPayment?.init_point , id: newPayment.collector_id}
 
   } catch (error : any) {

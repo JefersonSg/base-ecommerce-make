@@ -6,7 +6,7 @@ const CuponsUsed = mongoose.model(
   "cuponsUsed",
   new Schema(
     {
-      idCupon: {
+      idCupom: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Cupons",
         required: true,

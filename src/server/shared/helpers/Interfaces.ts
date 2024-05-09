@@ -173,6 +173,7 @@ export interface delivery {
 }
 
 export interface cuponsInterface {
+  _id?: string;
   code: string;
   userId?: string[];
   expiration?: Date;

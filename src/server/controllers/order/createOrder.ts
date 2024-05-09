@@ -3,12 +3,14 @@ import { Request, Response } from "express";
 import ShoppingCart from "../../db/models/ShoppingCart";
 import ItemCart from "../../db/models/ItemCart";
 import Product from "../../db/models/Product";
-import { AddressInterface, ItemsCartInterface, ProductDataBackEnd, delivery } from "../../shared/helpers/Interfaces";
+import { AddressInterface, ItemsCartInterface, ProductDataBackEnd, cuponsInterface, delivery } from "../../shared/helpers/Interfaces";
 import Orders from "../../db/models/Orders";
 import AddressModel from "../../db/models/Address";
 import { calculateDeliveryFunc } from "../../shared/helpers/calculateDeliveryFunc";
 import { Payment } from "../payment/methods/payment";
 import { v4 as uuidv4 } from 'uuid';
+import { CuponsModel } from "../../db/models/Cupons";
+import CuponsUsed from "../../db/models/CuponsUsed";
 
 export const createOrder = async (req: Request, res: Response) =>{
     const { userId } = req.params;
@@ -16,6 +18,8 @@ export const createOrder = async (req: Request, res: Response) =>{
     const { cupom, methodPayment, serviceShippingId } = req.body
 
     let itemNoStock : any = []
+
+   
 
     if (!userId) {
         return res.status(400).json({
@@ -36,7 +40,6 @@ export const createOrder = async (req: Request, res: Response) =>{
     
 }
 
-
     try {
     const address = await AddressModel.findOne({userId}) as AddressInterface
 
@@ -50,19 +53,45 @@ export const createOrder = async (req: Request, res: Response) =>{
     }
   
     const itemsCart = await ItemCart.find({ shoppingCartId: shoppingCart._id }) as ItemsCartInterface[];
-  
+    
     if (!itemsCart[0]) {
       res.status(404).json({
         message: "nenhum item encontrado no carrinho",
       });
       return;
     }
-  
+
+    const getCupom =  await CuponsModel.findOne({code: cupom}) as cuponsInterface
+
+    if (getCupom) {
+     const checkIfAlreadyUse = await CuponsUsed.findOne({userId, code: getCupom.code, idCupom: getCupom._id?.toString()})
+    
+      if (checkIfAlreadyUse) {
+        return res.status(404).json({
+          erro: 'Você está usando um cupom que já foi usado antes'
+      })
+    } else {
+     await new CuponsUsed({
+      code: getCupom.code,
+      idCupom: getCupom._id,
+      userId
+     }).save()
+
+     await CuponsModel.findOneAndUpdate({code: cupom},{
+      $set: {uses: getCupom.uses + 1}
+     })
+    }
+    }
+
     const produtosId: string[] = []
     const produtosNames: string[] = []
     const produtosCores: string[] = []
     const produtosQuantidade: number[] = []
     const produtosValores: number[] = []
+
+    const valorDescontoPorcentagem = getCupom?.percentageDiscount ? (getCupom?.percentageDiscount / 100) : undefined;
+
+    const valorDescontoFixo = getCupom?.valueFixDiscount
 
     const values : any[] | null = await Promise.all( itemsCart.map( async (item)=>{
       const productPrice = await Product.findOne({_id: item.productId}) as ProductDataBackEnd & {
@@ -114,21 +143,29 @@ export const createOrder = async (req: Request, res: Response) =>{
 
     const shippingOrder = await calculateDeliveryFunc(address.cep, itemsCart, actualValue, serviceShippingId) as delivery
 
+
     if (!shippingOrder.price) {
       return res.status(400).json({
         error: 'Erro ao buscar o valor do frete selecionado'
       })
     }
-    const totalValue = actualValue.reduce((i : number, value) => i + value, 0);
 
-    const allItemsToPayment = itemsCart.map((item, index)=>{
+
+    let totalValue = actualValue.reduce((i : number, value) => i + value, 0);
+
+    const allItemsToPayment = await itemsCart.map((item, index)=>{
+      const price = valorDescontoPorcentagem ? +( produtosValores[index] - (produtosValores[index] * valorDescontoPorcentagem)).toFixed(2) : valorDescontoFixo ? +(produtosValores[index] - valorDescontoFixo).toFixed(2) : produtosValores[index]
+     
       return {
         id: item.productId.toString(),
         title: produtosNames[index],
         quantity: item.amount,
-        unit_price: produtosValores[index]
+        unit_price: price,
       }
     })
+
+
+
 
     const fretePayment = {
       id: `${shippingOrder.id}`,
@@ -136,6 +173,7 @@ export const createOrder = async (req: Request, res: Response) =>{
       quantity: 1,
       unit_price: Number(shippingOrder.price)
     }
+
     const paymentId = uuidv4();
 
     const payment = await Payment(allItemsToPayment, fretePayment, paymentId)
@@ -146,9 +184,6 @@ export const createOrder = async (req: Request, res: Response) =>{
         error: 'Erro ao gerar o pagamento do pedido'
       })
     }
-
-    console.log(payment)
-
 
     const newOrder = new Orders({
       paymentId: paymentId,
@@ -163,15 +198,17 @@ export const createOrder = async (req: Request, res: Response) =>{
       valueProducts: produtosValores,
       orderTracking: '',
       totalPayment: Number((totalValue + +shippingOrder.price).toFixed(2)),
-      discount: 0, 
+      discount: valorDescontoPorcentagem ? +(totalValue * valorDescontoPorcentagem).toFixed(2) : valorDescontoFixo ? +(totalValue - valorDescontoFixo).toFixed(2) : 0, 
       shippingValue: shippingOrder.price,
       shippingMethod: shippingOrder?.name,
       shippingCompany: shippingOrder?.company?.name
     })
 
+    
     const createOrder = await newOrder.save()
 
     // Update amount
+
 
     for (let i = 0; i < itemsCart.length; i++) {
       const item = itemsCart[i];

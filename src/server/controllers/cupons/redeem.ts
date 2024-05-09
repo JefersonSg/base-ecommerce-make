@@ -22,15 +22,14 @@ export const redeemCupom = async(req: Request, res: Response)=>{
         
         const checkCode = await CuponsModel.findOne({code: code})
 
-        const checkIfAlreadyUsed = await CuponsUsed.find({code, userId: user._id, _id: checkCode?._id})
+        const checkIfAlreadyUsed = await CuponsUsed.find({code, userId: user._id, idCupom: checkCode?._id})
     
         if (!checkCode) {
             return res.status(500).json({
                 erro: 'nenhum cupom foi encontrado'
             })
         }
-
-        if (!checkIfAlreadyUsed) {
+        if (checkIfAlreadyUsed?.[0]) {
             return res.status(500).json({
                 erro: 'Você já resgatou esse cupom antes'
             })
