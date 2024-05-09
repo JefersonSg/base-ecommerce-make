@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 import User from "../../db/models/User";
+import { userInterface } from "../../controllers/user/interfaceUser";
 
 interface DecodedToken {
   id: string;
@@ -19,7 +20,7 @@ const getUserByToken = async (res: Response, token: string) => {
 
   const userId = decoded.id;
 
-  const user = await User.findOne({ _id: userId });
+  const user = await User.findOne({ _id: userId }) as userInterface;
 
   if (!user) {
     return false;

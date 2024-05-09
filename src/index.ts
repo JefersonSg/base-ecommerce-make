@@ -4,16 +4,17 @@ import cors from "cors";
 import path from "path";
 import "dotenv/config";
 
-import UserRoutes from "./server/routes/UserRoutes";
-import ProductRoutes from "./server/routes/ProductRoutes";
-import CategoryRoutes from "./server/routes/CategoryRoutes";
-import SubcategoryRoutes from "./server/routes/SubcategoryRoutes";
-import BannersRoutes from "./server/routes/BannersRoutes";
-import FavoritesRoutes from "./server/routes/FavoritesRoutes";
-import ShoppingRoutes from "./server/routes/ShoppingRoutes";
-import OrderRoutes from "./server/routes/OrderRoutes";
-import DeliveryRoutes from "./server/routes/deliveryRoutes";
-import PaymentRoutes from "./server/routes/PaymentRouter";
+import UserRoutes from "./server/routes/User.routes";
+import ProductRoutes from "./server/routes/Product.routes";
+import CategoryRoutes from "./server/routes/Category.routes";
+import SubcategoryRoutes from "./server/routes/Subcategory.routes";
+import BannersRoutes from "./server/routes/Banners.routes";
+import FavoritesRoutes from "./server/routes/Favorites.routes";
+import ShoppingRoutes from "./server/routes/Shopping.routes";
+import OrderRoutes from "./server/routes/Order.routes";
+import DeliveryRoutes from "./server/routes/Delivery.routes";
+import PaymentRoutes from "./server/routes/Payment.routes";
+import cuponsRoutes from "./server/routes/Cupons.routes";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -58,6 +59,7 @@ app.use("/shopping", ShoppingRoutes);
 app.use("/order", OrderRoutes);
 app.use("/delivery", DeliveryRoutes);
 app.use("/payment", PaymentRoutes);
+app.use("/cupons", cuponsRoutes);
 
 // Routes
 app.listen(port);

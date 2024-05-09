@@ -171,3 +171,14 @@ export interface delivery {
   };
   error?: string;
 }
+
+export interface cuponsInterface {
+  code: string;
+  userId?: string[];
+  expiration?: Date;
+  limitUses: number;
+  uses: number;
+  percentageDiscount: number;
+  valueFixDiscount: number;
+  minimumValue: number;
+}
