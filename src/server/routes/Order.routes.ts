@@ -38,11 +38,13 @@ router.get(
   checkToken,
   orderController.getDispatchedOrders,
 );
+
 router.post(
   "/create/:userId",
   checkToken,
   orderController.createOrder,
 );
+
 router.patch(
   "/cancel/:orderId",
   checkAdminToken,

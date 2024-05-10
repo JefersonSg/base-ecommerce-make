@@ -9,7 +9,7 @@ export const getConfirmedOrders = async (req: Request, res: Response) =>{
     const orders = await Orders.find({status: 'confirmado'}) as OrderInterface[]
     
     if (!orders[0]) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: 'Nenhum pedido encontrado'
       })
     }
@@ -20,7 +20,7 @@ export const getConfirmedOrders = async (req: Request, res: Response) =>{
       res.status(
         400
       ).json({
-        message: 'Erro ao buscar pedidos confirmados', error
+        erro: 'Erro ao buscar pedidos confirmados', error
       })
     }
 
