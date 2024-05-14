@@ -8,7 +8,7 @@ const IMAGE_URL = process.env.IMAGE_URL
 
 export const getByPromotion = async (req: Request, res: Response) => {
   try {
-    const products = await Product.find({promotion: true}).sort({ updatedAt: -1 });
+    const products = await Product.find({promotion: true, active: true}).sort({ updatedAt: -1 });
 
     if (!products) {
       res.status(422).json({

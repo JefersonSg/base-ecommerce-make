@@ -8,9 +8,8 @@ import ViewsModel from "../../../db/models/Views";
 
 export const addView = async (req: Request, res: Response) => {
   const productId = req.params.productId;
-  const { userToken } = req.body;
+  const { userToken, userIp } = req.body;
 
-  const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
   const user = (await getUserByToken(
     res,
@@ -35,14 +34,14 @@ export const addView = async (req: Request, res: Response) => {
   if (!product) {
     return res.status(404).json({
       message:
-        "nao e possivel add nova view,  produto nao encontrado com esse id",
+        "nao e possível add nova view,  produto nao encontrado com esse id",
     });
   }
   try {
     const newView = await new ViewsModel({
+      ip: userIp?.value ?? null,
       product: productId,
       userId: user._id ?? null,
-      ip
     }).save();
 
     return res.status(200).json({
@@ -50,7 +49,7 @@ export const addView = async (req: Request, res: Response) => {
       newView,
     });
   } catch (error) {
-    console.log("erro ao adicionar view");
+    console.log("erro ao adicionar view", error);
     return res.status(500).json({ message: error });
   }
 };
