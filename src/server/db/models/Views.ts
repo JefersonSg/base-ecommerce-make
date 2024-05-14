@@ -6,6 +6,9 @@ const ViewsModel = mongoose.model(
   "views",
   new Schema(
     {
+      ip: {
+       type: String,
+      },
       product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "products",

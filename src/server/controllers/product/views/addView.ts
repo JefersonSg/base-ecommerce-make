@@ -10,6 +10,8 @@ export const addView = async (req: Request, res: Response) => {
   const productId = req.params.productId;
   const { userToken } = req.body;
 
+  const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
   const user = (await getUserByToken(
     res,
     userToken,
@@ -40,6 +42,7 @@ export const addView = async (req: Request, res: Response) => {
     const newView = await new ViewsModel({
       product: productId,
       userId: user._id ?? null,
+      ip
     }).save();
 
     return res.status(200).json({
