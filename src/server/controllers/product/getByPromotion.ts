@@ -31,7 +31,7 @@ export const getByPromotion = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      message: "erro no getByName",
+      message: "erro no getByPromotion",
       error,
     });
   }
