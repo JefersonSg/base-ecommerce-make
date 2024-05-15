@@ -32,14 +32,51 @@ export const getAllViews = async (req: Request, res: Response) => {
           },
           {
             $group: {
-              _id: "$ip",
-              user: { $addToSet: "$userId" },
-              products: { $addToSet: "$product" },
-              numberVisit: {$sum: 1}
+              _id: { ip: "$ip", product: "$product" },
+              userId: { $addToSet: "$userId" },
+              visitCount: { $sum: 1 }
             }
+          },
+          {
+            $group: {
+              _id: "$_id.ip",
+              user: { $addToSet: "$userId" },
+              products: { 
+                $push: { 
+                  productId: "$_id.product", 
+                  count: "$visitCount" 
+                } 
+              },
+              numberVisit: { $sum: "$visitCount" }
+            }
+          },
+          {
+            $addFields: {
+              user: {
+                $reduce: {
+                  input: "$user",
+                  initialValue: [],
+                  in: { 
+                    $concatArrays: [
+                      "$$value", 
+                      { 
+                        $filter: { 
+                          input: "$$this", 
+                          as: "userId", 
+                          cond: { $ne: ["$$userId", null] } 
+                        } 
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }, {
+            $sort: {createdAt: -1}
           }
         ])
   
+        console.log(ips[0])
         return res.status(200).json({
           totalViews, ips
         });
