@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import testeID from "../../../shared/helpers/verifyId";
 import ViewsModel from "../../../db/models/Views";
 
 export const getAllViews = async (req: Request, res: Response) => {
@@ -34,6 +33,8 @@ export const getAllViews = async (req: Request, res: Response) => {
           {
             $group: {
               _id: "$ip",
+              user: { $addToSet: "$userId" },
+              products: { $addToSet: "$product" },
               numberVisit: {$sum: 1}
             }
           }
