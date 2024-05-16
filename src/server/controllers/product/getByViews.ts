@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import Product from "../../db/models/Product";
 import ViewsModel from "../../db/models/Views";
 
-
+interface ViewCountInterface  {
+  _id: string;
+  viewCount: number;
+}
 import ('dotenv/config')
 
 const IMAGE_URL = process.env.IMAGE_URL
@@ -32,22 +35,25 @@ export const getByViews = async (req: Request, res: Response) => {
       {
         $sort: { viewCount: -1 }
       }
-    ]);
+    ]) as unknown as ViewCountInterface[];
     
 
-    const productsPerViewsIds: any = productViews.map(view => view._id);
+    const productsPerViewsIds = productViews.map(view => view._id);
 
-    const productsPerViews = await Product.find({
+    const products  = await Product.find({
       _id: { $in: productsPerViewsIds }
     });
 
-    for (const product of productsPerViews) {
+    for (const product of products ) {
       for (let i = 0; i < product.images.length; i++) {
         
     product.images[i] = `${IMAGE_URL}/products/${product.images[i]}`;
-
       }
     }
+
+    const productMap = await new Map(products.map(product => [product._id.toString(), product]));
+
+    const productsPerViews = productsPerViewsIds.map((id)  => productMap.get(id.toString()));
 
     return res.status(200).json({
       products: productsPerViews,
