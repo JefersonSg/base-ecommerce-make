@@ -9,8 +9,6 @@ export const receiveWebhook = async (req: Request, res: Response) =>{
         const { id }= req.params
     const paymentQuery = req.query
 
-        console.log(paymentQuery?.['data.id'])
-
         const client =  new MercadoPagoConfig({accessToken: process.env.MP_ACCESS_TOKEN ?? '' })
 
         if (paymentQuery?.['data.id']) {
@@ -25,7 +23,6 @@ export const receiveWebhook = async (req: Request, res: Response) =>{
                     $set: {status: 'confirmado'}
                 })
 
-                console.log(update)
             }
         }
 

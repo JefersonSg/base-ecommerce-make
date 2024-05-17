@@ -76,7 +76,6 @@ export const getAllViews = async (req: Request, res: Response) => {
           }
         ])
   
-        console.log(ips[0])
         return res.status(200).json({
           totalViews, ips
         });

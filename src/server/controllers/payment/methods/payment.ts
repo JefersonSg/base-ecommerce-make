@@ -24,9 +24,9 @@ export async function Payment(items: Itens[], frete: Itens, paymentId: string) {
           frete
         ],
         back_urls: {
-          success: `${process.env.FRONT_URL}/minha-conta/pedidos`,
-          failure:`${process.env.FRONT_URL}/minha-conta/pedidos` ,
-          pending:`${process.env.FRONT_URL}/minha-conta/pedidos` ,
+          success: `${process.env.FRONT_URL}/pagamento/sucesso`,
+          failure:`${process.env.FRONT_URL}/pagamento/error` ,
+          pending:`${process.env.FRONT_URL}/pagamento/pendente` ,
         },
         notification_url: `https://mayse.fun/payment/webhook/${paymentId}`
       } ,
