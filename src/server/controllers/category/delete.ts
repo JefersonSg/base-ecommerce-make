@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import Category from "../../db/models/Category";
 
 import { removeImageS3 } from "../../shared/helpers/imageUpload";

@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-const router = express.Router();
 
 import { FavoritesControl } from "../controllers";
 
 // middleware
 import checkToken from "../shared/helpers/checkToken";
+const router = express.Router();
 
 router.post(
   "/create",

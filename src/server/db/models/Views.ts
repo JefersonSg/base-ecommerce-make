@@ -7,7 +7,7 @@ const ViewsModel = mongoose.model(
   new Schema(
     {
       ip: {
-       type: String,
+        type: String,
       },
       product: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,7 +16,7 @@ const ViewsModel = mongoose.model(
       },
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: "users",
       },
     },
     { timestamps: true },

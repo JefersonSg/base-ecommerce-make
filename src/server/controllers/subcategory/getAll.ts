@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import SubcategoryModel from "../../db/models/Subcategory";
 
-import ('dotenv/config')
+import("dotenv/config");
 
-const IMAGE_URL = process.env.IMAGE_URL
+const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getAll = async (req: Request, res: Response) => {
   const subcategories = await SubcategoryModel.find().sort("-createdAt");
@@ -17,8 +17,6 @@ export const getAll = async (req: Request, res: Response) => {
 
   for (const subcategory of subcategories) {
     if (subcategory.image) {
-      
-      
       subcategory.image = `${IMAGE_URL}/subcategory/${subcategory.image}`;
     }
   }
@@ -27,7 +25,6 @@ export const getAll = async (req: Request, res: Response) => {
     res.status(200).json({
       subcategories,
     });
-    return;
   } catch (error) {
     console.log("erro no getAll subcategory", error);
     return res.status(500).json({

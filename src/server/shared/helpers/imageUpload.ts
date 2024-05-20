@@ -19,9 +19,7 @@ const s3 = new S3Client({
 
 async function uploadToS3(path: string, file: Express.Multer.File) {
   const name =
-    (await Date.now()) +
-    String(Math.floor(Math.random() * 1000)) +
-    file?.originalname;
+    Date.now() + String(Math.floor(Math.random() * 1000)) + file?.originalname;
 
   const params: {
     Bucket: string;
@@ -37,12 +35,12 @@ async function uploadToS3(path: string, file: Express.Multer.File) {
 
   try {
     const command = new PutObjectCommand(params);
-  await s3.send(command);
+    await s3.send(command);
 
-  return name;
+    return name;
   } catch (error) {
-    console.log(error)
-    return false
+    console.log(error);
+    return false;
   }
 }
 async function updateImageToS3(file: Express.Multer.File, pathImage: string) {
@@ -66,9 +64,11 @@ async function removeImageS3(path: string, image: string) {
 
   try {
     const deleteObject = new DeleteObjectCommand(deleteParams);
-    const response = await s3.send(deleteObject);
+    await s3.send(deleteObject);
+    return true;
   } catch (error) {
     console.error("Erro ao excluir objeto:", error);
+    return true;
   }
 }
 

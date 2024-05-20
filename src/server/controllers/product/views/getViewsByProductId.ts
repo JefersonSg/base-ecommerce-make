@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import testeID from "../../../shared/helpers/verifyId";
 import ViewsModel from "../../../db/models/Views";
 

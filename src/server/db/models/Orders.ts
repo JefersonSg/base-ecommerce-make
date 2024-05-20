@@ -9,7 +9,7 @@ const Orders = mongoose.model(
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: "users",
         required: true,
       },
       paymentId: {
@@ -17,7 +17,7 @@ const Orders = mongoose.model(
         required: true,
       },
       paymentLink: {
-        type: String, 
+        type: String,
         required: true,
       },
       address: {
@@ -60,17 +60,16 @@ const Orders = mongoose.model(
       },
       shippingMethod: {
         type: String,
-        required: true
+        required: true,
       },
-      shippingValue:  {
+      shippingValue: {
         type: Number,
-        required: true
+        required: true,
       },
       shippingCompany: {
         type: String,
-        required: true
-      }
-
+        required: true,
+      },
     },
     { timestamps: true },
   ),

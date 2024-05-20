@@ -1,12 +1,11 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 
 import SubcategoryModel from "../../db/models/Subcategory";
 import testeID from "../../shared/helpers/verifyId";
 
+import("dotenv/config");
 
-import ('dotenv/config')
-
-const IMAGE_URL = process.env.IMAGE_URL
+const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getById = async (req: Request, res: Response) => {
   const id = req.params.id;

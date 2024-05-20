@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 
 import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 import BannersModel from "../../db/models/Banner";
-import { BannerInterface } from "../../shared/helpers/Interfaces";
+import { type BannerInterface } from "../../shared/helpers/Interfaces";
 import testeID from "../../shared/helpers/verifyId";
 import { verifySizeImage } from "../../shared/helpers/verifySize";
 import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
@@ -42,31 +42,29 @@ export const updateBanner = async (req: Request, res: Response) => {
     });
     return;
   }
+  async function uploads() {
+    await Promise.all(
+      images?.map(async (image: any) => {
+        const data = await uploadToS3("banners", image);
+        image.filename = data;
+      }),
+    );
+  }
 
   try {
     if (verifySizeImage(images)) {
       return res.status(401).json({
-        message : verifySizeImage(images)
-      })
+        message: verifySizeImage(images),
+      });
     }
 
     if (verifyMimetypeImage(images)) {
       return res.status(401).json({
-        message : verifyMimetypeImage(images)
-      })
+        message: verifyMimetypeImage(images),
+      });
     }
 
     if (images?.length > 0) {
-      async function uploads() {
-        // Use `map` with `Promise.all` to await for all uploads to complete
-        await Promise.all(
-          images?.map(async (image: any, index: number) => {
-            const data = await uploadToS3("banners", image);
-            image.filename = data;
-          }),
-        );
-      }
-
       await uploads();
 
       if (images?.[0] && mobile !== "undefined") {

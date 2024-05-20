@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import Category from "../../db/models/Category";
 import { verifySizeImage } from "../../shared/helpers/verifySize";
@@ -14,17 +14,17 @@ export const createCategory = async (req: Request, res: Response) => {
     });
     return;
   }
-  
+
   if (verifySizeImage(image)) {
     return res.status(401).json({
-      message : verifySizeImage(image)
-    })
+      message: verifySizeImage(image),
+    });
   }
 
   if (verifyMimetypeImage(image)) {
     return res.status(401).json({
-      message : verifyMimetypeImage(image)
-    })
+      message: verifyMimetypeImage(image),
+    });
   }
 
   const imageUpload = await uploadToS3("category", image);

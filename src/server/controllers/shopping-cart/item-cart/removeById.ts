@@ -1,5 +1,4 @@
-import { Request, Response } from "express";
-import ShoppingCart from "../../../db/models/ShoppingCart";
+import { type Request, type Response } from "express";
 import ItemCart from "../../../db/models/ItemCart";
 import mongoose from "mongoose";
 

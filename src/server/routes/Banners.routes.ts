@@ -1,15 +1,15 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-const router = express.Router();
 import multer from "multer";
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 import { BannersControl } from "../controllers";
 
 // middleware
-import checkToken from "../shared/helpers/checkToken";
 import checkAdminToken from "../shared/helpers/checkAdminToken";
+const router = express.Router();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.post(
   "/create",

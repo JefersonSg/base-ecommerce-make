@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import Category from "../../db/models/Category";
 import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 import testeID from "../../shared/helpers/verifyId";
-import { CategoryInterface } from "../../shared/helpers/Interfaces";
+import { type CategoryInterface } from "../../shared/helpers/Interfaces";
 import { verifySizeImage } from "../../shared/helpers/verifySize";
 import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
 
@@ -34,14 +34,14 @@ export const updateCategory = async (req: Request, res: Response) => {
     if (image && category.image) {
       if (verifySizeImage(image)) {
         return res.status(401).json({
-          message : verifySizeImage(image)
-        })
+          message: verifySizeImage(image),
+        });
       }
-  
+
       if (verifyMimetypeImage(image)) {
         return res.status(401).json({
-          message : verifyMimetypeImage(image)
-        })
+          message: verifyMimetypeImage(image),
+        });
       }
 
       const newImage = await uploadToS3("category", image);
@@ -56,7 +56,8 @@ export const updateCategory = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: "erro ao fazer update" + error,
+      message: "erro ao fazer update",
+      error,
     });
   }
 };

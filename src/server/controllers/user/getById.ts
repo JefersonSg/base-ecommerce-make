@@ -1,14 +1,12 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import User from "../../db/models/User";
 import "dotenv/config";
-import { userInterface } from "./interfaceUser";
+import { type userInterface } from "./interfaceUser";
 import testeID from "../../shared/helpers/verifyId";
-import ('dotenv/config')
-const IMAGE_URL = process.env.IMAGE_URL
+import("dotenv/config");
+const IMAGE_URL = process.env.IMAGE_URL;
 
-const id_admin = process.env.ID_ADMIN ?? "";
-
-
+const idAdmin = process.env.ID_ADMIN ?? "";
 
 export const getUserById = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -26,19 +24,18 @@ export const getUserById = async (req: Request, res: Response) => {
 
   try {
     const user = (await User.findById(id)) as userInterface;
-    const isAdmin = user._id.toString() === id_admin;
+    const isAdmin = user._id.toString() === idAdmin;
 
     if (user.image) {
       user.image = `${IMAGE_URL}/users/${user.image}`;
     }
 
-       
     if (!user) {
       res.status(422).json({ message: "Usuário não encontrado!" });
       return;
     }
     user.password = "";
-    res.status(200).json({ user, isAdmin: isAdmin });
+    res.status(200).json({ user, isAdmin });
   } catch (error) {
     console.log("erro no getById users", error);
     return res.status(500).json({

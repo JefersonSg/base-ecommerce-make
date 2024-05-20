@@ -1,8 +1,4 @@
-import { Request, Response } from "express";
-import {
-  CommentInterface,
-  ProductDataBackEnd,
-} from "../../../shared/helpers/Interfaces";
+import { type Request, type Response } from "express";
 import { removeImageS3, uploadToS3 } from "../../../shared/helpers/imageUpload";
 import CommentsModel from "../../../db/models/Comments";
 import testeID from "../../../shared/helpers/verifyId";
@@ -29,7 +25,7 @@ export const updateCommentById = async (req: Request, res: Response) => {
       });
     }
 
-    let updateCommentData: any = {
+    const updateCommentData: any = {
       userId: commentData?.userId,
       stars: stars ?? commentData?.stars ?? 5,
       productId: commentData.productId,
@@ -38,7 +34,7 @@ export const updateCommentById = async (req: Request, res: Response) => {
     };
 
     if (image) {
-      const newImage = image ? await uploadToS3("comments", image) : '';
+      const newImage = image ? await uploadToS3("comments", image) : "";
 
       updateCommentData.image = [newImage];
       await removeImageS3("comments", commentData?.image[0]);
@@ -58,7 +54,8 @@ export const updateCommentById = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(400).json({
-      message: "Erro na requisição: " + error,
+      message: "Erro na requisição: ",
+      error,
     });
   }
 };

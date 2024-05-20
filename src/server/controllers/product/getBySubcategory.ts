@@ -1,11 +1,10 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import Product from "../../db/models/Product";
 import testeID from "../../shared/helpers/verifyId";
 
+import("dotenv/config");
 
-import ('dotenv/config')
-
-const IMAGE_URL = process.env.IMAGE_URL
+const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getBySubcategory = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -31,9 +30,7 @@ export const getBySubcategory = async (req: Request, res: Response) => {
   try {
     for (const product of products) {
       for (let i = 0; i < product.images.length; i++) {
-        
-    product.images[i] = `${IMAGE_URL}/products/${product.images[i]}`;
-        
+        product.images[i] = `${IMAGE_URL}/products/${product.images[i]}`;
       }
     }
 

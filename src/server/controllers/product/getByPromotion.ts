@@ -1,14 +1,15 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import Product from "../../db/models/Product";
 
+import("dotenv/config");
 
-import ('dotenv/config')
-
-const IMAGE_URL = process.env.IMAGE_URL
+const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getByPromotion = async (req: Request, res: Response) => {
   try {
-    const products = await Product.find({promotion: true, active: true}).sort({ updatedAt: -1 });
+    const products = await Product.find({ promotion: true, active: true }).sort(
+      { updatedAt: -1 },
+    );
 
     if (!products) {
       res.status(422).json({
@@ -19,9 +20,7 @@ export const getByPromotion = async (req: Request, res: Response) => {
 
     for (const product of products) {
       for (let i = 0; i < product.images.length; i++) {
-        
-    product.images[i] = `${IMAGE_URL}/products/${product.images[i]}`;
-
+        product.images[i] = `${IMAGE_URL}/products/${product.images[i]}`;
       }
     }
 

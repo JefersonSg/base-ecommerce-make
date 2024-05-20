@@ -18,7 +18,7 @@ import cuponsRoutes from "./server/routes/Cupons.routes";
 import viewsRoutes from "./server/routes/Views.routes";
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT ?? 5000;
 
 // config JSON response
 app.use(express.json());
@@ -43,8 +43,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
-app.set('trust proxy', true);
+app.set("trust proxy", true);
 app.use(cors());
 
 // Public folder images

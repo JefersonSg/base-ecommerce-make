@@ -19,12 +19,12 @@ const CommentsModel = mongoose.model(
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'products',
+        ref: "products",
         required: true,
       },
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: "users",
         required: true,
       },
       comment: {

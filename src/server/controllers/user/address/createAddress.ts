@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import AddressModel from "../../../db/models/Address";
 import getUserByToken from "../../../shared/helpers/getUserByToken";
 import getToken from "../../../shared/helpers/getToken";
-import { userInterface } from "../interfaceUser";
+import { type userInterface } from "../interfaceUser";
 
 export const createAddress = async (req: Request, res: Response) => {
   const {
@@ -20,7 +20,7 @@ export const createAddress = async (req: Request, res: Response) => {
     uf,
   } = req.body;
 
-  const token = await getToken(req);
+  const token = getToken(req);
   const user = (await getUserByToken(res, token)) as unknown as userInterface;
 
   if (!user) {

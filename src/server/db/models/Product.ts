@@ -18,12 +18,12 @@ const Product = mongoose.model(
       },
       category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'categories',
+        ref: "categories",
         required: true,
       },
       subcategory: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'subcategories',
+        ref: "subcategories",
       },
       size: {
         type: String,

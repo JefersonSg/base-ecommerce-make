@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import SubcategoryModel from "../../db/models/Subcategory";
 import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
@@ -18,14 +18,14 @@ export const createSubcategory = async (req: Request, res: Response) => {
   }
   if (verifySizeImage(image)) {
     return res.status(401).json({
-      message : verifySizeImage(image)
-    })
+      message: verifySizeImage(image),
+    });
   }
 
   if (verifyMimetypeImage(image)) {
     return res.status(401).json({
-      message : verifyMimetypeImage(image)
-    })
+      message: verifyMimetypeImage(image),
+    });
   }
 
   const imageUpload = await uploadToS3("subcategory", image);

@@ -7,12 +7,12 @@ const ItemCart = mongoose.model(
   new Schema({
     shoppingCartId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'shopping-carts',
+      ref: "shopping-carts",
       required: true,
     },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
-        ref: 'products',
+      ref: "products",
       required: true,
     },
     color: {

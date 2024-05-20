@@ -1,16 +1,12 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-const router = express.Router();
 
 import { cuponsController } from "../controllers";
 import checkAdminToken from "../shared/helpers/checkAdminToken";
 import checkToken from "../shared/helpers/checkToken";
+const router = express.Router();
 
-
-router.get(
-    "/get-all",
-    checkAdminToken,
-    cuponsController.getAllCupons,
-  );
+router.get("/get-all", checkAdminToken, cuponsController.getAllCupons);
 
 router.post(
   "/create",
@@ -19,27 +15,10 @@ router.post(
   cuponsController.createCoupon,
 );
 
-router.post(
-    "/redeem",
-    checkToken,
-    cuponsController.redeemCupom,
-  );
+router.post("/redeem", checkToken, cuponsController.redeemCupom);
 
-router.patch(
-    "/toggle/:id",
-    checkAdminToken,
-    cuponsController.toggleCupom,
-  );
+router.patch("/toggle/:id", checkAdminToken, cuponsController.toggleCupom);
 
-router.delete(
-    "/delete/:id",
-    checkAdminToken,
-    cuponsController.deleteCupom,
-  );
-
-
-
-
-
+router.delete("/delete/:id", checkAdminToken, cuponsController.deleteCupom);
 
 export default router;

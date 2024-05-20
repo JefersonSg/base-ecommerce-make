@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import User from "../../db/models/User";
 import bcrypt from "bcrypt";
 import createUserToken from "../../shared/helpers/createUserToken";
@@ -18,7 +18,7 @@ export const create = async (req: Request, res: Response) => {
   const password = req.body.password;
 
   // check if user exists
-  const userExists = await User.findOne({ email: email });
+  const userExists = await User.findOne({ email });
 
   if (userExists) {
     res.status(422).json({ message: "Por favor, utilize outro e-mail!" });
@@ -31,9 +31,9 @@ export const create = async (req: Request, res: Response) => {
 
   // create user
   const user = new User({
-    name: name,
-    surname: surname,
-    email: email,
+    name,
+    surname,
+    email,
     password: passwordHash,
   });
 

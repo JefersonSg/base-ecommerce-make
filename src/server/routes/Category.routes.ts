@@ -1,15 +1,14 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-const router = express.Router();
 
 import multer from "multer";
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
-import checkToken from "../shared/helpers/checkToken";
-
 import { CategoryController } from "../controllers";
 import checkAdminToken from "../shared/helpers/checkAdminToken";
+const router = express.Router();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // GET
 router.get("/", CategoryController.getAll);
@@ -34,6 +33,10 @@ router.patch(
 );
 
 // DELETE
-router.delete("/delete/:id", checkAdminToken, CategoryController.deleteCategory);
+router.delete(
+  "/delete/:id",
+  checkAdminToken,
+  CategoryController.deleteCategory,
+);
 
 export default router;

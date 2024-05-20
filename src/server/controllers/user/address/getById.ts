@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import AddressModel from "../../../db/models/Address";
 import getToken from "../../../shared/helpers/getToken";
 import getUserByToken from "../../../shared/helpers/getUserByToken";
-import { userInterface } from "../interfaceUser";
+import { type userInterface } from "../interfaceUser";
 
 export const getAddressById = async (req: Request, res: Response) => {
-  const token = await getToken(req);
+  const token = getToken(req);
   const User = (await getUserByToken(res, token)) as unknown as userInterface;
 
   if (!User) {
@@ -21,11 +21,12 @@ export const getAddressById = async (req: Request, res: Response) => {
       res.status(422).json({ message: "Endereço não encontrado!" });
       return;
     }
-    return res.status(200).json({ address: address });
+    return res.status(200).json({ address });
   } catch (error) {
     console.log("erro ao buscar endereço", error);
     return res.status(404).json({
-      message: "erro ao buscar endereço" + error,
+      message: "erro ao buscar endereço",
+      error,
     });
   }
 };

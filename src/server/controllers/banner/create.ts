@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import BannersModel from "../../db/models/Banner";
 import { verifySizeImage } from "../../shared/helpers/verifySize";
@@ -32,14 +32,14 @@ export const create = async (req: Request, res: Response) => {
   }
   if (verifySizeImage(images)) {
     return res.status(401).json({
-      message : verifySizeImage(images)
-    })
+      message: verifySizeImage(images),
+    });
   }
 
   if (verifyMimetypeImage(images)) {
     return res.status(401).json({
-      message : verifyMimetypeImage(images)
-    })
+      message: verifyMimetypeImage(images),
+    });
   }
 
   async function uploads() {

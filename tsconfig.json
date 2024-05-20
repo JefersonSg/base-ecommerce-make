@@ -11,5 +11,8 @@
     "allowJs": true
   },
   "include": ["src/**/*.ts", "types"],
-  "exclude": ["node_modules","src/server/controllers/payment/methods/payment.ts"]
+  "exclude": [
+    "node_modules",
+    "src/server/controllers/payment/methods/payment.ts"
+  ]
 }

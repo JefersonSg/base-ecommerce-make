@@ -18,7 +18,7 @@ const CuponsUsed = mongoose.model(
       },
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: "users",
       },
     },
     { timestamps: true },

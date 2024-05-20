@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import { uploadToS3 } from "../../shared/helpers/imageUpload";
 import Product from "../../db/models/Product";
-import { ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
+import { type ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
 import { verifySizeImage } from "../../shared/helpers/verifySize";
 import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
 
@@ -23,14 +23,14 @@ export const create = async (req: Request, res: Response) => {
   }
   if (verifySizeImage(images)) {
     return res.status(401).json({
-      message : verifySizeImage(images)
-    })
+      message: verifySizeImage(images),
+    });
   }
 
   if (verifyMimetypeImage(images)) {
     return res.status(401).json({
-      message : verifyMimetypeImage(images)
-    })
+      message: verifyMimetypeImage(images),
+    });
   }
   async function uploads() {
     // Use `map` with `Promise.all` to wait for all uploads to complete
@@ -48,7 +48,7 @@ export const create = async (req: Request, res: Response) => {
     brand: productData.brand,
     price: productData.price,
     category: productData.category,
-    subcategory: productData?.subcategory || undefined,
+    subcategory: productData?.subcategory ?? undefined,
     description: productData.description,
     colors: productData?.colors?.split(","),
     codeColors: productData?.codeColors?.split(","),
@@ -56,7 +56,7 @@ export const create = async (req: Request, res: Response) => {
     howToUse: productData.howToUse,
     size: productData.size,
     characteristic: productData.characteristic,
-    stock: stock,
+    stock,
     images: [],
     promotion: productData.promotion,
     promotionalPrice: productData.promotionalPrice,
@@ -66,7 +66,7 @@ export const create = async (req: Request, res: Response) => {
   await uploads();
 
   images?.map((image: any) => {
-    product.images.push(image.filename);
+    return product.images.push(image.filename);
   });
 
   try {

@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import BannersModel from "../../db/models/Banner";
-import { BannerInterface } from "../../shared/helpers/Interfaces";
+import { type BannerInterface } from "../../shared/helpers/Interfaces";
 
-import ('dotenv/config')
+import("dotenv/config");
 
-const IMAGE_URL = process.env.IMAGE_URL
+const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getAll = async (req: Request, res: Response) => {
   const banners = (await BannersModel.find().sort(
@@ -19,7 +19,6 @@ export const getAll = async (req: Request, res: Response) => {
   }
 
   for (const banner of banners) {
-
     banner.imageMobile = `${IMAGE_URL}/banners/${banner?.imageMobile}`;
     banner.imageDesktop = `${IMAGE_URL}/banners/${banner?.imageDesktop}`;
   }
@@ -28,7 +27,6 @@ export const getAll = async (req: Request, res: Response) => {
     res.status(200).json({
       banners,
     });
-    return;
   } catch (error) {
     console.log("erro no getAll banner", error);
     return res.status(500).json({

@@ -13,12 +13,15 @@ const s3 = new S3Client({
   },
   region: bucketRegion,
 });
-const signedUrlsCache : any = {};
+const signedUrlsCache: any = {};
 
 export default async function getUrlImageS3(path: string, image: string) {
   const cacheKey = `${path}/${image}`;
 
-  if (signedUrlsCache[cacheKey] && signedUrlsCache[cacheKey].expiry > Date.now()) {
+  if (
+    signedUrlsCache[cacheKey] &&
+    signedUrlsCache[cacheKey].expiry > Date.now()
+  ) {
     return signedUrlsCache[cacheKey].url;
   }
 
@@ -29,7 +32,7 @@ export default async function getUrlImageS3(path: string, image: string) {
     };
 
     const command = new GetObjectCommand(getObjectParams);
-    const expires = 4 * 24 * 60 * 60
+    const expires = 4 * 24 * 60 * 60;
 
     const url = await getSignedUrl(s3, command, {
       expiresIn: 5 * 24 * 60 * 60,
@@ -37,13 +40,16 @@ export default async function getUrlImageS3(path: string, image: string) {
 
     signedUrlsCache[cacheKey] = {
       url,
-      expiry: Date.now() + (expires * 1000)
+      expiry: Date.now() + expires * 1000,
     };
 
     setInterval(() => {
       const now = Date.now();
       for (const cacheKey in signedUrlsCache) {
-        if (signedUrlsCache.hasOwnProperty(cacheKey) && signedUrlsCache[cacheKey].expiry < now) {
+        if (
+          Object.prototype.hasOwnProperty.call(signedUrlsCache, cacheKey) &&
+          signedUrlsCache[cacheKey].expiry < now
+        ) {
           delete signedUrlsCache[cacheKey];
         }
       }
@@ -51,6 +57,6 @@ export default async function getUrlImageS3(path: string, image: string) {
 
     return url;
   } catch (error) {
-    console.log("erro ao gerar url" + error);
+    console.log("erro ao gerar url", error);
   }
 }

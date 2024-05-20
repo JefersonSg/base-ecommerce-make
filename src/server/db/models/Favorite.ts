@@ -8,12 +8,12 @@ const FavoriteModel = mongoose.model(
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: "users",
         required: true,
       },
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'products',
+        ref: "products",
         required: true,
       },
     },

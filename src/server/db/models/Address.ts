@@ -7,7 +7,7 @@ const AddressModel = mongoose.model(
   new Schema({
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
+      ref: "users",
       required: true,
     },
     nome: {

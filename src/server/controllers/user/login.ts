@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import User from "../../db/models/User";
 import bcrypt from "bcrypt";
 import createUserToken from "../../shared/helpers/createUserToken";
 import "dotenv/config";
-import { userInterface } from "./interfaceUser";
+import { type userInterface } from "./interfaceUser";
 
 export const login = async (req: Request, res: Response) => {
   const email = req.body.email;
@@ -11,7 +11,7 @@ export const login = async (req: Request, res: Response) => {
 
   // check if user exists
   try {
-    const user = (await User.findOne({ email: email })) as userInterface;
+    const user = (await User.findOne({ email })) as userInterface;
 
     if (!user) {
       return res

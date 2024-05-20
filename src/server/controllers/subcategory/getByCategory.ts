@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import SubcategoryModel from "../../db/models/Subcategory";
 import testeID from "../../shared/helpers/verifyId";
 
-import ('dotenv/config')
+import("dotenv/config");
 
-const IMAGE_URL = process.env.IMAGE_URL
+const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getByCategory = async (req: Request, res: Response) => {
   const categoryId = req.params.id;
@@ -27,9 +27,7 @@ export const getByCategory = async (req: Request, res: Response) => {
     }
 
     for (const subcategory of subcategories) {
-
       subcategory.image = `${IMAGE_URL}/subcategory/${subcategory.image}`;
-
     }
 
     res.status(200).json({ subcategories });

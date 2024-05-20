@@ -1,9 +1,9 @@
-import { Request } from "express";
+import { type Request } from "express";
 
 // get token from headers
 const getToken = (req: Request) => {
-  const authHeader = req.headers["authorization"];
-  const token: string = (authHeader && authHeader.split(" ")[1]) || "";
+  const authHeader = req.headers.authorization;
+  const token: string = authHeader?.split(" ")[1] ?? "";
 
   return token;
 };

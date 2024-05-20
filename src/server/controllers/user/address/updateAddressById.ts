@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import AddressModel from "../../../db/models/Address";
 
 export const updateAddressById = async (req: Request, res: Response) => {

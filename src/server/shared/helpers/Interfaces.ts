@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { type ObjectId } from "mongoose";
 
 export interface CommentInterface {
   productId: ObjectId;
@@ -19,7 +19,7 @@ export interface ProductDataFrontEnd {
   composition?: string;
   characteristic?: string;
   howToUse?: string;
-  images: Object[];
+  images: object[];
   colors?: string;
   codeColors?: string;
   amount: string;
@@ -49,7 +49,7 @@ export interface ProductDataBackEnd {
   promotion: boolean;
   active: boolean;
   promotionalPrice: number;
-  sales: number
+  sales: number;
 }
 
 export interface CategoryInterface {
@@ -107,14 +107,14 @@ export interface OrderInterface {
   paymentLink: string;
   address: [AddressInterface];
   status: string;
-  productIds: ObjectId[]; 
-  valueProducts: Number[];
+  productIds: ObjectId[];
+  valueProducts: number[];
   productAmounts: number[];
   productColors: string[];
   totalPayment: number;
   methodPayment: string;
-  discount:  Number;
-  orderTracking:  string;
+  discount: number;
+  orderTracking: string;
   createdAt: string;
 }
 
@@ -155,14 +155,14 @@ export interface delivery {
         {
           id: string;
           quantity: number;
-        }
+        },
       ];
       dimensions: {
         height: number;
         width: number;
         length: number;
       };
-    }
+    },
   ];
   company: {
     id: number;

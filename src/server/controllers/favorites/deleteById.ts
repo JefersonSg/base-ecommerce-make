@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 
 import FavoriteModel from "../../db/models/Favorite";
 import testeID from "../../shared/helpers/verifyId";

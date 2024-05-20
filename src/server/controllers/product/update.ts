@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import Product from "../../db/models/Product";
 import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
-import { ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
+import { type ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
 import testeID from "../../shared/helpers/verifyId";
 import { verifySizeImage } from "../../shared/helpers/verifySize";
 import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
@@ -14,6 +14,25 @@ export const updateProduct = async (req: Request, res: Response) => {
 
   const updateData: ProductDataFrontEnd | any = {};
   // check if ID exists
+
+  async function uploads(images: string[], oldImages: string[]) {
+    // Use `map` with `Promise.all` to await for all uploads to complete
+    const newImages = await Promise.all(
+      images?.map(async (image: any) => {
+        const data = await uploadToS3("products", image);
+        return data;
+      }),
+    );
+
+    if (oldImages.length > 0) {
+      oldImages?.forEach((image) => {
+        void removeImageS3("products", image);
+      });
+    }
+
+    return newImages;
+  }
+
   try {
     const isValidId = testeID(id);
     if (!isValidId) {
@@ -36,12 +55,14 @@ export const updateProduct = async (req: Request, res: Response) => {
     updateData.name = productData.name;
     updateData.brand = productData.brand;
     updateData.category = productData.category;
-    updateData.subcategory = productData.subcategory ? productData.subcategory : null ;
+    updateData.subcategory = productData.subcategory
+      ? productData.subcategory
+      : null;
     updateData.description = productData.description;
     updateData.price = productData.price;
     updateData.size = productData.size;
-    updateData.colors = productData?.colors?.split(",") ?? '';
-    updateData.codeColors = productData?.codeColors?.split(",") ?? '';
+    updateData.colors = productData?.colors?.split(",") ?? "";
+    updateData.codeColors = productData?.codeColors?.split(",") ?? "";
     updateData.composition = productData.composition;
     updateData.characteristic = productData.characteristic;
     updateData.howToUse = productData.howToUse;
@@ -57,42 +78,24 @@ export const updateProduct = async (req: Request, res: Response) => {
       productData.promotionalPrice ?? product.promotionalPrice ?? 0;
 
     if (images?.length > 0) {
-      
-    if (verifySizeImage(images)) {
-      return res.status(401).json({
-        message : verifySizeImage(images)
-      })
-    }
+      if (verifySizeImage(images)) {
+        return res.status(401).json({
+          message: verifySizeImage(images),
+        });
+      }
 
-    if (verifyMimetypeImage(images)) {
-      return res.status(401).json({
-        message : verifyMimetypeImage(images)
-      })
-    }
-
-
-      async function uploads() {
-        // Use `map` with `Promise.all` to await for all uploads to complete
-       const newImages = await Promise.all(
-          images?.map(async (image: any, index: number) => {
-            const data = await uploadToS3("products", image);
-            image.filename = data;
-          }),
-        );
-
-        // delete Old Images
-        if (newImages.length > 0) {
-          product?.images.forEach((image) => {
-            removeImageS3("products", image);
-          });
-        }
+      if (verifyMimetypeImage(images)) {
+        return res.status(401).json({
+          message: verifyMimetypeImage(images),
+        });
       }
 
       updateData.images = [];
 
-      await uploads();
-      images.map((image: any) => {
-        updateData.images.push(image.filename);
+      const newImages = await uploads(images, product?.images);
+
+      newImages.map((image: any) => {
+        return updateData.images.push(image);
       });
     }
 
@@ -104,7 +107,8 @@ export const updateProduct = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(401).json({
-      message: "erro ao fazer update" + error,
+      message: "erro ao fazer update",
+      error,
     });
   }
 };

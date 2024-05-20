@@ -1,6 +1,6 @@
-import { Request, RequestHandler } from "express";
+import { type Request, type RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import { Schema, ValidationError } from "yup";
+import { type Schema, type ValidationError } from "yup";
 
 type TProperty = "body" | "header" | "params" | "query";
 
@@ -28,7 +28,7 @@ export const validate: TValidation =
     });
 
     if (Object.entries(errorsResult).length === 0) {
-      return next();
+      next();
     } else {
       return res.status(StatusCodes.BAD_REQUEST).json({ errorsResult });
     }

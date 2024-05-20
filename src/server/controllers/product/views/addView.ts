@@ -1,15 +1,13 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import Product from "../../../db/models/Product";
 import testeID from "../../../shared/helpers/verifyId";
-import getToken from "../../../shared/helpers/getToken";
 import getUserByToken from "../../../shared/helpers/getUserByToken";
-import { userInterface } from "../../user/interfaceUser";
+import { type userInterface } from "../../user/interfaceUser";
 import ViewsModel from "../../../db/models/Views";
 
 export const addView = async (req: Request, res: Response) => {
   const productId = req.params.productId;
   const { userToken, userIp } = req.body;
-
 
   const user = (await getUserByToken(
     res,

@@ -15,7 +15,7 @@ const SubcategoryModel = mongoose.model(
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
-        ref: 'categories',
+      ref: "categories",
       required: true,
     },
     image: {

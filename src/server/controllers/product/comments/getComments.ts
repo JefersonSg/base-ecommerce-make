@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import ProductModel from "../../../db/models/Product";
-import { ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
+import { type ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
 import getUrlImageS3 from "../../../shared/helpers/getUrlImageS3";
 import CommentsModel from "../../../db/models/Comments";
 import testeID from "../../../shared/helpers/verifyId";
@@ -17,7 +17,7 @@ export const getAllComments = async (req: Request, res: Response) => {
   }
 
   try {
-    let product = (await ProductModel.findOne({
+    const product = (await ProductModel.findOne({
       _id: productId,
     })) as ProductDataBackEnd;
 

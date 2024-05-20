@@ -7,7 +7,7 @@ const Metrics = mongoose.model(
   new Schema({
     userID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
+      ref: "users",
     },
     date: {
       type: String,

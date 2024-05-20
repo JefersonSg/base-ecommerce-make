@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-const router = express.Router();
 
 import { ShoppingCartControl } from "../controllers";
 
 // middleware
 import checkToken from "../shared/helpers/checkToken";
+const router = express.Router();
 
 // Carrinho
 router.post("/get-all/:userId", ShoppingCartControl.getAllItemsCart);

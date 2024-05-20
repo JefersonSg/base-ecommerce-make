@@ -16,9 +16,9 @@ import * as addView from "./views/addView";
 import * as getViewsByProductId from "./views/getViewsByProductId";
 import * as getAllProductsViews from "./views/getAllProductsViews";
 import * as getBySales from "./getBySales";
-import * as getByPromotion from './getByPromotion';
-import * as getAllViews from './views/getAllViews'
-import * as getByViews  from "./getByViews";
+import * as getByPromotion from "./getByPromotion";
+import * as getAllViews from "./views/getAllViews";
+import * as getByViews from "./getByViews";
 
 export const ProductController = {
   ...create,
@@ -41,5 +41,5 @@ export const ProductController = {
   ...getAllProductsViews,
   ...getByPromotion,
   ...getAllViews,
-  ...getByViews
+  ...getByViews,
 };

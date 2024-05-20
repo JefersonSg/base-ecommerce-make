@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import User from "../../db/models/User";
 import getToken from "../../shared/helpers/getToken";
 import getUserByToken from "../../shared/helpers/getUserByToken";
 import bcrypt from "bcrypt";
 import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
 
-interface User {
+interface UserInterface {
   _id: string;
   name: string;
   surname: string;
@@ -16,7 +16,7 @@ interface User {
 
 export const editUser = async (req: Request, res: Response) => {
   const token = getToken(req);
-  const user = (await getUserByToken(res, token)) as unknown as User;
+  const user = (await getUserByToken(res, token)) as unknown as UserInterface;
 
   if (!user) {
     return res.status(404).json({
@@ -24,8 +24,8 @@ export const editUser = async (req: Request, res: Response) => {
     });
   }
 
-  const { name,surname, email, password, confirmpassword } = req.body;
-  const image = req.file
+  const { name, surname, email, password, confirmpassword } = req.body;
+  const image = req.file;
   const { id } = req.params;
 
   if (id && id !== user._id.toString()) {
@@ -34,32 +34,32 @@ export const editUser = async (req: Request, res: Response) => {
     });
   }
 
-  const emailUsing = await User.findOne({ email: email });
+  const emailUsing = await User.findOne({ email });
 
   if (user?.email !== email && emailUsing) {
     res.status(422).json({ message: "E-mail em uso, utilize outro e-mail!" });
     return;
   }
 
-    user.email = email ?? user.email;
-    user.surname = surname ?? user.surname;
-    user.name = name ?? user.name;
-  
+  user.email = email ?? user.email;
+  user.surname = surname ?? user.surname;
+  user.name = name ?? user.name;
+
   if (image) {
     const fileName = await uploadToS3("users", image);
     if (user.image && fileName) {
-      await removeImageS3('users', user?.image)
+      await removeImageS3("users", user?.image);
     }
     if (fileName) {
-      user.image = fileName;  
+      user.image = fileName;
     }
   } else {
-    user.image = user.image
+    user.image = user.image ?? "";
   }
 
-  if (password != confirmpassword) {
+  if (password !== confirmpassword) {
     res.status(422).json({ error: "As senhas não conferem." });
-  } else if (password == confirmpassword && password != null) {
+  } else if (password === confirmpassword && password != null) {
     const salt = await bcrypt.genSalt(12);
     const reqPassword = req.body.password;
     const passwordHash = await bcrypt.hash(reqPassword, salt);
@@ -68,7 +68,7 @@ export const editUser = async (req: Request, res: Response) => {
   }
 
   try {
-    let updatedUser = await User.findOneAndUpdate(
+    const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
       { $set: user },
       { new: true },

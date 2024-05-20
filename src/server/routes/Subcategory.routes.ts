@@ -1,15 +1,13 @@
 import express from "express";
-const router = express.Router();
 
 import multer from "multer";
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
-import checkToken from "../shared/helpers/checkToken";
-
 import { SubcategoryController } from "../controllers";
 import checkAdminToken from "../shared/helpers/checkAdminToken";
+const router = express.Router();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // GET
 router.get("/", SubcategoryController.getAll);

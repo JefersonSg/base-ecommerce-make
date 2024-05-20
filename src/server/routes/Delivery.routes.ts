@@ -1,17 +1,11 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-const router = express.Router();
 
 import { deliveryController } from "../controllers";
+const router = express.Router();
 
-router.post(
-  "/consult-cep",
-  deliveryController.consultCep,
-);
+router.post("/consult-cep", deliveryController.consultCep);
 
-router.post(
-    '/calculate',
-    deliveryController.calculateDelivery
-)
-
+router.post("/calculate", deliveryController.calculateDelivery);
 
 export default router;
