@@ -15,6 +15,7 @@ import OrderRoutes from "./server/routes/Order.routes";
 import DeliveryRoutes from "./server/routes/Delivery.routes";
 import PaymentRoutes from "./server/routes/Payment.routes";
 import cuponsRoutes from "./server/routes/Cupons.routes";
+import viewsRoutes from "./server/routes/Views.routes";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -62,6 +63,7 @@ app.use("/order", OrderRoutes);
 app.use("/delivery", DeliveryRoutes);
 app.use("/payment", PaymentRoutes);
 app.use("/cupons", cuponsRoutes);
+app.use("/views", viewsRoutes);
 
 // Routes
 app.listen(port);

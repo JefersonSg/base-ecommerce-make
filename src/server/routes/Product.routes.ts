@@ -67,10 +67,5 @@ router.delete(
   ProductController.removeCommentById,
 );
 
-// views
-router.get("/views/get-all", ProductController.getAllViews);
-router.get("/views/get/:productId", ProductController.getViewsByProductId);
-router.get("/views/get-by-views/", ProductController.getAllProductsViews);
-router.post("/views/add/:productId", ProductController.addView);
 
 export default router;
