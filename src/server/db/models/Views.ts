@@ -4,23 +4,30 @@ const { Schema } = mongoose;
 
 const ViewsModel = mongoose.model(
   "views",
-  new Schema(
-    {
-      ip: {
-        type: String,
-      },
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
-        required: true,
-      },
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-      },
+  new Schema({
+    ip: {
+      type: String,
     },
-    { timestamps: true },
-  ),
+    sessionId: {
+      type: String,
+      required: true,
+    },
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "products",
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
+    pageView: {
+      type: String,
+    },
+    date: {
+      type: Date,
+      required: true,
+    },
+  }),
 );
 
 export default ViewsModel;

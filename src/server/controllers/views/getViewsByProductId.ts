@@ -1,6 +1,6 @@
 import { type Request, type Response } from "express";
-import testeID from "../../../shared/helpers/verifyId";
-import ViewsModel from "../../../db/models/Views";
+import testeID from "../../shared/helpers/verifyId";
+import ViewsModel from "../../db/models/Views";
 
 export const getViewsByProductId = async (req: Request, res: Response) => {
   const productId = req.params.productId;

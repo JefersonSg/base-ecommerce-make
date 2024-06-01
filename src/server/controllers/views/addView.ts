@@ -1,13 +1,20 @@
 import { type Request, type Response } from "express";
-import Product from "../../../db/models/Product";
-import testeID from "../../../shared/helpers/verifyId";
-import getUserByToken from "../../../shared/helpers/getUserByToken";
-import { type userInterface } from "../../user/interfaceUser";
-import ViewsModel from "../../../db/models/Views";
+import Product from "../../db/models/Product";
+import testeID from "../../shared/helpers/verifyId";
+import getUserByToken from "../../shared/helpers/getUserByToken";
+import { type userInterface } from "../user/interfaceUser";
+import ViewsModel from "../../db/models/Views";
+import { toZonedTime } from "date-fns-tz";
 
 export const addView = async (req: Request, res: Response) => {
   const productId = req.params.productId;
-  const { userToken, userIp } = req.body;
+  const { userToken, userIp, sessionId, pageView } = req.body;
+
+  const timeZone = "America/Sao_Paulo";
+
+  // Criar a data com o fuso horário de Brasília
+  const now = new Date();
+  const zonedDate = toZonedTime(now, timeZone);
 
   const user = (await getUserByToken(
     res,
@@ -38,8 +45,11 @@ export const addView = async (req: Request, res: Response) => {
   try {
     const newView = await new ViewsModel({
       ip: userIp?.value ?? null,
-      product: productId,
+      product: productId ?? null,
       userId: user._id ?? null,
+      date: zonedDate,
+      sessionId,
+      pageView: pageView ?? null,
     }).save();
 
     return res.status(200).json({

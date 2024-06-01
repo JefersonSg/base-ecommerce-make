@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
 
-import { ProductController } from "../controllers";
+import { ViewsController } from "../controllers";
 const router = express.Router();
 
-router.get("/get-all", ProductController.getAllViews);
-router.get("/:productId", ProductController.getViewsByProductId);
-router.get("/get-by-views/", ProductController.getAllProductsViews);
+router.get("/get-all", ViewsController.getAllViews);
+router.get("/:productId", ViewsController.getViewsByProductId);
+router.get("/get-by-views/", ViewsController.getAllProductsViews);
 
-router.post("/add/:productId", ProductController.addView);
+router.post("/add/:productId", ViewsController.addView);
 
 export default router;

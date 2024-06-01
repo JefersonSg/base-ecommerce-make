@@ -12,12 +12,8 @@ import * as updateComment from "./comments/updateCommentById";
 import * as removeCommentById from "./comments/removeCommentById";
 import * as getAllActives from "./getAllActives";
 import * as getByName from "./getByName";
-import * as addView from "./views/addView";
-import * as getViewsByProductId from "./views/getViewsByProductId";
-import * as getAllProductsViews from "./views/getAllProductsViews";
 import * as getBySales from "./getBySales";
 import * as getByPromotion from "./getByPromotion";
-import * as getAllViews from "./views/getAllViews";
 import * as getByViews from "./getByViews";
 
 export const ProductController = {
@@ -36,10 +32,6 @@ export const ProductController = {
   ...removeCommentById,
   ...getAllActives,
   ...getByName,
-  ...addView,
-  ...getViewsByProductId,
-  ...getAllProductsViews,
   ...getByPromotion,
-  ...getAllViews,
   ...getByViews,
 };

@@ -1,5 +1,5 @@
 import { type Request, type Response } from "express";
-import ViewsModel from "../../../db/models/Views";
+import ViewsModel from "../../db/models/Views";
 
 export const getAllProductsViews = async (req: Request, res: Response) => {
   try {
