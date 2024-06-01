@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-
 import { cuponsController } from "../controllers";
 import checkAdminToken from "../shared/helpers/checkAdminToken";
 import checkToken from "../shared/helpers/checkToken";
+
 const router = express.Router();
 
 router.get("/get-all", checkAdminToken, cuponsController.getAllCupons);

@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-
 import multer from "multer";
-
 import { SubcategoryController } from "../controllers";
 import checkAdminToken from "../shared/helpers/checkAdminToken";
-const router = express.Router();
 
+const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 

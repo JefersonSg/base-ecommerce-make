@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
-
 import { ShoppingCartControl } from "../controllers";
 
 // middleware

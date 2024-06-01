@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from "express";
 import multer from "multer";
-
 import { BannersControl } from "../controllers";
 
 // middleware

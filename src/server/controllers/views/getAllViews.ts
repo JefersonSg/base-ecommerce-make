@@ -3,14 +3,20 @@ import ViewsModel from "../../db/models/Views";
 import { sub } from "date-fns";
 
 export const getAllViews = async (req: Request, res: Response) => {
-  const sevenDaysAgo = sub(new Date(), { days: 1 });
+  const today = new Date();
+
+  const { daysAgo } = req.params;
+
+  today.setHours(0, 0, 0, 0);
+
+  const DaysAgo = sub(today, { days: Number(daysAgo) ?? 0 });
 
   try {
     try {
       const totalViews = await ViewsModel.aggregate([
         {
           $match: {
-            date: { $gte: sevenDaysAgo },
+            date: { $gte: DaysAgo },
           },
         },
         {
@@ -26,7 +32,7 @@ export const getAllViews = async (req: Request, res: Response) => {
       const sessions = await ViewsModel.aggregate([
         {
           $match: {
-            date: { $gte: sevenDaysAgo },
+            date: { $gte: DaysAgo },
           },
         },
         {
