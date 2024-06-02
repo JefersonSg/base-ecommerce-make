@@ -15,6 +15,7 @@ import * as getByName from "./getByName";
 import * as getBySales from "./getBySales";
 import * as getByPromotion from "./getByPromotion";
 import * as getByViews from "./getByViews";
+import * as getAllNoActives from './getNoActives'
 
 export const ProductController = {
   ...create,
@@ -31,6 +32,7 @@ export const ProductController = {
   ...updateComment,
   ...removeCommentById,
   ...getAllActives,
+  ...getAllNoActives,
   ...getByName,
   ...getByPromotion,
   ...getByViews,
