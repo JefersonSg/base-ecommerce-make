@@ -11,7 +11,6 @@ export const getAllViews = async (req: Request, res: Response) => {
 
   const DaysAgo = sub(today, { days: Number(daysAgo) ?? 0 });
 
-  try {
     try {
       const totalViews = await ViewsModel.aggregate([
         {
@@ -29,6 +28,7 @@ export const getAllViews = async (req: Request, res: Response) => {
           $sort: { viewsCount: -1 },
         },
       ]);
+
       const sessions = await ViewsModel.aggregate([
         {
           $match: {
@@ -37,7 +37,7 @@ export const getAllViews = async (req: Request, res: Response) => {
         },
         {
           $group: {
-            _id: { ip: "$sessionId", product: "$product" },
+            _id: { sessionId: "$sessionId", product: "$product" },
             userId: { $addToSet: "$userId" },
             visitCount: { $sum: 1 },
           },
@@ -94,7 +94,5 @@ export const getAllViews = async (req: Request, res: Response) => {
         error,
       });
     }
-  } catch (error) {
-    return res.status(500).json({ message: error });
-  }
+
 };
