@@ -21,22 +21,16 @@ export const addView = async (req: Request, res: Response) => {
     userToken,
   )) as unknown as userInterface;
 
-  if (!productId) {
-    return res.status(401).json({
-      message: "e necessario enviar o productId",
-    });
-  }
-
   const testeId = testeID(productId);
 
-  if (!testeId) {
+  if (productId && !testeId) {
     return res.status(401).json({
       message: "Id do produto e invalido",
     });
   }
-  const product = await Product.findById(productId);
+  const product = productId && await Product.findById(productId);
 
-  if (!product) {
+  if (productId && !product) {
     return res.status(404).json({
       message:
         "nao e possível add nova view,  produto nao encontrado com esse id",

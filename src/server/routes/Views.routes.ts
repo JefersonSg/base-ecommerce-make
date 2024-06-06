@@ -8,6 +8,6 @@ router.get("/get-all-views/:daysAgo?", ViewsController.getAllViews);
 router.get("/product/:productId", ViewsController.getViewsByProductId);
 router.get("/get-by-views/", ViewsController.getAllProductsViews);
 
-router.post("/add/:productId", ViewsController.addView);
+router.post("/add/:productId?", ViewsController.addView);
 
 export default router;

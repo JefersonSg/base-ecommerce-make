@@ -45,6 +45,7 @@ export const getAllViews = async (req: Request, res: Response) => {
             _id: { sessionId: "$sessionId", product: "$product" },
             userId: { $addToSet: "$userId" },
             visitCount: { $sum: 1 },
+            pageView: {$addToSet: '$pageView'},
           },
         },
         {
@@ -57,6 +58,7 @@ export const getAllViews = async (req: Request, res: Response) => {
                 count: "$visitCount",
               },
             },
+            pageView: {$addToSet: '$pageView'},
             numberVisit: { $sum: "$visitCount" },
           },
         },
