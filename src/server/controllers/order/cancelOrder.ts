@@ -7,7 +7,7 @@ import {
 } from "../../shared/helpers/Interfaces";
 import Orders from "../../db/models/Orders";
 
-export const reversalOrder = async (req: Request, res: Response) => {
+export const cancelOrder = async (req: Request, res: Response) => {
   const { orderId } = req.params;
 
   if (!orderId) {
@@ -39,6 +39,7 @@ export const reversalOrder = async (req: Request, res: Response) => {
       const productId = order.productIds[i];
       const color = order.productColors[i];
       const amount = order.productAmounts[i];
+      const size = order.productSizes[i];
 
       const productPrice = (await Product.findOne({
         _id: productId,
@@ -47,12 +48,15 @@ export const reversalOrder = async (req: Request, res: Response) => {
       };
 
       const indexColor = productPrice.colors.indexOf(color);
+      const indexSize = productPrice.size.indexOf(size);
 
       const newAmount = [...productPrice.stock.amount];
 
-      newAmount[indexColor] = newAmount[indexColor] + amount;
+      
+      newAmount[indexColor][indexSize] = newAmount[indexColor][indexSize] + amount;
 
       const options = { new: true, runValidators: true };
+
 
       await Product.findByIdAndUpdate(
         productId,
@@ -64,7 +68,7 @@ export const reversalOrder = async (req: Request, res: Response) => {
     const pedidoCancelado = await Orders.findOneAndUpdate(
       { _id: orderId },
       {
-        $set: { status: "devolvido" },
+        $set: { status: "cancelado" },
       },
     );
 
@@ -73,6 +77,7 @@ export const reversalOrder = async (req: Request, res: Response) => {
       pedidoCancelado,
     });
   } catch (error) {
+    console.log(error)
     res.status(400).json({
       message: "Erro ao cancelar o pedido",
       error,

@@ -35,7 +35,7 @@ export const concludedOrder = async (req: Request, res: Response) => {
     );
 
     return res.status(200).json({
-      message: "Pedido confirmado com sucesso",
+      message: "Pedido concluido com sucesso",
       pedidoConfirmado,
     });
   } catch (error) {

@@ -7,7 +7,7 @@ import {
 } from "../../shared/helpers/Interfaces";
 import Product from "../../db/models/Product";
 
-export const cancelOrder = async (req: Request, res: Response) => {
+export const reversalOrder = async (req: Request, res: Response) => {
   const { orderId } = req.params;
 
   if (!orderId) {
@@ -34,40 +34,45 @@ export const cancelOrder = async (req: Request, res: Response) => {
       const productId = order.productIds[i];
       const color = order.productColors[i];
       const amount = order.productAmounts[i];
+      const size = order.productSizes[i];
+
 
       const productPrice = (await Product.findOne({
         _id: productId,
       })) as ProductDataBackEnd & {
         _id: string;
       };
-
       const indexColor = productPrice.colors.indexOf(color);
+      const indexSize = productPrice.size.indexOf(size);
 
-      const newAmount = [...productPrice.stock.amount];
+      if (indexColor && indexSize) {
+        const newAmount = [...productPrice.stock.amount];
 
-      newAmount[indexColor] = newAmount[indexColor] + amount;
-
-      const options = { new: true, runValidators: true };
-
-      await Product.findByIdAndUpdate(
-        productId,
-        { $set: { "stock.amount": newAmount } },
-        options,
-      );
+        newAmount[indexColor][indexSize] = newAmount[indexColor][indexSize] + amount;  
+  
+        const options = { new: true, runValidators: true };
+  
+        await Product.findByIdAndUpdate(
+          productId,
+          { $set: { "stock.amount": newAmount } },
+          options,
+        );
+      }
     }
 
-    const pedidoCancelado = await Orders.findOneAndUpdate(
+    const pedidoDevolvido = await Orders.findOneAndUpdate(
       { _id: orderId },
       {
-        $set: { status: "cancelado" },
+        $set: { status: "devolvido" },
       },
     );
 
     return res.status(200).json({
-      message: "Pedido cancelado",
-      pedidoCancelado,
+      message: "Pedido devolvido",
+      pedidoDevolvido,
     });
   } catch (error) {
+    console.log(error)
     res.status(400).json({
       message: "Erro ao cancelar o pedido",
       error,

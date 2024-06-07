@@ -24,6 +24,8 @@ export const createOrder = async (req: Request, res: Response) => {
   const { cupom, methodPayment, serviceShippingId } = req.body;
   const hoje = new Date();
 
+  const valorDescontoFrete = 250.00
+
   let itemNoStock: any = [];
 
   if (!userId) {
@@ -97,6 +99,7 @@ export const createOrder = async (req: Request, res: Response) => {
     const produtosId: string[] = [];
     const produtosNames: string[] = [];
     const produtosCores: string[] = [];
+    const produtosTamanhos: string[] = [];
     const produtosQuantidade: number[] = [];
     const produtosValores: number[] = [];
 
@@ -139,6 +142,7 @@ export const createOrder = async (req: Request, res: Response) => {
           produtosQuantidade.push(+item.amount);
           produtosValores.push(+productPrice.price);
           produtosNames.push(productPrice.name);
+          produtosTamanhos.push(item.size)
 
           return +productPrice.price;
         }
@@ -179,7 +183,7 @@ export const createOrder = async (req: Request, res: Response) => {
       };
     }
 
-    if (!shippingOrder.price && serviceShippingId !== 99) {
+    if (!shippingOrder.price && serviceShippingId !== 99 ) {
       shippingOrder = (await calculateDeliveryFunc(
         address.cep,
         itemsCart,
@@ -242,6 +246,7 @@ export const createOrder = async (req: Request, res: Response) => {
       productIds: produtosId,
       productAmounts: produtosQuantidade,
       productColors: produtosCores,
+      productSizes: produtosTamanhos,
       valueProducts: produtosValores,
       orderTracking: "",
       totalPayment: Number((totalValue + +shippingOrder.price).toFixed(2)),
@@ -270,6 +275,7 @@ export const createOrder = async (req: Request, res: Response) => {
       );
     }
 
+    // Inserindo numero de vendas
     for (let i = 0; i < itemsCart.length; i++) {
       const item = itemsCart[i];
 

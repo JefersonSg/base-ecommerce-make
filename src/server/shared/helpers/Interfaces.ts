@@ -33,7 +33,7 @@ export interface ProductDataBackEnd {
   name: string;
   brand: string;
   price: number;
-  size: string;
+  size: string[];
   category: string;
   subcategory: string;
   description: string;
@@ -110,6 +110,7 @@ export interface OrderInterface {
   productIds: ObjectId[];
   valueProducts: number[];
   productAmounts: number[];
+  productSizes: string[];
   productColors: string[];
   totalPayment: number;
   methodPayment: string;

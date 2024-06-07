@@ -40,6 +40,10 @@ const Orders = mongoose.model(
         type: Array<String>,
         required: true,
       },
+      productSizes: {
+        type: Array<String>,
+        required: true,
+      },
       productColors: {
         type: Array<String>,
         required: true,

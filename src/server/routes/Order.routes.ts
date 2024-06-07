@@ -33,9 +33,9 @@ router.patch(
   orderController.dispatchedOrder,
 );
 router.patch(
-  "/reversal/:orderId",
+  "/return/:orderId",
   checkAdminToken,
-  orderController.dispatchedOrder,
+  orderController.reversalOrder,
 );
 router.patch(
   "/concluded/:orderId",
