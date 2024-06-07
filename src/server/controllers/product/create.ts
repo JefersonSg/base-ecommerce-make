@@ -10,9 +10,7 @@ export const create = async (req: Request, res: Response) => {
   const images: any = req.files;
 
   const stock = {
-    amount: productData.amount.split(",").map((amount) => {
-      return +amount;
-    }),
+    amount: JSON.parse(productData.amount)
   };
 
   if (images && images.length === 0) {
@@ -48,13 +46,13 @@ export const create = async (req: Request, res: Response) => {
     brand: productData.brand,
     price: productData.price,
     category: productData.category,
-    subcategory: productData?.subcategory ?? undefined,
+    subcategory: productData?.subcategory?.length ? productData?.subcategory : undefined,
     description: productData.description,
     colors: productData?.colors?.split(","),
     codeColors: productData?.codeColors?.split(","),
     composition: productData.composition,
     howToUse: productData.howToUse,
-    size: productData.size,
+    size: productData?.size?.split(','),
     characteristic: productData.characteristic,
     stock,
     images: [],

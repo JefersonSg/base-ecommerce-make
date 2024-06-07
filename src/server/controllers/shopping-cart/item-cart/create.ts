@@ -41,7 +41,7 @@ export const addNewItemCart = async (req: Request, res: Response) => {
       return;
     }
 
-    if (Number(amount) > product.stock.amount[colorIndex]) {
+    if (Number(amount) > product.stock.amount[colorIndex][sizeIndex]) {
       try {
         res.status(400).json({
           error: "Limite alcançado /  sem estoque",
@@ -63,7 +63,7 @@ export const addNewItemCart = async (req: Request, res: Response) => {
     });
 
     if (checkItemCart) {
-      checkItemCart.amount = checkItemCart.amount + 1;
+      checkItemCart.amount = product.stock.amount[colorIndex][sizeIndex] > checkItemCart.amount + 1 ? checkItemCart.amount + 1 : product.stock.amount[colorIndex][sizeIndex];
 
       const newItemCart = await ItemCart.findByIdAndUpdate(
         checkItemCart?._id,

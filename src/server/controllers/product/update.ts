@@ -60,7 +60,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       : null;
     updateData.description = productData.description;
     updateData.price = productData.price;
-    updateData.size = productData.size;
+    updateData.size = productData.size.split(',') ?? "";
     updateData.colors = productData?.colors?.split(",") ?? "";
     updateData.codeColors = productData?.codeColors?.split(",") ?? "";
     updateData.composition = productData.composition;
@@ -68,9 +68,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     updateData.howToUse = productData.howToUse;
     updateData.active = productData.active;
     const stock = {
-      amount: productData.amount.split(",").map((amount) => {
-        return +amount;
-      }),
+      amount: JSON.parse(productData.amount)
     };
     updateData.stock = stock;
     updateData.promotion = productData.promotion;

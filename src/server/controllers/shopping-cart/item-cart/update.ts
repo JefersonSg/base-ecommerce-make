@@ -38,19 +38,21 @@ export const updateItemCart = async (req: Request, res: Response) => {
     await ItemCart.findByIdAndDelete(itemId);
     return;
   }
+
+  
   if (Number(amount) < 1) {
     res.status(404).json({
       message: "o item não pode ser menor do que zero",
     });
     return;
   }
-  if (Number(amount) > product.stock.amount[colorIndex]) {
+  if (Number(amount) > product.stock.amount[colorIndex][sizeIndex]) {
     try {
       const newItem = {
         shoppingCartId: ItemShoppingCart.shoppingCartId,
         productId: ItemShoppingCart.productId,
         color: color ?? ItemShoppingCart.color,
-        amount: product.stock.amount[colorIndex],
+        amount: product.stock.amount[colorIndex][sizeIndex],
         size: size ?? ItemShoppingCart.size,
       };
 

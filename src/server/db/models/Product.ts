@@ -26,7 +26,7 @@ const Product = mongoose.model(
         ref: "subcategories",
       },
       size: {
-        type: String,
+        type: Array,
         required: true,
       },
       composition: {

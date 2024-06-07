@@ -279,17 +279,19 @@ export const createOrder = async (req: Request, res: Response) => {
         _id: string;
       };
 
-      const indexColor = productPrice.colors.indexOf(item?.color ?? "");
+      const indexColor = productPrice.colors.indexOf(item?.color ?? '');
+      const indexSize = productPrice.size.indexOf(item.size ?? '')
 
-      const newAmount = [...productPrice.stock.amount];
+      const newAmount = [...productPrice?.stock?.amount];
 
-      if (newAmount[indexColor] < item.amount) {
+
+      if (newAmount[indexColor][indexSize] < +item.amount) {
         return res.status(404).json({
           message: "Estoque insuficiente",
         });
       }
 
-      newAmount[indexColor] = newAmount[indexColor] - item.amount;
+      newAmount[indexColor][indexSize] = newAmount[indexColor][indexSize] - item.amount;
 
       const options = { new: true, runValidators: true };
       await Product.findByIdAndUpdate(

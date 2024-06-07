@@ -44,7 +44,7 @@ export interface ProductDataBackEnd {
   colors: string[];
   codeColors: string[];
   stock: {
-    amount: number[];
+    amount: number[][];
   };
   promotion: boolean;
   active: boolean;
