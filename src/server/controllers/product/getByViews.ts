@@ -18,7 +18,7 @@ export const getByViews = async (req: Request, res: Response) => {
     const productViews = (await ViewsModel.aggregate([
       {
         $match: {
-          createdAt: { $gte: thirtyDaysAgo },
+          date: { $gte: thirtyDaysAgo },
         },
       },
       {
@@ -32,7 +32,7 @@ export const getByViews = async (req: Request, res: Response) => {
       },
     ])) as unknown as ViewCountInterface[];
 
-    const productsPerViewsIds = productViews.map((view) => view._id);
+    const productsPerViewsIds = productViews.filter(item => item._id !== null).map((view) =>  view._id.toString())
 
     const products = await Product.find({
       _id: { $in: productsPerViewsIds },
@@ -44,16 +44,8 @@ export const getByViews = async (req: Request, res: Response) => {
       }
     }
 
-    const productMap = new Map(
-      products.map((product) => [product._id.toString(), product]),
-    );
-
-    const productsPerViews = productsPerViewsIds.map((id) =>
-      productMap.get(id.toString()),
-    );
-
     return res.status(200).json({
-      products: productsPerViews,
+      products: products,
     });
   } catch (error) {
     console.log(error);

@@ -20,7 +20,7 @@ router.get("/category/:id", ProductController.getProductByCategory);
 router.get("/name/:name", ProductController.getByName);
 router.get("/subcategory/:id", ProductController.getBySubcategory);
 router.get("/sales/get-all", ProductController.getBySales);
-router.get("/get-by-views", ProductController.getByViews);
+router.get("/views/get-by-views", ProductController.getByViews);
 router.get("/promotion/get-all", ProductController.getByPromotion);
 
 // comments
