@@ -52,10 +52,12 @@ export const updateProduct = async (req: Request, res: Response) => {
     }
 
     // validations
+
+
     updateData.name = productData.name;
     updateData.brand = productData.brand;
     updateData.category = productData.category;
-    updateData.subcategory = productData.subcategory
+    updateData.subcategory = productData?.subcategory && productData.subcategory.length > 5
       ? productData.subcategory
       : null;
     updateData.description = productData.description;

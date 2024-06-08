@@ -2,7 +2,7 @@ import mongoose from "../conn";
 
 const { Schema } = mongoose;
 
-const Product = mongoose.model(
+const ProductModel = mongoose.model(
   "product",
   new Schema(
     {
@@ -24,6 +24,8 @@ const Product = mongoose.model(
       subcategory: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "subcategories",
+        default: null,
+        required: false,
       },
       size: {
         type: Array,
@@ -85,4 +87,4 @@ const Product = mongoose.model(
   ),
 );
 
-export default Product;
+export default ProductModel;

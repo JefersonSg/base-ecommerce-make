@@ -58,6 +58,11 @@ router.patch(
   upload.single("image"),
   ProductController.updateCommentById,
 );
+router.patch(
+  "/reupdate/allProducts",
+  checkToken,
+  ProductController.updateAllProduct,
+);
 
 // DELETE
 router.delete(

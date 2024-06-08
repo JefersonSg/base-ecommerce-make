@@ -16,6 +16,7 @@ import * as getBySales from "./getBySales";
 import * as getByPromotion from "./getByPromotion";
 import * as getByViews from "./getByViews";
 import * as getAllNoActives from './getNoActives'
+import * as  updateAllProduct  from "./updateAllProducts";
 
 export const ProductController = {
   ...create,
@@ -36,4 +37,5 @@ export const ProductController = {
   ...getByName,
   ...getByPromotion,
   ...getByViews,
+  ...updateAllProduct
 };
