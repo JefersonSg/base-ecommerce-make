@@ -10,9 +10,8 @@ interface TotalViewsInterface {
   _id: string;
   userId: string[] | null;
   viewsCount: number;
-  pageView: string[];
 }
-interface SessionsInterface {
+interface UserNavigationInterface {
   _id: string;
   user: string[] | null,
   products: {productId: string, count: number}[],
@@ -32,7 +31,7 @@ export const getAllViews = async (req: Request, res: Response) => {
   const DaysAgo = sub(todayBrType, { days: Number(daysAgo) ?? 0 });
 
     try {
-      const newtotalViews = await ViewsModel.aggregate([
+      const newtotalViewsProduct = await ViewsModel.aggregate([
         {
           $match: {
             date: { $gte: DaysAgo }
@@ -42,7 +41,6 @@ export const getAllViews = async (req: Request, res: Response) => {
           $group: {
             _id: "$product",
             userId: { $addToSet: "$userId" },
-            pageView: { $addToSet: "$pageView" },
             viewsCount: { $sum: 1 },
           },
         },
@@ -51,7 +49,7 @@ export const getAllViews = async (req: Request, res: Response) => {
         },
       ]);
 
-      const getsessions = await ViewsModel.aggregate([
+      const userNavigations = await ViewsModel.aggregate([
         {
           $match: {
             date: { $gte: DaysAgo },
@@ -102,20 +100,18 @@ export const getAllViews = async (req: Request, res: Response) => {
           },
         },
         {
-          $sort: { createdAt: -1 },
+          $sort: { numberVisit: -1 },
         },
       ]);
 
-      const sessions = getsessions.filter((session: SessionsInterface)=> session?.user?.toString() !== idAdmin)
+      const sessions = userNavigations.filter((navigation: UserNavigationInterface)=> navigation?.user?.toString() !== idAdmin)
 
       
-      const totalViews = newtotalViews.map((view: TotalViewsInterface)=>{return ({
+      const totalViews = newtotalViewsProduct.map((view: TotalViewsInterface)=>{return ({
           _id: view._id,
           userId: view?.userId?.filter((user: string | null)=> user !== null),
           viewsCount: view.viewsCount,
-          pageView: view.pageView
-      })}).filter((view)=> view.userId?.[0]?.toString() !== idAdmin)
-
+      })}).filter((view)=> view.userId?.[0]?.toString() !== idAdmin).filter((view)=> view._id !== null)
 
 
       return res.status(200).json({
