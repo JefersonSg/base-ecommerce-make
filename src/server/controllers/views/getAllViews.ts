@@ -2,30 +2,47 @@ import { type Request, type Response } from "express";
 import ViewsModel from "../../db/models/Views";
 import { sub } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
+import 'dotenv/config'
+import mongoose from "mongoose";
+
+
+interface TotalViewsInterface {
+  _id: string;
+  userId: string[] | null;
+  viewsCount: number;
+  pageView: string[];
+}
+interface SessionsInterface {
+  _id: string;
+  user: string[] | null,
+  products: {productId: string, count: number}[],
+  pageView: string[],
+  numberVisit: number
+}
 
 export const getAllViews = async (req: Request, res: Response) => {
-  const timeZone = "America/Sao_Paulo";
 
-  // Criar a data com o fuso horário de Brasília
+  const idAdmin = process.env.ID_ADMIN ?? '';
+
+  const timeZone = "America/Sao_Paulo";
   const now = new Date();
   const todayBrType = toZonedTime(now, timeZone);
-
   const { daysAgo } = req.params;
-
   todayBrType.setHours(0, 0, 0, 0);
-
   const DaysAgo = sub(todayBrType, { days: Number(daysAgo) ?? 0 });
 
     try {
-      const totalViews = await ViewsModel.aggregate([
+      const newtotalViews = await ViewsModel.aggregate([
         {
           $match: {
-            date: { $gte: DaysAgo },
+            date: { $gte: DaysAgo }
           },
         },
         {
           $group: {
             _id: "$product",
+            userId: { $addToSet: "$userId" },
+            pageView: { $addToSet: "$pageView" },
             viewsCount: { $sum: 1 },
           },
         },
@@ -34,7 +51,7 @@ export const getAllViews = async (req: Request, res: Response) => {
         },
       ]);
 
-      const sessions = await ViewsModel.aggregate([
+      const getsessions = await ViewsModel.aggregate([
         {
           $match: {
             date: { $gte: DaysAgo },
@@ -89,6 +106,18 @@ export const getAllViews = async (req: Request, res: Response) => {
         },
       ]);
 
+      const sessions = getsessions.filter((session: SessionsInterface)=> session?.user?.toString() !== idAdmin)
+
+      const totalViews = newtotalViews.map((view: TotalViewsInterface)=>{return ({
+          _id: view._id,
+          userId: view?.userId?.filter((user: string | null)=> user !== null),
+          viewsCount: view.viewsCount,
+          pageView: view.pageView
+      })}).filter((view)=> view.userId?.[0]?.toString() !== idAdmin)
+
+
+
+      console.log(sessions[0].products)
       return res.status(200).json({
         totalViews,
         sessions,
