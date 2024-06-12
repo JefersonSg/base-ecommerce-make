@@ -108,6 +108,7 @@ export const getAllViews = async (req: Request, res: Response) => {
 
       const sessions = getsessions.filter((session: SessionsInterface)=> session?.user?.toString() !== idAdmin)
 
+      
       const totalViews = newtotalViews.map((view: TotalViewsInterface)=>{return ({
           _id: view._id,
           userId: view?.userId?.filter((user: string | null)=> user !== null),
