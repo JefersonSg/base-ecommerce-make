@@ -117,7 +117,6 @@ export const getAllViews = async (req: Request, res: Response) => {
 
 
 
-      console.log(sessions[0].products)
       return res.status(200).json({
         totalViews,
         sessions,
