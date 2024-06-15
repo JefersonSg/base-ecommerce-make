@@ -97,8 +97,6 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     // validations
 
-    console.log(images.coverPhoto2)
-
     updateData.name = productData.name;
     updateData.brand = productData.brand;
     updateData.category = productData.category;

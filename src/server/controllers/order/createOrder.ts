@@ -226,7 +226,7 @@ export const createOrder = async (req: Request, res: Response) => {
     const paymentId = uuidv4();
 
     const payment =
-      serviceShippingId === 99
+      serviceShippingId === 99 || totalValue > 249.9
         ? await Payment(allItemsToPayment, paymentId)
         : await Payment(allItemsToPayment, paymentId, fretePayment);
 
