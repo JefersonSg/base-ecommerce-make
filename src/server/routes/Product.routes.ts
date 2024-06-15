@@ -30,7 +30,11 @@ router.get("/comments/get-all/:productId", ProductController.getAllComments);
 router.post(
   "/create",
   checkAdminToken,
-  upload.array("images"),
+  upload.fields([
+    { name: 'images' },
+    { name: 'coverPhoto1', maxCount: 1 },
+    { name: 'coverPhoto2', maxCount: 1 }
+  ]),
   ProductController.validationProduct,
   ProductController.create,
 );
@@ -47,7 +51,11 @@ router.post(
 router.patch(
   "/edit/:id",
   checkAdminToken,
-  upload.array("images"),
+  upload.fields([
+    { name: 'images' },
+    { name: 'coverPhoto1', maxCount: 1 },
+    { name: 'coverPhoto2', maxCount: 1 }
+  ]),
   ProductController.validationProduct,
   ProductController.updateProduct,
 );

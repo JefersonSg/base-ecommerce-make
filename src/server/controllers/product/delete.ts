@@ -25,6 +25,13 @@ export const removeProductById = async (req: Request, res: Response) => {
   try {
     await Product.findByIdAndRemove(id);
 
+    if (product?.coverPhoto1) {
+       await removeImageS3("products", product.coverPhoto1);
+    }
+    if (product?.coverPhoto2) {
+      await removeImageS3("products", product.coverPhoto2);
+    }
+
     for (const images of product.images) {
       await removeImageS3("products", images);
     }

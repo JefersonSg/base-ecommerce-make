@@ -20,6 +20,8 @@ export interface ProductDataFrontEnd {
   characteristic?: string;
   howToUse?: string;
   images: object[];
+  coverPhoto1: any,
+  coverPhoto2: any,
   colors?: string;
   codeColors?: string;
   amount: string;
@@ -41,6 +43,8 @@ export interface ProductDataBackEnd {
   characteristic: string;
   hotToUse?: string;
   images: string[];
+  coverPhoto1:string,
+  coverPhoto2:string,
   colors: string[];
   codeColors: string[];
   stock: {

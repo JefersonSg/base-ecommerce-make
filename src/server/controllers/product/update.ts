@@ -5,20 +5,64 @@ import { type ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
 import testeID from "../../shared/helpers/verifyId";
 import { verifySizeImage } from "../../shared/helpers/verifySize";
 import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
+import { cuponsController } from "../cupons";
 
 export const updateProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
   const productData: ProductDataFrontEnd = req.body;
+
+  let coverPhoto1 = '';
+  let coverPhoto2 = '';
 
   const images: any = req.files;
 
   const updateData: ProductDataFrontEnd | any = {};
   // check if ID exists
 
-  async function uploads(images: string[], oldImages: string[]) {
+  if (images?.coverPhoto1?.[0]) {
+    if (verifySizeImage(images?.coverPhoto1)) {
+      return res.status(401).json({
+        error: verifySizeImage(images?.coverPhoto1),
+      });
+    }
+
+    if (verifyMimetypeImage(images?.coverPhoto1)) {
+      return res.status(401).json({
+        error: verifyMimetypeImage(images?.coverPhoto1),
+      });
+    }
+  }
+  if (images?.coverPhoto2?.[0]) {
+    if (verifySizeImage(images?.coverPhoto2)) {
+      return res.status(401).json({
+        error: verifySizeImage(images?.coverPhoto2),
+      });
+    }
+
+    if (verifyMimetypeImage(images?.coverPhoto2)) {
+      return res.status(401).json({
+        error: verifyMimetypeImage(images?.coverPhoto2),
+      });
+    }
+  }
+
+  if (images?.coverPhoto1?.[0]) {
+    let convertPhoto = await uploadToS3("products", images?.coverPhoto1?.[0]) ;
+
+    coverPhoto1 = convertPhoto || '';
+    void removeImageS3("products", productData.coverPhoto1);
+  }
+
+  if (images?.coverPhoto2?.[0]) {
+    let convertPhoto = await uploadToS3("products", images?.coverPhoto2?.[0]) ;
+    coverPhoto2 = convertPhoto || '';
+    void removeImageS3("products", productData?.coverPhoto1);
+  }
+
+  async function uploads(images: any, oldImages: string[]) {
     // Use `map` with `Promise.all` to await for all uploads to complete
     const newImages = await Promise.all(
-      images?.map(async (image: any) => {
+      images?.images?.map(async (image: any) => {
         const data = await uploadToS3("products", image);
         return data;
       }),
@@ -53,6 +97,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     // validations
 
+    console.log(images.coverPhoto2)
 
     updateData.name = productData.name;
     updateData.brand = productData.brand;
@@ -75,18 +120,27 @@ export const updateProduct = async (req: Request, res: Response) => {
     updateData.stock = stock;
     updateData.promotion = productData.promotion;
     updateData.promotionalPrice =
-      productData.promotionalPrice ?? product.promotionalPrice ?? 0;
+    productData.promotionalPrice ?? product.promotionalPrice ?? 0;
+    if (images?.coverPhoto1?.[0]) {
+      updateData.coverPhoto1 =  coverPhoto1 ;
+      
+    } 
+
+    if (images?.coverPhoto2?.[0]) {
+      updateData.coverPhoto2 =  coverPhoto2 ;
+      
+    } 
 
     if (images?.length > 0) {
       if (verifySizeImage(images)) {
         return res.status(401).json({
-          message: verifySizeImage(images),
+          error: verifySizeImage(images),
         });
       }
 
       if (verifyMimetypeImage(images)) {
         return res.status(401).json({
-          message: verifyMimetypeImage(images),
+          error: verifyMimetypeImage(images),
         });
       }
 
@@ -100,6 +154,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     }
 
     await Product.findByIdAndUpdate(id, updateData);
+
 
     return res
       .status(200)

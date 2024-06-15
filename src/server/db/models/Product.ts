@@ -54,6 +54,12 @@ const ProductModel = mongoose.model(
         type: Array,
         required: true,
       },
+      coverPhoto1: {
+        type: String,
+      },
+      coverPhoto2: {
+        type: String,
+      },
       stock: {
         type: Object,
       },
