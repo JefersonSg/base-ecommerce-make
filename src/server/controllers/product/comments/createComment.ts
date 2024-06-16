@@ -39,6 +39,7 @@ export const createComment = async (req: Request, res: Response) => {
     });
   }
 
+  console.log(image)
   const imageUpload = image ? await uploadToS3("comments", image) : "";
 
   const commentData = new CommentsModel({

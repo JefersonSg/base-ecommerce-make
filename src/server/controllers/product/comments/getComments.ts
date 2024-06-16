@@ -31,7 +31,7 @@ export const getAllComments = async (req: Request, res: Response) => {
 
     for (const comment of AllComments) {
       for (let i = 0; i < comment?.image?.length; i++) {
-        const url = await getUrlImageS3("comments", comment?.image[i]);
+        const url = comment.image[i] && await getUrlImageS3("comments", comment?.image[i]);
 
         comment.image[i] = url ?? "";
       }

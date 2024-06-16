@@ -11,6 +11,12 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
 
   const { cep } = req.body;
 
+  if (!userId) {
+    return res.status(400).json({
+      error: 'é necessário o userId'
+    })
+  }
+
   const cepLimpo = cep?.replace?.("-", "");
   const CepOrigin = process.env.CEP_ORIGIN;
 
