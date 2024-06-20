@@ -3,7 +3,6 @@ import ViewsModel from "../../db/models/Views";
 import { sub } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import 'dotenv/config'
-import mongoose from "mongoose";
 
 
 interface TotalViewsInterface {
@@ -57,7 +56,7 @@ export const getAllViews = async (req: Request, res: Response) => {
         },
         {
           $group: {
-            _id: { sessionId: "$sessionId", product: "$product" },
+            _id: { sessionId: "$sessionId", page: "$pageView" },
             userId: { $addToSet: "$userId" },
             visitCount: { $sum: 1 },
             pageView: {$addToSet: '$pageView'},
@@ -67,13 +66,12 @@ export const getAllViews = async (req: Request, res: Response) => {
           $group: {
             _id: "$_id.sessionId",
             user: { $addToSet: "$userId" },
-            products: {
+            pageViews: {
               $push: {
-                productId: "$_id.product",
+                page: "$_id.page",
                 count: "$visitCount",
               },
             },
-            pageView: {$addToSet: '$pageView'},
             numberVisit: { $sum: "$visitCount" },
           },
         },
@@ -106,14 +104,12 @@ export const getAllViews = async (req: Request, res: Response) => {
 
       const sessions = userNavigations.filter((navigation: UserNavigationInterface)=> navigation?.user?.toString() !== idAdmin)
 
-      
       const totalViews = newtotalViewsProduct.map((view: TotalViewsInterface)=>{return ({
-          _id: view._id,
-          userId: view?.userId?.filter((user: string | null)=> user !== null),
-          viewsCount: view.viewsCount,
-      })}).filter((view)=> view.userId?.[0]?.toString() !== idAdmin).filter((view)=> view._id !== null)
-
-
+        _id: view._id,
+        userId: view?.userId?.filter((user: string | null)=> user?.toString() === idAdmin || user !== null),
+        viewsCount: view.viewsCount,
+    })}).filter((view)=> view.userId?.[0]?.toString() !== idAdmin).filter((view)=> view._id !== null)
+      
       return res.status(200).json({
         totalViews,
         sessions,
