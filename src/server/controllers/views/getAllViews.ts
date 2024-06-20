@@ -56,7 +56,7 @@ export const getAllViews = async (req: Request, res: Response) => {
         },
         {
           $group: {
-            _id: { sessionId: "$sessionId", page: "$pageView" },
+            _id: { sessionId: "$sessionId", page: "$pageView" , product: "$product" },
             userId: { $addToSet: "$userId" },
             visitCount: { $sum: 1 },
             pageView: {$addToSet: '$pageView'},
@@ -66,6 +66,12 @@ export const getAllViews = async (req: Request, res: Response) => {
           $group: {
             _id: "$_id.sessionId",
             user: { $addToSet: "$userId" },
+            products: {
+              $push: {
+                productId: "$_id.product",
+                count: "$visitCount",
+              },
+            },
             pageViews: {
               $push: {
                 page: "$_id.page",
