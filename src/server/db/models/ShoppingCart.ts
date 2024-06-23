@@ -1,23 +1,23 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const ShoppingCart = mongoose.model(
-  "shopping-cart",
+  'shopping-cart',
   new Schema(
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: true,
+        ref: 'users',
+        required: true
       },
       status: {
         type: String,
-        required: true,
-      },
+        required: true
+      }
     },
-    { timestamps: true },
-  ),
+    { timestamps: true }
+  )
 );
 
 export default ShoppingCart;

@@ -1,6 +1,6 @@
-import jwt from "jsonwebtoken";
-import "dotenv/config";
-import { type NextFunction, type Request, type Response } from "express";
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
+import { type NextFunction, type Request, type Response } from 'express';
 
 interface Verifies {
   name: string;
@@ -9,11 +9,11 @@ interface Verifies {
 // middleware to validate token
 const checkAdminToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader?.split(" ")[1];
+  const token = authHeader?.split(' ')[1];
 
-  if (!token) return res.status(401).json({ message: "Acesso negado!" });
+  if (!token) return res.status(401).json({ message: 'Acesso negado!' });
 
-  const secret: string = process.env.SECRET_JWT ?? "";
+  const secret: string = process.env.SECRET_JWT ?? '';
 
   try {
     const verified = jwt.verify(token, secret) as Verifies;
@@ -21,10 +21,10 @@ const checkAdminToken = (req: Request, res: Response, next: NextFunction) => {
     if (verified.id === process.env.ID_ADMIN) {
       next();
     } else {
-      res.status(401).json({ message: "Acesso negado!" });
+      res.status(401).json({ message: 'Acesso negado!' });
     }
   } catch (err) {
-    res.status(400).json({ message: "O Token é inválido!" });
+    res.status(400).json({ message: 'O Token é inválido!' });
   }
 };
 

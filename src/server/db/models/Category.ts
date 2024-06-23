@@ -1,22 +1,22 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const Category = mongoose.model(
-  "category",
+  'category',
   new Schema({
     name: {
       type: String,
-      required: true,
+      required: true
     },
     description: {
       type: String,
-      required: true,
+      required: true
     },
     image: {
-      type: String,
-    },
-  }),
+      type: String
+    }
+  })
 );
 
 export default Category;

@@ -1,10 +1,10 @@
-import { type Request, type Response } from "express";
-import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
-import { type ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
-import testeID from "../../shared/helpers/verifyId";
-import { verifySizeImage } from "../../shared/helpers/verifySize";
-import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
-import ProductModel from "../../db/models/Product";
+import { type Request, type Response } from 'express';
+import { removeImageS3, uploadToS3 } from '../../shared/helpers/imageUpload';
+import { type ProductDataFrontEnd } from '../../shared/helpers/Interfaces';
+import testeID from '../../shared/helpers/verifyId';
+import { verifySizeImage } from '../../shared/helpers/verifySize';
+import { verifyMimetypeImage } from '../../shared/helpers/verifyMimetype';
+import ProductModel from '../../db/models/Product';
 
 export const updateAllProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -14,46 +14,37 @@ export const updateAllProduct = async (req: Request, res: Response) => {
   // check if ID exists
 
   try {
-
-
     // check if Product exists
 
     const product = await ProductModel.find();
 
     if (!product) {
-      res.status(404).json({ message: "Produto não encontrado!" });
+      res.status(404).json({ message: 'Produto não encontrado!' });
       return;
     }
 
-
     for (let index = 0; index < product.length; index++) {
-        const produto = product[index];
+      const produto = product[index];
 
+      if (produto.stock.amount[0].length) {
+        const amount = produto.stock.amount[0];
 
-        if (produto.stock.amount[0].length) {
-            const amount = produto.stock.amount[0]
+        const newAmount = amount.map((item: any) => {
+          return [item];
+        });
 
-            const newAmount = amount.map((item: any)=>{
-                return [item]
-            })
+        console.log(newAmount);
 
-            console.log(newAmount)
+        const options = { new: true, runValidators: true };
+        // const finalAmount = [newAmount]
 
-
-            
-            const options = { new: true, runValidators: true };
-            // const finalAmount = [newAmount]
-
-
-            await ProductModel.findByIdAndUpdate(
-                produto._id ,
-                { $set: { "stock.amount": newAmount } },
-                options,
-              );
-        }
-
+        await ProductModel.findByIdAndUpdate(
+          produto._id,
+          { $set: { 'stock.amount': newAmount } },
+          options
+        );
+      }
     }
-
 
     // validations
     // updateData.name = productData.name;
@@ -103,15 +94,12 @@ export const updateAllProduct = async (req: Request, res: Response) => {
 
     // await Product.findByIdAndUpdate(id, updateData);
 
-    return res
-      .status(200).json(
-        'ok'
-      )
+    return res.status(200).json('ok');
   } catch (error) {
     console.log(error);
     return res.status(401).json({
-      message: "erro ao fazer update",
-      error,
+      message: 'erro ao fazer update',
+      error
     });
   }
 };

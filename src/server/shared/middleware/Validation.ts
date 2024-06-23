@@ -1,8 +1,8 @@
-import { type Request, type RequestHandler } from "express";
-import { StatusCodes } from "http-status-codes";
-import { type Schema, type ValidationError } from "yup";
+import { type Request, type RequestHandler } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { type Schema, type ValidationError } from 'yup';
 
-type TProperty = "body" | "header" | "params" | "query";
+type TProperty = 'body' | 'header' | 'params' | 'query';
 
 type TAllSchemas = Record<TProperty, Schema<any>>;
 

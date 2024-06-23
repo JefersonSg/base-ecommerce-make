@@ -1,11 +1,11 @@
-import { type Request, type Response } from "express";
-import Product from "../../db/models/Product";
-import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
-import { type ProductDataFrontEnd } from "../../shared/helpers/Interfaces";
-import testeID from "../../shared/helpers/verifyId";
-import { verifySizeImage } from "../../shared/helpers/verifySize";
-import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
-import { cuponsController } from "../cupons";
+import { type Request, type Response } from 'express';
+import Product from '../../db/models/Product';
+import { removeImageS3, uploadToS3 } from '../../shared/helpers/imageUpload';
+import { type ProductDataFrontEnd } from '../../shared/helpers/Interfaces';
+import testeID from '../../shared/helpers/verifyId';
+import { verifySizeImage } from '../../shared/helpers/verifySize';
+import { verifyMimetypeImage } from '../../shared/helpers/verifyMimetype';
+import { cuponsController } from '../cupons';
 
 export const updateProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -22,55 +22,55 @@ export const updateProduct = async (req: Request, res: Response) => {
   if (images?.coverPhoto1?.[0]) {
     if (verifySizeImage(images?.coverPhoto1)) {
       return res.status(401).json({
-        error: verifySizeImage(images?.coverPhoto1),
+        error: verifySizeImage(images?.coverPhoto1)
       });
     }
 
     if (verifyMimetypeImage(images?.coverPhoto1)) {
       return res.status(401).json({
-        error: verifyMimetypeImage(images?.coverPhoto1),
+        error: verifyMimetypeImage(images?.coverPhoto1)
       });
     }
   }
   if (images?.coverPhoto2?.[0]) {
     if (verifySizeImage(images?.coverPhoto2)) {
       return res.status(401).json({
-        error: verifySizeImage(images?.coverPhoto2),
+        error: verifySizeImage(images?.coverPhoto2)
       });
     }
 
     if (verifyMimetypeImage(images?.coverPhoto2)) {
       return res.status(401).json({
-        error: verifyMimetypeImage(images?.coverPhoto2),
+        error: verifyMimetypeImage(images?.coverPhoto2)
       });
     }
   }
 
   if (images?.coverPhoto1?.[0]) {
-    let convertPhoto = await uploadToS3("products", images?.coverPhoto1?.[0]) ;
+    let convertPhoto = await uploadToS3('products', images?.coverPhoto1?.[0]);
 
     coverPhoto1 = convertPhoto || '';
-    void removeImageS3("products", productData.coverPhoto1);
+    void removeImageS3('products', productData.coverPhoto1);
   }
 
   if (images?.coverPhoto2?.[0]) {
-    let convertPhoto = await uploadToS3("products", images?.coverPhoto2?.[0]) ;
+    let convertPhoto = await uploadToS3('products', images?.coverPhoto2?.[0]);
     coverPhoto2 = convertPhoto || '';
-    void removeImageS3("products", productData?.coverPhoto1);
+    void removeImageS3('products', productData?.coverPhoto1);
   }
 
   async function uploads(images: any, oldImages: string[]) {
     // Use `map` with `Promise.all` to await for all uploads to complete
     const newImages = await Promise.all(
       images?.images?.map(async (image: any) => {
-        const data = await uploadToS3("products", image);
+        const data = await uploadToS3('products', image);
         return data;
-      }),
+      })
     );
 
     if (oldImages.length > 0) {
       oldImages?.forEach((image) => {
-        void removeImageS3("products", image);
+        void removeImageS3('products', image);
       });
     }
 
@@ -81,7 +81,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     const isValidId = testeID(id);
     if (!isValidId) {
       res.status(422).json({
-        message: "ID inválido, produto não encontrado",
+        message: 'ID inválido, produto não encontrado'
       });
       return;
     }
@@ -91,7 +91,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     const product = await Product.findOne({ _id: id });
 
     if (!product) {
-      res.status(404).json({ message: "Produto não encontrado!" });
+      res.status(404).json({ message: 'Produto não encontrado!' });
       return;
     }
 
@@ -100,14 +100,15 @@ export const updateProduct = async (req: Request, res: Response) => {
     updateData.name = productData.name;
     updateData.brand = productData.brand;
     updateData.category = productData.category;
-    updateData.subcategory = productData?.subcategory && productData.subcategory.length > 5
-      ? productData.subcategory
-      : null;
+    updateData.subcategory =
+      productData?.subcategory && productData.subcategory.length > 5
+        ? productData.subcategory
+        : null;
     updateData.description = productData.description;
     updateData.price = productData.price;
-    updateData.size = productData.size.split(',') ?? "";
-    updateData.colors = productData?.colors?.split(",") ?? "";
-    updateData.codeColors = productData?.codeColors?.split(",") ?? "";
+    updateData.size = productData.size.split(',') ?? '';
+    updateData.colors = productData?.colors?.split(',') ?? '';
+    updateData.codeColors = productData?.codeColors?.split(',') ?? '';
     updateData.composition = productData.composition;
     updateData.characteristic = productData.characteristic;
     updateData.howToUse = productData.howToUse;
@@ -118,27 +119,25 @@ export const updateProduct = async (req: Request, res: Response) => {
     updateData.stock = stock;
     updateData.promotion = productData.promotion;
     updateData.promotionalPrice =
-    productData.promotionalPrice ?? product.promotionalPrice ?? 0;
+      productData.promotionalPrice ?? product.promotionalPrice ?? 0;
     if (images?.coverPhoto1?.[0]) {
-      updateData.coverPhoto1 =  coverPhoto1 ;
-      
-    } 
+      updateData.coverPhoto1 = coverPhoto1;
+    }
 
     if (images?.coverPhoto2?.[0]) {
-      updateData.coverPhoto2 =  coverPhoto2 ;
-      
-    } 
+      updateData.coverPhoto2 = coverPhoto2;
+    }
 
     if (images?.length > 0) {
       if (verifySizeImage(images)) {
         return res.status(401).json({
-          error: verifySizeImage(images),
+          error: verifySizeImage(images)
         });
       }
 
       if (verifyMimetypeImage(images)) {
         return res.status(401).json({
-          error: verifyMimetypeImage(images),
+          error: verifyMimetypeImage(images)
         });
       }
 
@@ -153,15 +152,14 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     await Product.findByIdAndUpdate(id, updateData);
 
-
     return res
       .status(200)
-      .json({ updateData, message: "Produto atualizado com sucesso!" });
+      .json({ updateData, message: 'Produto atualizado com sucesso!' });
   } catch (error) {
     console.log(error);
     return res.status(401).json({
-      message: "erro ao fazer update",
-      error,
+      message: 'erro ao fazer update',
+      error
     });
   }
 };

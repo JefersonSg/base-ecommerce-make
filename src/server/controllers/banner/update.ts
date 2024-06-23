@@ -1,11 +1,11 @@
-import { type Request, type Response } from "express";
+import { type Request, type Response } from 'express';
 
-import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
-import BannersModel from "../../db/models/Banner";
-import { type BannerInterface } from "../../shared/helpers/Interfaces";
-import testeID from "../../shared/helpers/verifyId";
-import { verifySizeImage } from "../../shared/helpers/verifySize";
-import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
+import { removeImageS3, uploadToS3 } from '../../shared/helpers/imageUpload';
+import BannersModel from '../../db/models/Banner';
+import { type BannerInterface } from '../../shared/helpers/Interfaces';
+import testeID from '../../shared/helpers/verifyId';
+import { verifySizeImage } from '../../shared/helpers/verifySize';
+import { verifyMimetypeImage } from '../../shared/helpers/verifyMimetype';
 
 export const updateBanner = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -14,14 +14,14 @@ export const updateBanner = async (req: Request, res: Response) => {
   const updateData: BannerInterface | any = {
     name,
     link,
-    active,
+    active
   };
 
   const isValidId = testeID(id);
 
   if (!isValidId) {
     res.status(422).json({
-      message: "ID inválido, Banner não encontrada",
+      message: 'ID inválido, Banner não encontrada'
     });
     return;
   }
@@ -30,7 +30,7 @@ export const updateBanner = async (req: Request, res: Response) => {
 
   if (!banner) {
     res.status(422).json({
-      message: "Nenhum banner encontrado no BD",
+      message: 'Nenhum banner encontrado no BD'
     });
     return;
   }
@@ -38,48 +38,48 @@ export const updateBanner = async (req: Request, res: Response) => {
   if (images?.length > 2) {
     res.status(422).json({
       message:
-        "Maximo de imagens excedidas, envie uma para Desktok e uma para Mobile",
+        'Maximo de imagens excedidas, envie uma para Desktok e uma para Mobile'
     });
     return;
   }
   async function uploads() {
     await Promise.all(
       images?.map(async (image: any) => {
-        const data = await uploadToS3("banners", image);
+        const data = await uploadToS3('banners', image);
         image.filename = data;
-      }),
+      })
     );
   }
 
   try {
     if (verifySizeImage(images)) {
       return res.status(401).json({
-        message: verifySizeImage(images),
+        message: verifySizeImage(images)
       });
     }
 
     if (verifyMimetypeImage(images)) {
       return res.status(401).json({
-        message: verifyMimetypeImage(images),
+        message: verifyMimetypeImage(images)
       });
     }
 
     if (images?.length > 0) {
       await uploads();
 
-      if (images?.[0] && mobile !== "undefined") {
+      if (images?.[0] && mobile !== 'undefined') {
         updateData.imageMobile = images[0].filename;
-        await removeImageS3("banners", banner.imageMobile);
+        await removeImageS3('banners', banner.imageMobile);
       }
 
-      if (images?.[1] && desktop !== "undefined") {
+      if (images?.[1] && desktop !== 'undefined') {
         updateData.imageDesktop = images?.[1]?.filename;
-        await removeImageS3("banners", banner.imageDesktop);
+        await removeImageS3('banners', banner.imageDesktop);
       }
 
-      if (images?.[0] && desktop !== "undefined" && mobile === "undefined") {
+      if (images?.[0] && desktop !== 'undefined' && mobile === 'undefined') {
         updateData.imageDesktop = images?.[0]?.filename;
-        await removeImageS3("banners", banner.imageDesktop);
+        await removeImageS3('banners', banner.imageDesktop);
       }
     }
 
@@ -87,12 +87,12 @@ export const updateBanner = async (req: Request, res: Response) => {
 
     return res
       .status(200)
-      .json({ message: "Banner atualizado com sucesso!", newBanner });
+      .json({ message: 'Banner atualizado com sucesso!', newBanner });
   } catch (error) {
-    console.log("erro no update banner", error);
+    console.log('erro no update banner', error);
     return res.status(500).json({
-      message: "erro no update banner",
-      error,
+      message: 'erro no update banner',
+      error
     });
   }
 };

@@ -1,96 +1,96 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const ProductModel = mongoose.model(
-  "product",
+  'product',
   new Schema(
     {
       name: {
         type: String,
-        required: true,
+        required: true
       },
       brand: {
-        type: String,
+        type: String
       },
       description: {
-        type: String,
+        type: String
       },
       category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "categories",
-        required: true,
+        ref: 'categories',
+        required: true
       },
       subcategory: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "subcategories",
+        ref: 'subcategories',
         default: null,
-        required: false,
+        required: false
       },
       size: {
         type: Array,
-        required: true,
+        required: true
       },
       composition: {
-        type: String,
+        type: String
       },
       characteristic: {
-        type: String,
+        type: String
       },
       howToUse: {
-        type: String,
+        type: String
       },
       price: {
         type: Number,
-        required: true,
+        required: true
       },
       colors: {
-        type: Array,
+        type: Array
       },
       codeColors: {
-        type: Array,
+        type: Array
       },
       images: {
         type: Array,
-        required: true,
+        required: true
       },
       coverPhoto1: {
-        type: String,
+        type: String
       },
       coverPhoto2: {
-        type: String,
+        type: String
       },
       stock: {
-        type: Object,
+        type: Object
       },
       promotion: {
         type: Boolean,
         required: true,
-        default: false,
+        default: false
       },
       promotionalPrice: {
         type: Number,
         required: true,
-        default: 0,
+        default: 0
       },
       active: {
         type: Boolean,
         required: true,
-        default: true,
+        default: true
       },
       sales: {
         type: Number,
         required: true,
-        default: 0,
+        default: 0
       },
       assessment: {
         type: Number,
         required: true,
-        default: 0,
-      },
+        default: 0
+      }
     },
-    { timestamps: true },
-  ),
+    { timestamps: true }
+  )
 );
 
 export default ProductModel;

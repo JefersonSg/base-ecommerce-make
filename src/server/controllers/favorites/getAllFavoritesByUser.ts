@@ -1,5 +1,5 @@
-import { type Request, type Response } from "express";
-import FavoriteModel from "../../db/models/Favorite";
+import { type Request, type Response } from 'express';
+import FavoriteModel from '../../db/models/Favorite';
 
 export const getAllFavoritesUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -8,13 +8,13 @@ export const getAllFavoritesUser = async (req: Request, res: Response) => {
 
   try {
     res.status(200).json({
-      favorites,
+      favorites
     });
   } catch (error) {
-    console.log("erro no getAllFavoritesByUser", error);
+    console.log('erro no getAllFavoritesByUser', error);
     return res.status(500).json({
-      message: "erro no getAllFavoritesByUser",
-      error,
+      message: 'erro no getAllFavoritesByUser',
+      error
     });
   }
 };

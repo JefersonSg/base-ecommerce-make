@@ -1,41 +1,41 @@
-import { boolean } from "yup";
-import mongoose from "../conn";
+import { boolean } from 'yup';
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 export const CuponsModel = mongoose.model(
-  "cupons",
+  'cupons',
   new Schema({
     code: {
       type: String,
-      ref: "products",
-      required: true,
+      ref: 'products',
+      required: true
     },
     userId: [
       {
         type: Schema.Types.ObjectId,
-        ref: "users",
-      },
+        ref: 'users'
+      }
     ],
     expiration: {
-      type: Date,
+      type: Date
     },
     limitUses: {
-      type: Number,
+      type: Number
     },
     uses: {
       type: Number,
-      default: 0,
+      default: 0
     },
     percentageDiscount: {
-      type: Number,
+      type: Number
     },
     minimumValue: {
-      type: Number,
+      type: Number
     },
     active: {
       type: Boolean,
-      required: true,
-    },
-  }),
+      required: true
+    }
+  })
 );

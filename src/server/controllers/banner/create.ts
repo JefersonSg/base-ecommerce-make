@@ -1,8 +1,8 @@
-import { type Request, type Response } from "express";
-import { uploadToS3 } from "../../shared/helpers/imageUpload";
-import BannersModel from "../../db/models/Banner";
-import { verifySizeImage } from "../../shared/helpers/verifySize";
-import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
+import { type Request, type Response } from 'express';
+import { uploadToS3 } from '../../shared/helpers/imageUpload';
+import BannersModel from '../../db/models/Banner';
+import { verifySizeImage } from '../../shared/helpers/verifySize';
+import { verifyMimetypeImage } from '../../shared/helpers/verifyMimetype';
 
 export const create = async (req: Request, res: Response) => {
   const { name, link, active } = req.body;
@@ -10,7 +10,7 @@ export const create = async (req: Request, res: Response) => {
 
   if (images?.length === 0) {
     res.status(422).json({
-      message: "A imagem é obrigatoria",
+      message: 'A imagem é obrigatoria'
     });
     return;
   }
@@ -18,7 +18,7 @@ export const create = async (req: Request, res: Response) => {
   if (images && images.length === 1) {
     res.status(422).json({
       message:
-        "São necessárias duas imagens, uma para Desktop e uma para Mobile",
+        'São necessárias duas imagens, uma para Desktop e uma para Mobile'
     });
     return;
   }
@@ -26,19 +26,19 @@ export const create = async (req: Request, res: Response) => {
   if (images && images.length > 2) {
     res.status(422).json({
       message:
-        "Maximo de imagens excedidas, envie uma para Desktok e uma para Mobile",
+        'Maximo de imagens excedidas, envie uma para Desktok e uma para Mobile'
     });
     return;
   }
   if (verifySizeImage(images)) {
     return res.status(401).json({
-      message: verifySizeImage(images),
+      message: verifySizeImage(images)
     });
   }
 
   if (verifyMimetypeImage(images)) {
     return res.status(401).json({
-      message: verifyMimetypeImage(images),
+      message: verifyMimetypeImage(images)
     });
   }
 
@@ -46,9 +46,9 @@ export const create = async (req: Request, res: Response) => {
     // Use `map` with `Promise.all` to wait for all uploads to complete
     await Promise.all(
       images?.map(async (image: any) => {
-        const Image = await uploadToS3("banners", image);
+        const Image = await uploadToS3('banners', image);
         image.filename = Image;
-      }),
+      })
     );
   }
 
@@ -59,20 +59,20 @@ export const create = async (req: Request, res: Response) => {
     link,
     active,
     imageMobile: images?.[0]?.filename,
-    imageDesktop: images?.[1]?.filename,
+    imageDesktop: images?.[1]?.filename
   });
 
   try {
     const newBanner = await Banner.save();
     res.status(200).json({
-      message: "Banner criado com sucesso",
-      newBanner,
+      message: 'Banner criado com sucesso',
+      newBanner
     });
   } catch (error) {
-    console.log("erro no create banner", error);
+    console.log('erro no create banner', error);
     return res.status(500).json({
-      message: "erro no create banner",
-      error,
+      message: 'erro no create banner',
+      error
     });
   }
 };

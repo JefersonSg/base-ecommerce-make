@@ -1,33 +1,33 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import express from "express";
-import { ShoppingCartControl } from "../controllers";
+import express from 'express';
+import { ShoppingCartControl } from '../controllers';
 
 // middleware
-import checkToken from "../shared/helpers/checkToken";
+import checkToken from '../shared/helpers/checkToken';
 const router = express.Router();
 
 // Carrinho
-router.post("/get-all/:userId", ShoppingCartControl.getAllItemsCart);
+router.post('/get-all/:userId', ShoppingCartControl.getAllItemsCart);
 
 // Item carrinho
 router.post(
-  "/create",
+  '/create',
   checkToken,
   ShoppingCartControl.validationCreateItemCart,
-  ShoppingCartControl.addNewItemCart,
+  ShoppingCartControl.addNewItemCart
 );
 
 router.patch(
-  "/update/:itemId",
+  '/update/:itemId',
   checkToken,
   ShoppingCartControl.validationEditItemCart,
-  ShoppingCartControl.updateItemCart,
+  ShoppingCartControl.updateItemCart
 );
 
 router.delete(
-  "/delete/:itemId",
+  '/delete/:itemId',
   checkToken,
-  ShoppingCartControl.removeItemCartById,
+  ShoppingCartControl.removeItemCartById
 );
 
 export default router;

@@ -1,27 +1,32 @@
-import { type Request, type Response } from "express";
-import Product from "../../db/models/Product";
+import { type Request, type Response } from 'express';
+import Product from '../../db/models/Product';
 
-import("dotenv/config");
+import('dotenv/config');
 
 const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getByName = async (req: Request, res: Response) => {
   const { name } = req.params;
 
+  const page = req.params.page ?? 1;
+  const total = req.params.total ?? 9;
+
   if (!name) {
     return res.status(400).json({
-      message: "insira o nome do produto",
+      message: 'insira o nome do produto'
     });
   }
 
-  const regex = new RegExp(name, "i");
+  const regex = new RegExp(name, 'i');
 
   try {
-    const products = await Product.find({ name: regex, active: true });
+    const products = await Product.find({ name: regex, active: true })
+      .skip((+page - 1) * +total)
+      .limit(+total);
 
     if (!products) {
       res.status(422).json({
-        message: "Nenhum produto não encontrado",
+        message: 'Nenhum produto não encontrado'
       });
       return;
     }
@@ -39,13 +44,13 @@ export const getByName = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({
-      products,
+      products
     });
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      message: "erro no getByName",
-      error,
+      message: 'erro no getByName',
+      error
     });
   }
 };

@@ -1,20 +1,20 @@
-import { type Request, type Response } from "express";
+import { type Request, type Response } from 'express';
 
-import { type OrderInterface } from "../../shared/helpers/Interfaces";
-import Orders from "../../db/models/Orders";
-import testeID from "../../shared/helpers/verifyId";
+import { type OrderInterface } from '../../shared/helpers/Interfaces';
+import Orders from '../../db/models/Orders';
+import testeID from '../../shared/helpers/verifyId';
 
 export const getOrderById = async (req: Request, res: Response) => {
   const { orderId } = req.params;
 
   if (!orderId) {
     return res.status(400).json({
-      message: "É necessário o id do pedido",
+      message: 'É necessário o id do pedido'
     });
   }
   if (!testeID(orderId)) {
     return res.status(400).json({
-      error: "ID não correspondente",
+      error: 'ID não correspondente'
     });
   }
 
@@ -23,17 +23,17 @@ export const getOrderById = async (req: Request, res: Response) => {
 
     if (!order) {
       return res.status(404).json({
-        message: "Nenhum pedido encontrado",
+        message: 'Nenhum pedido encontrado'
       });
     }
     return res.status(200).json({
-      pedido: order,
+      pedido: order
     });
   } catch (error) {
     console.log(error);
     res.status(400).json({
-      message: "Erro ao buscar o pedido",
-      error,
+      message: 'Erro ao buscar o pedido',
+      error
     });
   }
 };

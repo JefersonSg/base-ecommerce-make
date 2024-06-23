@@ -1,26 +1,26 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const Metrics = mongoose.model(
-  "metrics",
+  'metrics',
   new Schema({
     userID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: 'users'
     },
     date: {
       type: String,
-      required: true,
+      required: true
     },
     pageVisit: {
       type: String,
-      required: true,
+      required: true
     },
     categoryId: {
-      type: String,
-    },
-  }),
+      type: String
+    }
+  })
 );
 
 export default Metrics;

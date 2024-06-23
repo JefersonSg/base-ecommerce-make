@@ -1,5 +1,5 @@
-import { validate } from "../../shared/middleware/Validation";
-import * as yup from "yup";
+import { validate } from '../../shared/middleware/Validation';
+import * as yup from 'yup';
 
 export const validationProduct = validate({
   body: yup.object().shape({
@@ -17,6 +17,6 @@ export const validationProduct = validate({
     colors: yup.string(),
     codeColors: yup.string(),
     amount: yup.string().required(),
-    active: yup.boolean().required(),
-  }),
+    active: yup.boolean().required()
+  })
 });

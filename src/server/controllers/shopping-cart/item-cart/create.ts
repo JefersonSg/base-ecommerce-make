@@ -1,19 +1,19 @@
-import { type Request, type Response } from "express";
-import ShoppingCart from "../../../db/models/ShoppingCart";
-import ItemCart from "../../../db/models/ItemCart";
-import Product from "../../../db/models/Product";
-import { type ProductDataBackEnd } from "../../../shared/helpers/Interfaces";
+import { type Request, type Response } from 'express';
+import ShoppingCart from '../../../db/models/ShoppingCart';
+import ItemCart from '../../../db/models/ItemCart';
+import Product from '../../../db/models/Product';
+import { type ProductDataBackEnd } from '../../../shared/helpers/Interfaces';
 
 export const addNewItemCart = async (req: Request, res: Response) => {
   const { userId, productId, color, amount, size } = req.body;
 
   try {
-    let shoppingCart = await ShoppingCart.findOne({ userId, status: "aberto" });
+    let shoppingCart = await ShoppingCart.findOne({ userId, status: 'aberto' });
 
     if (!shoppingCart) {
       shoppingCart = await new ShoppingCart({
         userId,
-        status: "aberto",
+        status: 'aberto'
       }).save();
     }
 
@@ -21,7 +21,7 @@ export const addNewItemCart = async (req: Request, res: Response) => {
 
     if (!product) {
       return res.status(404).json({
-        message: "Erro ao procurar pelo produto",
+        message: 'Erro ao procurar pelo produto'
       });
     }
     const colorIndex = product.colors.indexOf(color);
@@ -30,13 +30,13 @@ export const addNewItemCart = async (req: Request, res: Response) => {
     if (colorIndex < 0 || sizeIndex < 0) {
       return res.status(400).json({
         message:
-          "Erro ao atualizar o produto, está cor / tamanho não está disponível",
+          'Erro ao atualizar o produto, está cor / tamanho não está disponível'
       });
     }
 
     if (Number(amount) < 1) {
       res.status(404).json({
-        message: "o item não pode ser menor do que zero",
+        message: 'o item não pode ser menor do que zero'
       });
       return;
     }
@@ -44,13 +44,13 @@ export const addNewItemCart = async (req: Request, res: Response) => {
     if (Number(amount) > product.stock.amount[colorIndex][sizeIndex]) {
       try {
         res.status(400).json({
-          error: "Limite alcançado /  sem estoque",
+          error: 'Limite alcançado /  sem estoque'
         });
         return;
       } catch (error) {
-        console.log("Erro ao atualizar o item-cart", error);
+        console.log('Erro ao atualizar o item-cart', error);
         res.status(400).json({
-          message: "Limite alcançado",
+          message: 'Limite alcançado'
         });
       }
     }
@@ -59,37 +59,40 @@ export const addNewItemCart = async (req: Request, res: Response) => {
       shoppingCartId: shoppingCart._id,
       productId,
       color,
-      size,
+      size
     });
 
     if (checkItemCart) {
-      checkItemCart.amount = product.stock.amount[colorIndex][sizeIndex] > checkItemCart.amount + 1 ? checkItemCart.amount + 1 : product.stock.amount[colorIndex][sizeIndex];
+      checkItemCart.amount =
+        product.stock.amount[colorIndex][sizeIndex] > checkItemCart.amount + 1
+          ? checkItemCart.amount + 1
+          : product.stock.amount[colorIndex][sizeIndex];
 
       const newItemCart = await ItemCart.findByIdAndUpdate(
         checkItemCart?._id,
-        checkItemCart,
+        checkItemCart
       );
       return res.status(200).json({
-        message: "Adicionou +1 ao amount",
-        newItemCart,
+        message: 'Adicionou +1 ao amount',
+        newItemCart
       });
     }
 
     const itemCart = await new ItemCart({
       shoppingCartId: shoppingCart._id,
       productId,
-      color: color.length > 0 ? color : "",
+      color: color.length > 0 ? color : '',
       amount,
-      size,
+      size
     }).save();
 
     return res
       .status(200)
-      .json({ message: "Item adicionado ao carrinho com sucesso", itemCart });
+      .json({ message: 'Item adicionado ao carrinho com sucesso', itemCart });
   } catch (error) {
-    console.error("Erro ao adicionar item ao carrinho:", error);
+    console.error('Erro ao adicionar item ao carrinho:', error);
     return res
       .status(500)
-      .json({ error: "Ocorreu um erro ao processar a solicitação" });
+      .json({ error: 'Ocorreu um erro ao processar a solicitação' });
   }
 };

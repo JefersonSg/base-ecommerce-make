@@ -1,7 +1,7 @@
-import { type Request, type Response } from "express";
-import Category from "../../db/models/Category";
+import { type Request, type Response } from 'express';
+import Category from '../../db/models/Category';
 
-import("dotenv/config");
+import('dotenv/config');
 
 const IMAGE_URL = process.env.IMAGE_URL;
 
@@ -12,11 +12,11 @@ interface category {
 }
 
 export const getAll = async (req: Request, res: Response) => {
-  const categories = (await Category.find().sort("-createdAt")) as category[];
+  const categories = (await Category.find().sort('-createdAt')) as category[];
 
   if (!categories) {
     res.status(422).json({
-      message: "Nenhuma categoria foi encontrada",
+      message: 'Nenhuma categoria foi encontrada'
     });
     return;
   }
@@ -26,13 +26,13 @@ export const getAll = async (req: Request, res: Response) => {
 
   try {
     res.status(200).json({
-      categories,
+      categories
     });
   } catch (error) {
-    console.log("erro no getAll categories", error);
+    console.log('erro no getAll categories', error);
     return res.status(500).json({
-      message: "erro no getAll categories",
-      error,
+      message: 'erro no getAll categories',
+      error
     });
   }
 };

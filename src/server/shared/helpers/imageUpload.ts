@@ -1,20 +1,20 @@
 import {
   S3Client,
   PutObjectCommand,
-  DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
+  DeleteObjectCommand
+} from '@aws-sdk/client-s3';
 
-const bucketName = process.env.BUCKET_NAME ?? "";
-const bucketRegion = process.env.BUCKET_REGION ?? "";
-const secretAcessKey = process.env.SECRET_ACESS_KEY ?? "";
-const acessKey = process.env.ACESS_KEY ?? "";
+const bucketName = process.env.BUCKET_NAME ?? '';
+const bucketRegion = process.env.BUCKET_REGION ?? '';
+const secretAcessKey = process.env.SECRET_ACESS_KEY ?? '';
+const acessKey = process.env.ACESS_KEY ?? '';
 
 const s3 = new S3Client({
   credentials: {
     accessKeyId: acessKey,
-    secretAccessKey: secretAcessKey,
+    secretAccessKey: secretAcessKey
   },
-  region: bucketRegion,
+  region: bucketRegion
 });
 
 async function uploadToS3(path: string, file: Express.Multer.File) {
@@ -30,7 +30,7 @@ async function uploadToS3(path: string, file: Express.Multer.File) {
     Bucket: bucketName,
     Key: `${path}/${name}`,
     Body: file?.buffer,
-    contentType: file?.mimetype,
+    contentType: file?.mimetype
   };
 
   try {
@@ -48,7 +48,7 @@ async function updateImageToS3(file: Express.Multer.File, pathImage: string) {
     Bucket: bucketName,
     Key: pathImage,
     Body: file.buffer,
-    ContentType: file.mimetype,
+    ContentType: file.mimetype
   };
 
   const command = new PutObjectCommand(params);
@@ -59,7 +59,7 @@ async function updateImageToS3(file: Express.Multer.File, pathImage: string) {
 async function removeImageS3(path: string, image: string) {
   const deleteParams = {
     Bucket: bucketName,
-    Key: `${path}/${image}`,
+    Key: `${path}/${image}`
   };
 
   try {
@@ -67,7 +67,7 @@ async function removeImageS3(path: string, image: string) {
     await s3.send(deleteObject);
     return true;
   } catch (error) {
-    console.error("Erro ao excluir objeto:", error);
+    console.error('Erro ao excluir objeto:', error);
     return true;
   }
 }

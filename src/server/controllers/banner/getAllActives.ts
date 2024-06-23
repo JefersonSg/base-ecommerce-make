@@ -1,19 +1,19 @@
-import { type Request, type Response } from "express";
-import BannersModel from "../../db/models/Banner";
-import { type BannerInterface } from "../../shared/helpers/Interfaces";
+import { type Request, type Response } from 'express';
+import BannersModel from '../../db/models/Banner';
+import { type BannerInterface } from '../../shared/helpers/Interfaces';
 
-import("dotenv/config");
+import('dotenv/config');
 
 const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getAllActives = async (req: Request, res: Response) => {
   const banners = (await BannersModel.find({ active: true }).sort(
-    "-createdAt",
+    '-createdAt'
   )) as unknown as BannerInterface[];
 
   if (!banners) {
     res.status(422).json({
-      message: "Nenhuma categoria foi encontrada",
+      message: 'Nenhuma categoria foi encontrada'
     });
     return;
   }
@@ -25,13 +25,13 @@ export const getAllActives = async (req: Request, res: Response) => {
 
   try {
     res.status(200).json({
-      banners,
+      banners
     });
   } catch (error) {
-    console.log("erro no getAllActives banner", error);
+    console.log('erro no getAllActives banner', error);
     return res.status(500).json({
-      message: "erro no getAllActives banner",
-      error,
+      message: 'erro no getAllActives banner',
+      error
     });
   }
 };

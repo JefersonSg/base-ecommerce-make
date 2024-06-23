@@ -1,10 +1,10 @@
-import { type Request, type Response } from "express";
-import ShoppingCart from "../../../db/models/ShoppingCart";
-import ItemCart from "../../../db/models/ItemCart";
-import Product from "../../../db/models/Product";
-import { calculateDeliveryFunc } from "../../../shared/helpers/calculateDeliveryFunc";
-import { type ItemsCartInterface } from "../../../shared/helpers/Interfaces";
-import "dotenv/config";
+import { type Request, type Response } from 'express';
+import ShoppingCart from '../../../db/models/ShoppingCart';
+import ItemCart from '../../../db/models/ItemCart';
+import Product from '../../../db/models/Product';
+import { calculateDeliveryFunc } from '../../../shared/helpers/calculateDeliveryFunc';
+import { type ItemsCartInterface } from '../../../shared/helpers/Interfaces';
+import 'dotenv/config';
 
 export const getAllItemsCart = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -14,28 +14,28 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
   if (!userId) {
     return res.status(400).json({
       error: 'é necessário o userId'
-    })
+    });
   }
 
-  const cepLimpo = cep?.replace?.("-", "");
+  const cepLimpo = cep?.replace?.('-', '');
   const CepOrigin = process.env.CEP_ORIGIN;
 
-  const shoppingCart = await ShoppingCart.findOne({ userId, status: "aberto" });
+  const shoppingCart = await ShoppingCart.findOne({ userId, status: 'aberto' });
 
   if (!shoppingCart) {
     res.status(200).json({
-      message: "nenhum item no carrinho / Carrinho não criado",
+      message: 'nenhum item no carrinho / Carrinho não criado'
     });
     return;
   }
 
   const itemsCart = (await ItemCart.find({
-    shoppingCartId: shoppingCart._id,
+    shoppingCartId: shoppingCart._id
   })) as unknown as ItemsCartInterface[];
 
   if (!itemsCart) {
     res.status(404).json({
-      message: "nenhum item encontrado no carrinho",
+      message: 'nenhum item encontrado no carrinho'
     });
     return;
   }
@@ -60,11 +60,11 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
       }
 
       return null;
-    }),
+    })
   );
 
   const actualValue = values.map(
-    (value, index) => itemsCart[index].amount * value,
+    (value, index) => itemsCart[index].amount * value
   );
 
   const entrega = await calculateDeliveryFunc(cep, itemsCart, actualValue);
@@ -72,36 +72,36 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
   if (CepOrigin === cepLimpo) {
     const retirada = {
       id: 99,
-      name: "Retirada na loja",
-      price: "00.00",
-      custom_price: "00.00",
-      currency: "R$",
+      name: 'Retirada na loja',
+      price: '00.00',
+      custom_price: '00.00',
+      currency: 'R$',
       delivery_time: 1,
-      delivery_range: { max: "Combinar" },
-      custom_delivery_time: "Combinar",
-      custom_delivery_range: { min: 1, max: "Combinar" },
+      delivery_range: { max: 'Combinar' },
+      custom_delivery_time: 'Combinar',
+      custom_delivery_range: { min: 1, max: 'Combinar' },
       company: {
         id: 1,
-        name: "Retirada na loja",
-        picture: "",
-      },
+        name: 'Retirada na loja',
+        picture: ''
+      }
     };
 
     const motoboy = {
       id: 100,
-      name: "Motoboy",
-      price: "10.00",
-      custom_price: "10.00",
-      currency: "R$",
+      name: 'Motoboy',
+      price: '10.00',
+      custom_price: '10.00',
+      currency: 'R$',
       delivery_time: 1,
-      delivery_range: { max: "2 Horas" },
-      custom_delivery_time: "2 Horas",
-      custom_delivery_range: { max: "2 Horas" },
+      delivery_range: { max: '2 Horas' },
+      custom_delivery_time: '2 Horas',
+      custom_delivery_range: { max: '2 Horas' },
       company: {
         id: 1,
-        name: "Motoboy",
-        picture: "",
-      },
+        name: 'Motoboy',
+        picture: ''
+      }
     };
 
     entrega.unshift(motoboy, retirada);
@@ -113,7 +113,7 @@ export const getAllItemsCart = async (req: Request, res: Response) => {
       itemsCart,
       prices: actualValue,
       totalValue,
-      shippingOptions: entrega,
+      shippingOptions: entrega
     });
   } catch (error) {
     res.status(500).json({ message: error });

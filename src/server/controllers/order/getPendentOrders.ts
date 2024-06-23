@@ -1,25 +1,25 @@
-import { type Request, type Response } from "express";
+import { type Request, type Response } from 'express';
 
-import Orders from "../../db/models/Orders";
+import Orders from '../../db/models/Orders';
 
 export const getPendentOrders = async (req: Request, res: Response) => {
   try {
     const orders = await Orders.find({
-      status: "pendente",
+      status: 'pendente'
     });
 
     if (!orders[0]) {
       return res.status(404).json({
-        message: "Nenhum pedido encontrado",
+        message: 'Nenhum pedido encontrado'
       });
     }
     return res.status(200).json({
-      pedidos: orders,
+      pedidos: orders
     });
   } catch (error) {
     res.status(400).json({
-      message: "Erro ao buscar pedidos pendentes",
-      error,
+      message: 'Erro ao buscar pedidos pendentes',
+      error
     });
   }
 };

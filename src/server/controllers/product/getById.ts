@@ -1,8 +1,8 @@
-import { type Request, type Response } from "express";
-import Product from "../../db/models/Product";
-import testeID from "../../shared/helpers/verifyId";
+import { type Request, type Response } from 'express';
+import Product from '../../db/models/Product';
+import testeID from '../../shared/helpers/verifyId';
 
-import("dotenv/config");
+import('dotenv/config');
 
 const IMAGE_URL = process.env.IMAGE_URL;
 
@@ -13,7 +13,7 @@ export const getProductById = async (req: Request, res: Response) => {
 
   if (!isValidId) {
     res.status(422).json({
-      message: "ID inválido, produto não encontrado",
+      message: 'ID inválido, produto não encontrado'
     });
     return;
   }
@@ -23,7 +23,7 @@ export const getProductById = async (req: Request, res: Response) => {
 
     if (!product) {
       res.status(422).json({
-        message: "produto não encontrado",
+        message: 'produto não encontrado'
       });
       return;
     }
@@ -34,18 +34,18 @@ export const getProductById = async (req: Request, res: Response) => {
     if (product?.coverPhoto2) {
       product.coverPhoto2 = `${IMAGE_URL}/products/${product.coverPhoto2}`;
     }
-    
+
     for (let i = 0; i < product.images.length; i++) {
       product.images[i] = `${IMAGE_URL}/products/${product.images[i]}`;
     }
     res.status(200).json({
-      product,
+      product
     });
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      message: "erro no getById",
-      error,
+      message: 'erro no getById',
+      error
     });
   }
 };

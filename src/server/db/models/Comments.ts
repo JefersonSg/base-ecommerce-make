@@ -1,4 +1,4 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
@@ -14,32 +14,32 @@ export interface CommentInterface {
 }
 
 const CommentsModel = mongoose.model(
-  "comments",
+  'comments',
   new Schema(
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
-        required: true,
+        ref: 'products',
+        required: true
       },
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: true,
+        ref: 'users',
+        required: true
       },
       comment: {
         type: String,
-        required: true,
+        required: true
       },
       image: {
-        type: Array,
+        type: Array
       },
       stars: {
-        type: Number,
-      },
+        type: Number
+      }
     },
-    { timestamps: true },
-  ),
+    { timestamps: true }
+  )
 );
 
 export default CommentsModel;

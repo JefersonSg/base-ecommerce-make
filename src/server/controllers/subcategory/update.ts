@@ -1,10 +1,10 @@
-import { type Request, type Response } from "express";
-import SubcategoryModel from "../../db/models/Subcategory";
-import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
-import testeID from "../../shared/helpers/verifyId";
-import { type SubcategoryInterface } from "../../shared/helpers/Interfaces";
-import { verifySizeImage } from "../../shared/helpers/verifySize";
-import { verifyMimetypeImage } from "../../shared/helpers/verifyMimetype";
+import { type Request, type Response } from 'express';
+import SubcategoryModel from '../../db/models/Subcategory';
+import { removeImageS3, uploadToS3 } from '../../shared/helpers/imageUpload';
+import testeID from '../../shared/helpers/verifyId';
+import { type SubcategoryInterface } from '../../shared/helpers/Interfaces';
+import { verifySizeImage } from '../../shared/helpers/verifySize';
+import { verifyMimetypeImage } from '../../shared/helpers/verifyMimetype';
 
 export const update = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -14,12 +14,12 @@ export const update = async (req: Request, res: Response) => {
   const updateData: SubcategoryInterface | any = {
     name,
     description,
-    category,
+    category
   };
 
   if (!testeID(id)) {
     res.status(422).json({
-      message: "ID inválido, Categoria não encontrada",
+      message: 'ID inválido, Categoria não encontrada'
     });
     return;
   }
@@ -29,7 +29,7 @@ export const update = async (req: Request, res: Response) => {
 
     if (!subcategory) {
       res.status(422).json({
-        message: "Subcategoria não encontrada",
+        message: 'Subcategoria não encontrada'
       });
       return;
     }
@@ -39,33 +39,33 @@ export const update = async (req: Request, res: Response) => {
     if (image && subcategory.image) {
       if (verifySizeImage(image)) {
         return res.status(401).json({
-          message: verifySizeImage(image),
+          message: verifySizeImage(image)
         });
       }
 
       if (verifyMimetypeImage(image)) {
         return res.status(401).json({
-          message: verifyMimetypeImage(image),
+          message: verifyMimetypeImage(image)
         });
       }
 
-      const newImage = await uploadToS3("subcategory", image);
+      const newImage = await uploadToS3('subcategory', image);
 
       updateData.image = newImage;
 
-      await removeImageS3("subcategory", subcategory.image);
+      await removeImageS3('subcategory', subcategory.image);
     }
 
     await SubcategoryModel.findByIdAndUpdate(id, updateData);
 
     return res
       .status(200)
-      .json({ subcategory, message: "Categoria atualizada com sucesso!" });
+      .json({ subcategory, message: 'Categoria atualizada com sucesso!' });
   } catch (error) {
-    console.log("erro no update subcategory", error);
+    console.log('erro no update subcategory', error);
     return res.status(500).json({
-      message: "erro no update subcategory",
-      error,
+      message: 'erro no update subcategory',
+      error
     });
   }
 };

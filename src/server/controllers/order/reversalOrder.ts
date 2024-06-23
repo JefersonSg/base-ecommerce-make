@@ -1,18 +1,18 @@
-import { type Request, type Response } from "express";
+import { type Request, type Response } from 'express';
 
-import Orders from "../../db/models/Orders";
+import Orders from '../../db/models/Orders';
 import {
   type ProductDataBackEnd,
-  type OrderInterface,
-} from "../../shared/helpers/Interfaces";
-import Product from "../../db/models/Product";
+  type OrderInterface
+} from '../../shared/helpers/Interfaces';
+import Product from '../../db/models/Product';
 
 export const reversalOrder = async (req: Request, res: Response) => {
   const { orderId } = req.params;
 
   if (!orderId) {
     return res.status(400).json({
-      message: "É necessário o id do pedido",
+      message: 'É necessário o id do pedido'
     });
   }
 
@@ -21,12 +21,12 @@ export const reversalOrder = async (req: Request, res: Response) => {
 
     if (!order) {
       return res.status(404).json({
-        message: "Nenhum pedido encontrado",
+        message: 'Nenhum pedido encontrado'
       });
     }
-    if (order.status === "cancelado") {
+    if (order.status === 'cancelado') {
       return res.status(404).json({
-        message: "O pedido já foi cancelado anteriormente",
+        message: 'O pedido já foi cancelado anteriormente'
       });
     }
 
@@ -36,9 +36,8 @@ export const reversalOrder = async (req: Request, res: Response) => {
       const amount = order.productAmounts[i];
       const size = order.productSizes[i];
 
-
       const productPrice = (await Product.findOne({
-        _id: productId,
+        _id: productId
       })) as ProductDataBackEnd & {
         _id: string;
       };
@@ -48,14 +47,15 @@ export const reversalOrder = async (req: Request, res: Response) => {
       if (indexColor && indexSize) {
         const newAmount = [...productPrice.stock.amount];
 
-        newAmount[indexColor][indexSize] = newAmount[indexColor][indexSize] + amount;  
-  
+        newAmount[indexColor][indexSize] =
+          newAmount[indexColor][indexSize] + amount;
+
         const options = { new: true, runValidators: true };
-  
+
         await Product.findByIdAndUpdate(
           productId,
-          { $set: { "stock.amount": newAmount } },
-          options,
+          { $set: { 'stock.amount': newAmount } },
+          options
         );
       }
     }
@@ -63,19 +63,19 @@ export const reversalOrder = async (req: Request, res: Response) => {
     const pedidoDevolvido = await Orders.findOneAndUpdate(
       { _id: orderId },
       {
-        $set: { status: "devolvido" },
-      },
+        $set: { status: 'devolvido' }
+      }
     );
 
     return res.status(200).json({
-      message: "Pedido devolvido",
-      pedidoDevolvido,
+      message: 'Pedido devolvido',
+      pedidoDevolvido
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(400).json({
-      message: "Erro ao cancelar o pedido",
-      error,
+      message: 'Erro ao cancelar o pedido',
+      error
     });
   }
 };

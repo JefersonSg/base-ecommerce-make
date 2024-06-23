@@ -1,9 +1,9 @@
-import { type Request, type Response } from "express";
+import { type Request, type Response } from 'express';
 
-import Category from "../../db/models/Category";
-import testeID from "../../shared/helpers/verifyId";
+import Category from '../../db/models/Category';
+import testeID from '../../shared/helpers/verifyId';
 
-import("dotenv/config");
+import('dotenv/config');
 
 const IMAGE_URL = process.env.IMAGE_URL;
 
@@ -14,7 +14,7 @@ export const getById = async (req: Request, res: Response) => {
 
   if (!isValidId) {
     res.status(422).json({
-      message: "ID inválido, Categoria não encontrada",
+      message: 'ID inválido, Categoria não encontrada'
     });
     return;
   }
@@ -24,26 +24,26 @@ export const getById = async (req: Request, res: Response) => {
 
     if (!category) {
       res.status(422).json({
-        message: "Categoria não encontrada",
+        message: 'Categoria não encontrada'
       });
       return;
     }
     if (!category.image) {
       return res.status(200).json({
-        category,
+        category
       });
     }
 
     category.image = `${IMAGE_URL}/category/${category.image}`;
 
     res.status(200).json({
-      category,
+      category
     });
   } catch (error) {
-    console.log("erro no getById category", error);
+    console.log('erro no getById category', error);
     return res.status(500).json({
-      message: "erro no getById category",
-      error,
+      message: 'erro no getById category',
+      error
     });
   }
 };

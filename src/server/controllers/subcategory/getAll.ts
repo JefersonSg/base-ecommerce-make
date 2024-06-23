@@ -1,16 +1,16 @@
-import { type Request, type Response } from "express";
-import SubcategoryModel from "../../db/models/Subcategory";
+import { type Request, type Response } from 'express';
+import SubcategoryModel from '../../db/models/Subcategory';
 
-import("dotenv/config");
+import('dotenv/config');
 
 const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getAll = async (req: Request, res: Response) => {
-  const subcategories = await SubcategoryModel.find().sort("-createdAt");
+  const subcategories = await SubcategoryModel.find().sort('-createdAt');
 
   if (!subcategories) {
     res.status(422).json({
-      message: "Nenhuma subcategoria foi encontrada",
+      message: 'Nenhuma subcategoria foi encontrada'
     });
     return;
   }
@@ -23,13 +23,13 @@ export const getAll = async (req: Request, res: Response) => {
 
   try {
     res.status(200).json({
-      subcategories,
+      subcategories
     });
   } catch (error) {
-    console.log("erro no getAll subcategory", error);
+    console.log('erro no getAll subcategory', error);
     return res.status(500).json({
-      message: "erro no getAll subcategory",
-      error,
+      message: 'erro no getAll subcategory',
+      error
     });
   }
 };

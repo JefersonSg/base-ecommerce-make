@@ -1,20 +1,24 @@
-import { type Request, type Response } from "express";
-import Product from "../../db/models/Product";
-import { type ProductDataBackEnd } from "../../shared/helpers/Interfaces";
+import { type Request, type Response } from 'express';
+import Product from '../../db/models/Product';
+import { type ProductDataBackEnd } from '../../shared/helpers/Interfaces';
 
-import("dotenv/config");
+import('dotenv/config');
 
 const IMAGE_URL = process.env.IMAGE_URL;
 
 export const getAllActives = async (req: Request, res: Response) => {
   try {
-    const products = (await Product.find({ active: true }).sort(
-      "-createdAt",
-    )) as unknown as ProductDataBackEnd[];
+    const page = req.params.page ?? 1;
+    const total = req.params.total ?? 9;
+
+    const products = (await Product.find({ active: true })
+      .skip((+page - 1) * +total)
+      .limit(+total)
+      .sort('-createdAt')) as unknown as ProductDataBackEnd[];
 
     if (!products) {
       return res.status(200).json({
-        message: "nenhum item encontrado",
+        message: 'nenhum item encontrado'
       });
     }
 
@@ -31,13 +35,13 @@ export const getAllActives = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({
-      products,
+      products
     });
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      message: "erro no getAllActives",
-      error,
+      message: 'erro no getAllActives',
+      error
     });
   }
 };

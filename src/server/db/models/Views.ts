@@ -1,33 +1,33 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const ViewsModel = mongoose.model(
-  "views",
+  'views',
   new Schema({
     ip: {
-      type: String,
+      type: String
     },
     sessionId: {
       type: String,
-      required: true,
+      required: true
     },
     product: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "products",
+      ref: 'products'
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: 'users'
     },
     pageView: {
-      type: String,
+      type: String
     },
     date: {
       type: Date,
-      required: true,
-    },
-  }),
+      required: true
+    }
+  })
 );
 
 export default ViewsModel;

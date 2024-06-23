@@ -1,9 +1,9 @@
-import { type Request, type Response } from "express";
-import User from "../../db/models/User";
-import getToken from "../../shared/helpers/getToken";
-import getUserByToken from "../../shared/helpers/getUserByToken";
-import bcrypt from "bcrypt";
-import { removeImageS3, uploadToS3 } from "../../shared/helpers/imageUpload";
+import { type Request, type Response } from 'express';
+import User from '../../db/models/User';
+import getToken from '../../shared/helpers/getToken';
+import getUserByToken from '../../shared/helpers/getUserByToken';
+import bcrypt from 'bcrypt';
+import { removeImageS3, uploadToS3 } from '../../shared/helpers/imageUpload';
 
 interface UserInterface {
   _id: string;
@@ -20,7 +20,7 @@ export const editUser = async (req: Request, res: Response) => {
 
   if (!user) {
     return res.status(404).json({
-      message: "nenhum usuario encontrado",
+      message: 'nenhum usuario encontrado'
     });
   }
 
@@ -30,14 +30,14 @@ export const editUser = async (req: Request, res: Response) => {
 
   if (id && id !== user._id.toString()) {
     return res.status(400).json({
-      message: "o Id do token e do parametro fornecido não coincidem",
+      message: 'o Id do token e do parametro fornecido não coincidem'
     });
   }
 
   const emailUsing = await User.findOne({ email });
 
   if (user?.email !== email && emailUsing) {
-    res.status(422).json({ message: "E-mail em uso, utilize outro e-mail!" });
+    res.status(422).json({ message: 'E-mail em uso, utilize outro e-mail!' });
     return;
   }
 
@@ -46,19 +46,19 @@ export const editUser = async (req: Request, res: Response) => {
   user.name = name ?? user.name;
 
   if (image) {
-    const fileName = await uploadToS3("users", image);
+    const fileName = await uploadToS3('users', image);
     if (user.image && fileName) {
-      await removeImageS3("users", user?.image);
+      await removeImageS3('users', user?.image);
     }
     if (fileName) {
       user.image = fileName;
     }
   } else {
-    user.image = user.image ?? "";
+    user.image = user.image ?? '';
   }
 
   if (password !== confirmpassword) {
-    res.status(422).json({ error: "As senhas não conferem." });
+    res.status(422).json({ error: 'As senhas não conferem.' });
   } else if (password === confirmpassword && password != null) {
     const salt = await bcrypt.genSalt(12);
     const reqPassword = req.body.password;
@@ -71,23 +71,23 @@ export const editUser = async (req: Request, res: Response) => {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
       { $set: user },
-      { new: true },
+      { new: true }
     );
 
     if (!updatedUser)
-      return res.status(404).json({ message: "Erro ao atualizar" });
+      return res.status(404).json({ message: 'Erro ao atualizar' });
 
-    updatedUser.password = "";
+    updatedUser.password = '';
 
     res.json({
-      message: "Usuário atualizado com sucesso!",
-      data: updatedUser,
+      message: 'Usuário atualizado com sucesso!',
+      data: updatedUser
     });
   } catch (error) {
-    console.log("erro no updateUserById", error);
+    console.log('erro no updateUserById', error);
     return res.status(500).json({
-      message: "erro no updateUserById",
-      error,
+      message: 'erro no updateUserById',
+      error
     });
   }
 };

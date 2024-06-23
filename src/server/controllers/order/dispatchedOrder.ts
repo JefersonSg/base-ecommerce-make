@@ -1,7 +1,7 @@
-import { type Request, type Response } from "express";
+import { type Request, type Response } from 'express';
 
-import { type OrderInterface } from "../../shared/helpers/Interfaces";
-import Orders from "../../db/models/Orders";
+import { type OrderInterface } from '../../shared/helpers/Interfaces';
+import Orders from '../../db/models/Orders';
 
 export const dispatchedOrder = async (req: Request, res: Response) => {
   const { orderId } = req.params;
@@ -9,7 +9,7 @@ export const dispatchedOrder = async (req: Request, res: Response) => {
 
   if (!orderId) {
     return res.status(400).json({
-      message: "É necessário o id do pedido",
+      message: 'É necessário o id do pedido'
     });
   }
 
@@ -18,36 +18,36 @@ export const dispatchedOrder = async (req: Request, res: Response) => {
 
     if (!order) {
       return res.status(404).json({
-        message: "Nenhum pedido encontrado",
+        message: 'Nenhum pedido encontrado'
       });
     }
 
-    if (order.status === "cancelado") {
+    if (order.status === 'cancelado') {
       return res.status(404).json({
-        message: "O pedido já foi cancelado anteriormente",
+        message: 'O pedido já foi cancelado anteriormente'
       });
     }
     if (!orderTracking) {
       return res.status(404).json({
-        message: "É necessário o código de rastreio",
+        message: 'É necessário o código de rastreio'
       });
     }
 
     const pedidoConfirmado = await Orders.findOneAndUpdate(
       { _id: orderId },
       {
-        $set: { status: "enviado", orderTracking },
-      },
+        $set: { status: 'enviado', orderTracking }
+      }
     );
 
     return res.status(200).json({
-      message: "Pedido atualizado com sucesso",
-      pedidoConfirmado,
+      message: 'Pedido atualizado com sucesso',
+      pedidoConfirmado
     });
   } catch (error) {
     res.status(400).json({
-      message: "Erro ao cancelar o pedido",
-      error,
+      message: 'Erro ao cancelar o pedido',
+      error
     });
   }
 };

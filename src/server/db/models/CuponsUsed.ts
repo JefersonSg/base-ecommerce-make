@@ -1,28 +1,28 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const CuponsUsed = mongoose.model(
-  "cuponsUsed",
+  'cuponsUsed',
   new Schema(
     {
       idCupom: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Cupons",
-        required: true,
+        ref: 'Cupons',
+        required: true
       },
       code: {
         type: String,
-        ref: "Cupons",
-        required: true,
+        ref: 'Cupons',
+        required: true
       },
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-      },
+        ref: 'users'
+      }
     },
-    { timestamps: true },
-  ),
+    { timestamps: true }
+  )
 );
 
 export default CuponsUsed;

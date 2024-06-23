@@ -1,18 +1,18 @@
-import { type Request, type Response } from "express";
+import { type Request, type Response } from 'express';
 
-import Product from "../../db/models/Product";
+import Product from '../../db/models/Product';
 import {
   type OrderInterface,
-  type ProductDataBackEnd,
-} from "../../shared/helpers/Interfaces";
-import Orders from "../../db/models/Orders";
+  type ProductDataBackEnd
+} from '../../shared/helpers/Interfaces';
+import Orders from '../../db/models/Orders';
 
 export const cancelOrder = async (req: Request, res: Response) => {
   const { orderId } = req.params;
 
   if (!orderId) {
     return res.status(400).json({
-      message: "É necessário o id do pedido",
+      message: 'É necessário o id do pedido'
     });
   }
 
@@ -21,17 +21,17 @@ export const cancelOrder = async (req: Request, res: Response) => {
 
     if (!order) {
       return res.status(404).json({
-        message: "Nenhum pedido encontrado",
+        message: 'Nenhum pedido encontrado'
       });
     }
-    if (order.status === "cancelado") {
+    if (order.status === 'cancelado') {
       return res.status(404).json({
-        message: "O pedido já foi cancelado anteriormente",
+        message: 'O pedido já foi cancelado anteriormente'
       });
     }
-    if (order.status === "devolvido") {
+    if (order.status === 'devolvido') {
       return res.status(404).json({
-        message: "O pedido já foi cancelado anteriormente",
+        message: 'O pedido já foi cancelado anteriormente'
       });
     }
 
@@ -42,7 +42,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
       const size = order.productSizes[i];
 
       const productPrice = (await Product.findOne({
-        _id: productId,
+        _id: productId
       })) as ProductDataBackEnd & {
         _id: string;
       };
@@ -52,35 +52,34 @@ export const cancelOrder = async (req: Request, res: Response) => {
 
       const newAmount = [...productPrice.stock.amount];
 
-      
-      newAmount[indexColor][indexSize] = newAmount[indexColor][indexSize] + amount;
+      newAmount[indexColor][indexSize] =
+        newAmount[indexColor][indexSize] + amount;
 
       const options = { new: true, runValidators: true };
 
-
       await Product.findByIdAndUpdate(
         productId,
-        { $set: { "stock.amount": newAmount } },
-        options,
+        { $set: { 'stock.amount': newAmount } },
+        options
       );
     }
 
     const pedidoCancelado = await Orders.findOneAndUpdate(
       { _id: orderId },
       {
-        $set: { status: "cancelado" },
-      },
+        $set: { status: 'cancelado' }
+      }
     );
 
     return res.status(200).json({
-      message: "Pedido cancelado",
-      pedidoCancelado,
+      message: 'Pedido cancelado',
+      pedidoCancelado
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(400).json({
-      message: "Erro ao cancelar o pedido",
-      error,
+      message: 'Erro ao cancelar o pedido',
+      error
     });
   }
 };

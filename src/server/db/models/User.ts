@@ -1,37 +1,37 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const collectionName = process.env.MONGO_COLLECTION;
 
 const User = mongoose.model(
-  "user",
+  'user',
   new Schema(
     {
       name: {
         type: String,
-        required: true,
+        required: true
       },
       surname: {
         type: String,
-        required: true,
+        required: true
       },
       email: {
         type: String,
-        required: true,
+        required: true
       },
 
       password: {
         type: String,
-        required: true,
+        required: true
       },
 
       image: {
-        type: String,
-      },
+        type: String
+      }
     },
-    { timestamps: true },
-  ),
+    { timestamps: true }
+  )
 );
 
 export default User;

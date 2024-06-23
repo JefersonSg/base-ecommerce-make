@@ -1,34 +1,37 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import express from "express";
-import multer from "multer";
+import express from 'express';
+import multer from 'multer';
 
-import { ProductController } from "../controllers";
+import { ProductController } from '../controllers';
 
 // middleware
-import checkToken from "../shared/helpers/checkToken";
-import checkAdminToken from "../shared/helpers/checkAdminToken";
+import checkToken from '../shared/helpers/checkToken';
+import checkAdminToken from '../shared/helpers/checkAdminToken';
 const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // GETS
-router.get("/", ProductController.getAll);
-router.get("/actives", ProductController.getAllActives);
-router.get("/no-actives", ProductController.getAllNoActives);
-router.get("/:id", ProductController.getProductById);
-router.get("/category/:id", ProductController.getProductByCategory);
-router.get("/name/:name", ProductController.getByName);
-router.get("/subcategory/:id", ProductController.getBySubcategory);
-router.get("/sales/get-all", ProductController.getBySales);
-router.get("/views/get-by-views", ProductController.getByViews);
-router.get("/promotion/get-all", ProductController.getByPromotion);
+router.get('/', ProductController.getAll);
+router.get('/actives/:page/:total', ProductController.getAllActives);
+router.get('/no-actives', ProductController.getAllNoActives);
+router.get('/:id', ProductController.getProductById);
+router.get(
+  '/category/:id/:page/:total',
+  ProductController.getProductByCategory
+);
+router.get('/name/:name/:page/:total', ProductController.getByName);
+router.get('/subcategory/:id/:page/:total', ProductController.getBySubcategory);
+router.get('/sales/:page/:total', ProductController.getBySales);
+router.get('/get-by-views/:page/:total', ProductController.getByViews);
+router.get('/promotion/:page/:total', ProductController.getByPromotion);
 
 // comments
-router.get("/comments/get-all/:productId", ProductController.getAllComments);
+router.get('/comments/get-all/:productId', ProductController.getAllComments);
 
 // POST
 router.post(
-  "/create",
+  '/create',
   checkAdminToken,
   upload.fields([
     { name: 'images' },
@@ -36,20 +39,20 @@ router.post(
     { name: 'coverPhoto2', maxCount: 1 }
   ]),
   ProductController.validationProduct,
-  ProductController.create,
+  ProductController.create
 );
 
 // comments
 router.post(
-  "/create/comment",
+  '/create/comment',
   checkToken,
-  upload.single("image"),
-  ProductController.createComment,
+  upload.single('image'),
+  ProductController.createComment
 );
 
 // UPDATE
 router.patch(
-  "/edit/:id",
+  '/edit/:id',
   checkAdminToken,
   upload.fields([
     { name: 'images' },
@@ -57,14 +60,14 @@ router.patch(
     { name: 'coverPhoto2', maxCount: 1 }
   ]),
   ProductController.validationProduct,
-  ProductController.updateProduct,
+  ProductController.updateProduct
 );
 // comments
 router.patch(
-  "/update/comment",
+  '/update/comment',
   checkToken,
-  upload.single("image"),
-  ProductController.updateCommentById,
+  upload.single('image'),
+  ProductController.updateCommentById
 );
 // router.patch(
 //   "/reupdate/allProducts",
@@ -74,16 +77,16 @@ router.patch(
 
 // DELETE
 router.delete(
-  "/delete/:id",
+  '/delete/:id',
   checkAdminToken,
-  ProductController.removeProductById,
+  ProductController.removeProductById
 );
 
 // comment
 router.delete(
-  "/delete/comment/:id",
+  '/delete/comment/:id',
   checkToken,
-  ProductController.removeCommentById,
+  ProductController.removeCommentById
 );
 
 export default router;

@@ -1,5 +1,5 @@
-import { validate } from "../../shared/middleware/Validation";
-import * as yup from "yup";
+import { validate } from '../../shared/middleware/Validation';
+import * as yup from 'yup';
 
 export const validationUser = validate({
   body: yup.object().shape({
@@ -9,8 +9,8 @@ export const validationUser = validate({
     password: yup.string().required().min(6),
     confirmpassword: yup
       .string()
-      .oneOf([yup.ref("password")], "As senhas digitadas devem ser iguals")
+      .oneOf([yup.ref('password')], 'As senhas digitadas devem ser iguals')
       .required()
-      .min(6),
-  }),
+      .min(6)
+  })
 });

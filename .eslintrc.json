@@ -3,13 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
   "extends": [
-    "plugin:react/recommended",
     "standard-with-typescript",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -21,12 +15,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
-    "react/react-in-jsx-scope": "off",
-    "react-hooks/exhaustive-deps": "warn",
     "@typescript-eslint/semi": "off",
-    "react-hooks/rules-of-hooks": "error",
     "linebreak-style": ["error", "unix"],
     "prettier/prettier": "error",
     "@typescript-eslint/space-before-function-paren": "off",

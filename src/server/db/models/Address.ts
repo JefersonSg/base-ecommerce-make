@@ -1,64 +1,64 @@
-import mongoose from "../conn";
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const AddressModel = mongoose.model(
-  "address",
+  'address',
   new Schema({
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-      required: true,
+      ref: 'users',
+      required: true
     },
     nome: {
       type: String,
-      required: true,
+      required: true
     },
     cpf: {
       type: String,
-      required: true,
+      required: true
     },
     email: {
       type: String,
-      required: true,
+      required: true
     },
     cep: {
       type: String,
-      required: true,
+      required: true
     },
     cidade: {
       type: String,
-      required: true,
+      required: true
     },
     uf: {
       type: String,
-      required: true,
+      required: true
     },
     rua: {
       type: String,
-      required: true,
+      required: true
     },
     bairro: {
       type: String,
-      required: true,
+      required: true
     },
     referencia: {
       type: String,
-      required: true,
+      required: true
     },
     complemento: {
       type: String,
-      required: true,
+      required: true
     },
     numero: {
       type: String,
-      required: true,
+      required: true
     },
     telefone: {
       type: String,
-      required: true,
-    },
-  }),
+      required: true
+    }
+  })
 );
 
 export default AddressModel;

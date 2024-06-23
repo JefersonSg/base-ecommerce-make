@@ -1,34 +1,34 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import express from "express";
-import multer from "multer";
-import { BannersControl } from "../controllers";
+import express from 'express';
+import multer from 'multer';
+import { BannersControl } from '../controllers';
 
 // middleware
-import checkAdminToken from "../shared/helpers/checkAdminToken";
+import checkAdminToken from '../shared/helpers/checkAdminToken';
 const router = express.Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.post(
-  "/create",
-  upload.array("images"),
+  '/create',
+  upload.array('images'),
   checkAdminToken,
   BannersControl.validationBanner,
-  BannersControl.create,
+  BannersControl.create
 );
 
-router.get("/", BannersControl.getAll);
-router.get("/actives", BannersControl.getAllActives);
+router.get('/', BannersControl.getAll);
+router.get('/actives', BannersControl.getAllActives);
 
 router.patch(
-  "/update/:id",
+  '/update/:id',
   checkAdminToken,
-  upload.array("images"),
+  upload.array('images'),
   BannersControl.validationBanner,
-  BannersControl.updateBanner,
+  BannersControl.updateBanner
 );
 
-router.delete("/delete/:id", checkAdminToken, BannersControl.deleteBanner);
+router.delete('/delete/:id', checkAdminToken, BannersControl.deleteBanner);
 
 export default router;

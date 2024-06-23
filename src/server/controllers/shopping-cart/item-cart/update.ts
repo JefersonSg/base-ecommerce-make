@@ -1,10 +1,10 @@
-import { type Request, type Response } from "express";
-import ItemCart from "../../../db/models/ItemCart";
+import { type Request, type Response } from 'express';
+import ItemCart from '../../../db/models/ItemCart';
 import {
   type ProductDataBackEnd,
-  type itemCart,
-} from "../../../shared/helpers/Interfaces";
-import Product from "../../../db/models/Product";
+  type itemCart
+} from '../../../shared/helpers/Interfaces';
+import Product from '../../../db/models/Product';
 
 export const updateItemCart = async (req: Request, res: Response) => {
   const { itemId } = req.params;
@@ -13,17 +13,17 @@ export const updateItemCart = async (req: Request, res: Response) => {
 
   if (!ItemShoppingCart) {
     res.status(404).json({
-      message: "nenhum item encontrado",
+      message: 'nenhum item encontrado'
     });
     return;
   }
   const product = (await Product.findById(
-    ItemShoppingCart?.productId,
+    ItemShoppingCart?.productId
   )) as ProductDataBackEnd;
 
   if (!product) {
     return res.status(404).json({
-      message: "Erro ao procurar pelo produto",
+      message: 'Erro ao procurar pelo produto'
     });
   }
 
@@ -32,17 +32,16 @@ export const updateItemCart = async (req: Request, res: Response) => {
 
   if (colorIndex < 0 || sizeIndex < 0) {
     res.status(400).json({
-      message: "Erro ao atualizar o produto, está cor não está disponivel",
+      message: 'Erro ao atualizar o produto, está cor não está disponivel'
     });
 
     await ItemCart.findByIdAndDelete(itemId);
     return;
   }
 
-  
   if (Number(amount) < 1) {
     res.status(404).json({
-      message: "o item não pode ser menor do que zero",
+      message: 'o item não pode ser menor do que zero'
     });
     return;
   }
@@ -53,19 +52,19 @@ export const updateItemCart = async (req: Request, res: Response) => {
         productId: ItemShoppingCart.productId,
         color: color ?? ItemShoppingCart.color,
         amount: product.stock.amount[colorIndex][sizeIndex],
-        size: size ?? ItemShoppingCart.size,
+        size: size ?? ItemShoppingCart.size
       };
 
       await ItemCart.findByIdAndUpdate(itemId, newItem);
 
       res.status(200).json({
-        message: "Limite alcançado",
+        message: 'Limite alcançado'
       });
       return;
     } catch (error) {
-      console.log("Erro ao atualizar o item-cart", error);
+      console.log('Erro ao atualizar o item-cart', error);
       res.status(400).json({
-        message: "Limite alcançado",
+        message: 'Limite alcançado'
       });
     }
   }
@@ -74,21 +73,21 @@ export const updateItemCart = async (req: Request, res: Response) => {
     productId: ItemShoppingCart.productId,
     color: color ?? ItemShoppingCart.color,
     amount: amount ?? ItemShoppingCart.amount,
-    size: size ?? ItemShoppingCart.size,
+    size: size ?? ItemShoppingCart.size
   };
 
   try {
     const newItemCart = await ItemCart.findByIdAndUpdate(itemId, newItem);
 
     return res.status(200).json({
-      message: "atulizado com sucesso: ",
-      newItemCart,
+      message: 'atulizado com sucesso: ',
+      newItemCart
     });
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      message: "erro no update item-cart",
-      error,
+      message: 'erro no update item-cart',
+      error
     });
   }
 };

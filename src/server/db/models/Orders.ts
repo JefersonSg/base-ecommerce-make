@@ -1,82 +1,82 @@
-import { AddressInterface } from "../../shared/helpers/Interfaces";
-import mongoose from "../conn";
+import { AddressInterface } from '../../shared/helpers/Interfaces';
+import mongoose from '../conn';
 
 const { Schema } = mongoose;
 
 const Orders = mongoose.model(
-  "orders",
+  'orders',
   new Schema(
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: true,
+        ref: 'users',
+        required: true
       },
       paymentId: {
         type: String,
-        required: true,
+        required: true
       },
       paymentLink: {
         type: String,
-        required: true,
+        required: true
       },
       address: {
         type: Array<AddressInterface>,
-        required: true,
+        required: true
       },
       status: {
         type: String,
-        required: true,
+        required: true
       },
       productIds: {
         type: Array<String>,
-        required: true,
+        required: true
       },
       valueProducts: {
         type: Array<Number>,
-        required: true,
+        required: true
       },
       productAmounts: {
         type: Array<String>,
-        required: true,
+        required: true
       },
       productSizes: {
         type: Array<String>,
-        required: true,
+        required: true
       },
       productColors: {
         type: Array<String>,
-        required: true,
+        required: true
       },
       totalPayment: {
         type: String,
-        required: true,
+        required: true
       },
       methodPayment: {
         type: String,
-        required: true,
+        required: true
       },
       discount: {
-        type: Number,
+        type: Number
       },
       orderTracking: {
-        type: String,
+        type: String
       },
       shippingMethod: {
         type: String,
-        required: true,
+        required: true
       },
       shippingValue: {
         type: Number,
-        required: true,
+        required: true
       },
       shippingCompany: {
         type: String,
-        required: true,
-      },
+        required: true
+      }
     },
-    { timestamps: true },
-  ),
+    { timestamps: true }
+  )
 );
 
 export default Orders;

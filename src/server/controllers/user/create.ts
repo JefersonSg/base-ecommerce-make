@@ -1,7 +1,7 @@
-import { type Request, type Response } from "express";
-import User from "../../db/models/User";
-import bcrypt from "bcrypt";
-import createUserToken from "../../shared/helpers/createUserToken";
+import { type Request, type Response } from 'express';
+import User from '../../db/models/User';
+import bcrypt from 'bcrypt';
+import createUserToken from '../../shared/helpers/createUserToken';
 
 interface newUser {
   _id?: string;
@@ -21,7 +21,7 @@ export const create = async (req: Request, res: Response) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(422).json({ message: "Por favor, utilize outro e-mail!" });
+    res.status(422).json({ message: 'Por favor, utilize outro e-mail!' });
     return;
   }
 
@@ -34,7 +34,7 @@ export const create = async (req: Request, res: Response) => {
     name,
     surname,
     email,
-    password: passwordHash,
+    password: passwordHash
   });
 
   try {
@@ -42,10 +42,10 @@ export const create = async (req: Request, res: Response) => {
 
     await createUserToken(newUser, req, res);
   } catch (error) {
-    console.log("erro no create user", error);
+    console.log('erro no create user', error);
     return res.status(500).json({
-      message: "erro no create user",
-      error,
+      message: 'erro no create user',
+      error
     });
   }
 };

@@ -1,6 +1,6 @@
-import "dotenv/config";
+import 'dotenv/config';
 
-import { MercadoPagoConfig, Preference } from "mercadopago";
+import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 interface Itens {
   id: string;
@@ -12,11 +12,11 @@ interface Itens {
 export async function Payment(
   items: Itens[],
   paymentId: string,
-  frete?: Itens,
+  frete?: Itens
 ) {
   try {
     const client = new MercadoPagoConfig({
-      accessToken: process.env.MP_ACCESS_TOKEN ?? "",
+      accessToken: process.env.MP_ACCESS_TOKEN ?? ''
     });
 
     const preference = new Preference(client);
@@ -28,10 +28,10 @@ export async function Payment(
         back_urls: {
           success: `${process.env.FRONT_URL}/pagamento/sucesso`,
           failure: `${process.env.FRONT_URL}/pagamento/error`,
-          pending: `${process.env.FRONT_URL}/pagamento/pendente`,
+          pending: `${process.env.FRONT_URL}/pagamento/pendente`
         },
-        notification_url: `https://mayse.fun/payment/webhook/${paymentId}`,
-      },
+        notification_url: `https://mayse.fun/payment/webhook/${paymentId}`
+      }
     });
 
     return { paymentLink: newPayment?.init_point, id: newPayment.collector_id };

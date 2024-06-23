@@ -1,46 +1,46 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import express from "express";
-import { orderController } from "../controllers";
+import express from 'express';
+import { orderController } from '../controllers';
 
 // middleware
-import checkToken from "../shared/helpers/checkToken";
-import checkAdminToken from "../shared/helpers/checkAdminToken";
+import checkToken from '../shared/helpers/checkToken';
+import checkAdminToken from '../shared/helpers/checkAdminToken';
 const router = express.Router();
 
 //  gets
-router.get("/get-all", checkAdminToken, orderController.getAllOrders);
-router.get("/get-order-by-user-id/:userId", orderController.getOrderByUserId);
+router.get('/get-all', checkAdminToken, orderController.getAllOrders);
+router.get('/get-order-by-user-id/:userId', orderController.getOrderByUserId);
 router.get(
-  "/get-order-by-id/:orderId",
+  '/get-order-by-id/:orderId',
   checkToken,
-  orderController.getOrderById,
+  orderController.getOrderById
 );
-router.get("/get-canceled", checkToken, orderController.getCanceledOrders);
-router.get("/get-confirmed", checkToken, orderController.getConfirmedOrders);
-router.get("/get-dispatched", checkToken, orderController.getDispatchedOrders);
+router.get('/get-canceled', checkToken, orderController.getCanceledOrders);
+router.get('/get-confirmed', checkToken, orderController.getConfirmedOrders);
+router.get('/get-dispatched', checkToken, orderController.getDispatchedOrders);
 
-router.post("/create/:userId", checkToken, orderController.createOrder);
+router.post('/create/:userId', checkToken, orderController.createOrder);
 
-router.patch("/cancel/:orderId", checkAdminToken, orderController.cancelOrder);
+router.patch('/cancel/:orderId', checkAdminToken, orderController.cancelOrder);
 router.patch(
-  "/confirm/:orderId",
+  '/confirm/:orderId',
   checkAdminToken,
-  orderController.confirmOrder,
+  orderController.confirmOrder
 );
 router.patch(
-  "/dispatch/:orderId",
+  '/dispatch/:orderId',
   checkAdminToken,
-  orderController.dispatchedOrder,
+  orderController.dispatchedOrder
 );
 router.patch(
-  "/return/:orderId",
+  '/return/:orderId',
   checkAdminToken,
-  orderController.reversalOrder,
+  orderController.reversalOrder
 );
 router.patch(
-  "/concluded/:orderId",
+  '/concluded/:orderId',
   checkAdminToken,
-  orderController.concludedOrder,
+  orderController.concludedOrder
 );
 
 export default router;
