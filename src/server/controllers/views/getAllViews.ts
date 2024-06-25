@@ -12,7 +12,7 @@ interface TotalViewsInterface {
 interface UserNavigationInterface {
   _id: string;
   user: string[] | null;
-  products: { productId: string; count: number }[];
+  products: Array<{ productId: string; count: number }>;
   pageView: string[];
   numberVisit: number;
 }
@@ -110,10 +110,15 @@ export const getAllViews = async (req: Request, res: Response) => {
       }
     ]);
 
-    const sessions = userNavigations.filter(
-      (navigation: UserNavigationInterface) =>
-        navigation?.user?.toString() !== idAdmin
-    );
+    const sessions = userNavigations
+      .map((navigation: UserNavigationInterface) =>
+        navigation?.user?.[0]?.toString() !== idAdmin
+          ? {
+              ...navigation
+            }
+          : undefined
+      )
+      .filter((item) => item !== undefined);
 
     const totalViews = newtotalViewsProduct
       .map((view: TotalViewsInterface) => {
