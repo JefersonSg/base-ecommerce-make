@@ -5,7 +5,6 @@ import { type ProductDataFrontEnd } from '../../shared/helpers/Interfaces';
 import testeID from '../../shared/helpers/verifyId';
 import { verifySizeImage } from '../../shared/helpers/verifySize';
 import { verifyMimetypeImage } from '../../shared/helpers/verifyMimetype';
-import { cuponsController } from '../cupons';
 
 export const updateProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -47,20 +46,19 @@ export const updateProduct = async (req: Request, res: Response) => {
   }
 
   if (images?.coverPhoto1?.[0]) {
-    let convertPhoto = await uploadToS3('products', images?.coverPhoto1?.[0]);
+    const convertPhoto = await uploadToS3('products', images?.coverPhoto1?.[0]);
 
     coverPhoto1 = convertPhoto || '';
     void removeImageS3('products', productData.coverPhoto1);
   }
 
   if (images?.coverPhoto2?.[0]) {
-    let convertPhoto = await uploadToS3('products', images?.coverPhoto2?.[0]);
+    const convertPhoto = await uploadToS3('products', images?.coverPhoto2?.[0]);
     coverPhoto2 = convertPhoto || '';
     void removeImageS3('products', productData?.coverPhoto1);
   }
 
   async function uploads(images: any, oldImages: string[]) {
-    // Use `map` with `Promise.all` to await for all uploads to complete
     const newImages = await Promise.all(
       images?.images?.map(async (image: any) => {
         const data = await uploadToS3('products', image);
@@ -128,7 +126,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       updateData.coverPhoto2 = coverPhoto2;
     }
 
-    if (images?.length > 0) {
+    if (images?.images?.length > 0) {
       if (verifySizeImage(images)) {
         return res.status(401).json({
           error: verifySizeImage(images)
@@ -146,7 +144,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       const newImages = await uploads(images, product?.images);
 
       newImages.map((image: any) => {
-        return updateData.images.push(image);
+        return updateData?.images.push(image);
       });
     }
 
