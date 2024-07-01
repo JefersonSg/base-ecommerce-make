@@ -13,18 +13,10 @@ const upload = multer({ storage });
 
 // GETS
 router.get('/', ProductController.getAll);
-router.get('/actives/:page/:total', ProductController.getAllActives);
-router.get('/no-actives', ProductController.getAllNoActives);
+router.get('/filter/:page/:total', ProductController.getByFilter);
 router.get('/:id', ProductController.getProductById);
-router.get(
-  '/category/:id/:page/:total',
-  ProductController.getProductByCategory
-);
-router.get('/name/:name/:page/:total', ProductController.getByName);
-router.get('/subcategory/:id/:page/:total', ProductController.getBySubcategory);
-router.get('/sales/:page/:total', ProductController.getBySales);
+
 router.get('/get-by-views/:page/:total', ProductController.getByViews);
-router.get('/promotion/:page/:total', ProductController.getByPromotion);
 
 // comments
 router.get('/comments/get-all/:productId', ProductController.getAllComments);
@@ -69,11 +61,6 @@ router.patch(
   upload.single('image'),
   ProductController.updateCommentById
 );
-// router.patch(
-//   "/reupdate/allProducts",
-//   checkToken,
-//   ProductController.updateAllProduct,
-// );
 
 // DELETE
 router.delete(

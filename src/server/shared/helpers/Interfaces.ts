@@ -32,6 +32,7 @@ export interface ProductDataFrontEnd {
 }
 
 export interface ProductDataBackEnd {
+  _id: string;
   name: string;
   brand: string;
   price: number;
