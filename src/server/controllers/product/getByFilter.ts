@@ -13,10 +13,10 @@ interface QueryInterface {
   price: { $gte: number; $lte: number };
   category?: string;
   subcategory?: string;
-  name?: any;
-  color?: string;
-  size?: string;
-  brand?: string;
+  name?: RegExp;
+  colors?: RegExp;
+  size?: RegExp;
+  brand?: RegExp;
 }
 
 export const getByFilter = async (req: Request, res: Response) => {
@@ -86,21 +86,26 @@ export const getByFilter = async (req: Request, res: Response) => {
       query.name = new RegExp(name, 'i');
     }
     if (color) {
-      query.color = color;
+      const colorRegex = new RegExp(color, 'i');
+      query.colors = colorRegex;
     }
 
     if (size) {
-      query.size = size;
+      const sizeRegex = new RegExp(size, 'i');
+      query.size = sizeRegex;
     }
 
     if (brand) {
-      query.brand = brand;
+      const brandRegex = new RegExp(brand, 'i');
+      query.brand = brandRegex;
     }
 
     const products = (await Product.find(query)
       .skip((+page - 1) * +total)
       .limit(+total)
       .sort({ [orderBy]: orderDirection })) as unknown as ProductDataBackEnd[];
+
+    console.log(query);
 
     if (!products) {
       return res.status(200).json({
