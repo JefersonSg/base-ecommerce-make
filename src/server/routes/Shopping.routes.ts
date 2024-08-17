@@ -6,7 +6,7 @@ import { ShoppingCartControl } from '../controllers';
 const router = express.Router();
 
 // Carrinho
-router.post('/get-all/:userId', ShoppingCartControl.getAllItemsCart);
+router.post('/get-all/', ShoppingCartControl.getAllItemsCart);
 
 // Item carrinho
 router.post(

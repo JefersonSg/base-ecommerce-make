@@ -7,20 +7,18 @@ import { type ItemsCartInterface } from '../../../shared/helpers/Interfaces';
 import 'dotenv/config';
 
 export const getAllItemsCart = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-
-  const { cep } = req.body;
-
-  if (!userId) {
-    return res.status(400).json({
-      error: 'é necessário o userId'
-    });
-  }
+  const { cep, cartId, userId } = req.body;
 
   const cepLimpo = cep?.replace?.('-', '');
   const CepOrigin = process.env.CEP_ORIGIN;
 
-  const shoppingCart = await ShoppingCart.findOne({ userId, status: 'aberto' });
+  let shoppingCart = userId.length
+    ? await ShoppingCart.findOne({ userId })
+    : undefined;
+
+  if (!shoppingCart && cartId) {
+    shoppingCart = await ShoppingCart.findById(cartId);
+  }
 
   if (!shoppingCart) {
     res.status(200).json({

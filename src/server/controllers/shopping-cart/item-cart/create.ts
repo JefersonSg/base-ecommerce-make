@@ -8,9 +8,11 @@ export const addNewItemCart = async (req: Request, res: Response) => {
   const { userId, productId, color, amount, size, cartId } = req.body;
 
   try {
-    let shoppingCart = await ShoppingCart.findOne({
-      userId
-    });
+    let shoppingCart = userId
+      ? await ShoppingCart.findOne({
+          userId
+        })
+      : undefined;
 
     if (!shoppingCart && userId && !cartId) {
       shoppingCart = await new ShoppingCart({
