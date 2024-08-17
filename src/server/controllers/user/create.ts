@@ -2,6 +2,7 @@ import { type Request, type Response } from 'express';
 import User from '../../db/models/User';
 import bcrypt from 'bcrypt';
 import createUserToken from '../../shared/helpers/createUserToken';
+import ShoppingCart from '../../db/models/ShoppingCart';
 
 interface newUser {
   _id?: string;
@@ -16,6 +17,7 @@ export const create = async (req: Request, res: Response) => {
   const surname = req.body.surname;
   const email = req.body.email;
   const password = req.body.password;
+  const cartId = req.body.cartId;
 
   // check if user exists
   const userExists = await User.findOne({ email });
@@ -39,6 +41,12 @@ export const create = async (req: Request, res: Response) => {
 
   try {
     const newUser: newUser | any = await user.save();
+
+    if (cartId && newUser) {
+      await ShoppingCart.findByIdAndUpdate(cartId, {
+        userId: newUser._id
+      });
+    }
 
     await createUserToken(newUser, req, res);
   } catch (error) {

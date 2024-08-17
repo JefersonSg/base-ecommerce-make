@@ -110,15 +110,14 @@ export const getAllViews = async (req: Request, res: Response) => {
       }
     ]);
 
-    const sessions = userNavigations
-      .map((navigation: UserNavigationInterface) =>
+    const sessions = userNavigations.map(
+      (navigation: UserNavigationInterface) =>
         navigation?.user?.[0]?.toString() !== idAdmin
           ? {
               ...navigation
             }
           : undefined
-      )
-      .filter((item) => item !== undefined);
+    );
 
     const totalViews = newtotalViewsProduct
       .map((view: TotalViewsInterface) => {

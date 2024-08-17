@@ -5,14 +5,31 @@ import Product from '../../../db/models/Product';
 import { type ProductDataBackEnd } from '../../../shared/helpers/Interfaces';
 
 export const addNewItemCart = async (req: Request, res: Response) => {
-  const { userId, productId, color, amount, size } = req.body;
+  const { userId, productId, color, amount, size, cartId } = req.body;
 
   try {
-    let shoppingCart = await ShoppingCart.findOne({ userId, status: 'aberto' });
+    let shoppingCart = await ShoppingCart.findOne({
+      userId
+    });
 
-    if (!shoppingCart) {
+    if (!shoppingCart && userId && !cartId) {
       shoppingCart = await new ShoppingCart({
         userId,
+        status: 'aberto'
+      }).save();
+    }
+    if (!shoppingCart && !userId && cartId) {
+      shoppingCart = await ShoppingCart.findById(cartId);
+    }
+    if (!shoppingCart && userId && cartId) {
+      shoppingCart = await ShoppingCart.findByIdAndUpdate(cartId, {
+        userId,
+        status: 'aberto'
+      });
+    }
+    if (!shoppingCart) {
+      shoppingCart = await new ShoppingCart({
+        userId: '',
         status: 'aberto'
       }).save();
     }
@@ -56,7 +73,7 @@ export const addNewItemCart = async (req: Request, res: Response) => {
     }
 
     const checkItemCart = await ItemCart.findOne({
-      shoppingCartId: shoppingCart._id,
+      shoppingCartId: shoppingCart?._id,
       productId,
       color,
       size
@@ -79,7 +96,7 @@ export const addNewItemCart = async (req: Request, res: Response) => {
     }
 
     const itemCart = await new ItemCart({
-      shoppingCartId: shoppingCart._id,
+      shoppingCartId: shoppingCart?._id,
       productId,
       color: color.length > 0 ? color : '',
       amount,

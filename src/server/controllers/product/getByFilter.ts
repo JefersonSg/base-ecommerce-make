@@ -105,8 +105,6 @@ export const getByFilter = async (req: Request, res: Response) => {
       .limit(+total)
       .sort({ [orderBy]: orderDirection })) as unknown as ProductDataBackEnd[];
 
-    console.log(query);
-
     if (!products) {
       return res.status(200).json({
         message: 'nenhum item encontrado'
