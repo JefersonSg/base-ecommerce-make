@@ -27,9 +27,7 @@ app.use(express.json());
 app.use((req, res, next) => {
   const allowedOrigins = [
     'http://localhost:3000',
-    'http://lojamayse.com',
-    'https://basecommerce.vercel.app',
-    'https://abayomimake.com'
+    'http://lojamayse.com'
   ];
 
   const origin = req.headers.origin ?? '';

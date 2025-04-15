@@ -16,7 +16,7 @@ export const calculateDelivery = async (req: Request, res: Response) => {
   try {
     const { cep } = req.body;
     const cepLimpo = cep.replace('-', '');
-    const CepOrigin = process.env.CEP_ORIGIN;
+    const CepOrigin = process.env.CEP_ORIGIN?.replace('-', '');
 
     if (cepLimpo.length === 8) {
       const args = {
