@@ -47,7 +47,7 @@ export const createComment = async (req: Request, res: Response) => {
     userId,
     comment,
     stars,
-    image: [imageUpload] ?? []
+    image: imageUpload ? [imageUpload] : []
   });
 
   try {
