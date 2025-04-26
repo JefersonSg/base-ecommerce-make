@@ -25,10 +25,7 @@ app.use(express.json());
 
 // Configuração do CORS
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'http://lojamayse.com'
-  ];
+  const allowedOrigins = ['http://localhost:3000', 'http://lojamayse.com'];
 
   const origin = req.headers.origin ?? '';
 
