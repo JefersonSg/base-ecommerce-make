@@ -29,18 +29,18 @@ export const redeemCupom = async (req: Request, res: Response) => {
 
     if (!checkCode) {
       return res.status(500).json({
-        erro: 'nenhum cupom foi encontrado'
+        erro: 'Este cupom não existe'
       });
     }
 
     if (!checkCode.active) {
       return res.status(500).json({
-        erro: 'nenhum cupom foi encontrado'
+        erro: 'Este cupom não existe'
       });
     }
     if (checkIfAlreadyUsed?.[0]) {
       return res.status(500).json({
-        erro: 'Você já resgatou esse cupom antes'
+        erro: 'Você já usou esse cupom'
       });
     }
     if (checkCode?.expiration && checkCode.expiration < hoje) {
@@ -50,7 +50,7 @@ export const redeemCupom = async (req: Request, res: Response) => {
     }
     if (checkCode?.limitUses && checkCode.uses >= checkCode?.limitUses) {
       return res.status(500).json({
-        erro: 'Todos os cupons já foram resgatados'
+        erro: 'Cupons esgotados'
       });
     }
 
