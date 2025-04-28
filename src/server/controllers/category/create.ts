@@ -10,20 +10,20 @@ export const createCategory = async (req: Request, res: Response) => {
 
   if (image && image?.length === 0) {
     res.status(422).json({
-      message: 'A imagem é obrigatoria'
+      error: 'A imagem é obrigatoria'
     });
     return;
   }
 
   if (verifySizeImage(image)) {
     return res.status(401).json({
-      message: verifySizeImage(image)
+      error: verifySizeImage(image)
     });
   }
 
   if (verifyMimetypeImage(image)) {
     return res.status(401).json({
-      message: verifyMimetypeImage(image)
+      error: verifyMimetypeImage(image)
     });
   }
 
@@ -31,7 +31,7 @@ export const createCategory = async (req: Request, res: Response) => {
 
   if (!imageUpload) {
     return res.status(404).send({
-      message: 'erro ao enviar imagem'
+      error: 'erro ao enviar imagem'
     });
   }
 

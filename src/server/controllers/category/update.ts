@@ -52,7 +52,7 @@ export const updateCategory = async (req: Request, res: Response) => {
 
     return res
       .status(200)
-      .json({ category, message: 'Subcategoria atualizada com sucesso!' });
+      .json({ category, message: 'Categoria atualizada com sucesso!' });
   } catch (error) {
     console.log(error);
     return res.status(500).json({

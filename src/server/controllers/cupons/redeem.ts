@@ -15,48 +15,39 @@ export const redeemCupom = async (req: Request, res: Response) => {
   try {
     if (!code) {
       return res.status(403).json({
-        erro: 'faltam dados para o resgate, code'
+        erro: 'Insira o código co cupom'
       });
     }
 
     const checkCode = await CuponsModel.findOne({ code });
 
-    const checkIfAlreadyUsed = await CuponsUsed.find({
+    if (!checkCode || !checkCode.active) {
+      return res.status(400).json({ erro: 'Cupom inválido ou inativo.' });
+    }
+    const [alreadyUsed] = await CuponsUsed.find({
       code,
       userId: user._id,
-      idCupom: checkCode?._id
+      idCupom: checkCode._id
     });
-
-    if (!checkCode) {
-      return res.status(500).json({
-        erro: 'Este cupom não existe'
-      });
+    if (alreadyUsed) {
+      return res.status(400).json({ erro: 'Você já utilizou este cupom.' });
     }
-
-    if (!checkCode.active) {
-      return res.status(500).json({
-        erro: 'Este cupom não existe'
-      });
-    }
-    if (checkIfAlreadyUsed?.[0]) {
-      return res.status(500).json({
-        erro: 'Você já usou esse cupom'
-      });
-    }
-    if (checkCode?.expiration && checkCode.expiration < hoje) {
+    if (checkCode.expiration && checkCode.expiration < hoje) {
       return res.status(400).json({
-        erro: 'Cupom expirado'
+        erro: 'Este cupom expirou'
       });
     }
-    if (checkCode?.limitUses && checkCode.uses >= checkCode?.limitUses) {
-      return res.status(500).json({
-        erro: 'Cupons esgotados'
+    if (checkCode.limitUses && checkCode.uses >= checkCode?.limitUses) {
+      return res.status(400).json({
+        erro: 'Limite de uso do cupom atingido'
       });
     }
 
     if (checkCode.minimumValue && checkCode.minimumValue > valorDaCompra) {
       return res.status(400).json({
-        erro: 'Você não atingiu o valor mínimo para usar este cupom'
+        erro: `É necessário um valor mínimo de R$ ${checkCode.minimumValue.toFixed(
+          2
+        )}`
       });
     }
     return res.status(200).json({
@@ -64,7 +55,7 @@ export const redeemCupom = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
+    return res.status(500).json({
       erro: 'erro ao resgatar o cupom',
       error
     });
