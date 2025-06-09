@@ -3,6 +3,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand
 } from '@aws-sdk/client-s3';
+import { imageComprimer } from './imageComprimer';
 
 const bucketName = process.env.BUCKET_NAME ?? '';
 const bucketRegion = process.env.BUCKET_REGION ?? '';
@@ -17,27 +18,24 @@ const s3 = new S3Client({
   region: bucketRegion
 });
 
-async function uploadToS3(path: string, file: Express.Multer.File) {
-  const name =
-    Date.now() + String(Math.floor(Math.random() * 1000)) + file?.originalname;
-
-  const params: {
-    Bucket: string;
-    Key: string;
-    Body: Buffer;
-    contentType: string;
-  } = {
-    Bucket: bucketName,
-    Key: `${path}/${name}`,
-    Body: file?.buffer,
-    contentType: file?.mimetype
-  };
-
+async function uploadToS3(
+  path: string,
+  file: Express.Multer.File
+): Promise<string | false> {
   try {
+    const imagemComprimida = imageComprimer(file);
+
+    const params = {
+      Bucket: bucketName,
+      Key: `${path}/${(await imagemComprimida).name}`,
+      Body: (await imagemComprimida).compressedBuffer, // << USAMOS O BUFFER COMPRIMIDO AQUI
+      ContentType: 'image/webp' // << ATUALIZAMOS O TIPO DE CONTEÚDO
+    };
+
     const command = new PutObjectCommand(params);
     await s3.send(command);
 
-    return name;
+    return (await imagemComprimida).name;
   } catch (error) {
     console.log('ocorreu um erro:', error);
     return false;

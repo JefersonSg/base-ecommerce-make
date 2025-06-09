@@ -12,8 +12,8 @@ export function verifySizeImage(images: ImageFile[]) {
   }
 
   for (let i = 0; i < images?.length; i++) {
-    if (images[i]?.size && images[i]?.size > 2 * 1024 * 1024) {
-      return `Tamanho da imagem ${images[i]?.originalname} muito grande, Maximo 2MB`;
+    if (images[i]?.size && images[i]?.size > 10 * 1024 * 1024) {
+      return `Tamanho da imagem ${images[i]?.originalname} muito grande, Maximo 10MB`;
     }
   }
 }
