@@ -42,11 +42,14 @@ async function uploadToS3(
   }
 }
 async function updateImageToS3(file: Express.Multer.File, pathImage: string) {
+  const imagemComprimida = imageComprimer(file);
+
   const params = {
     Bucket: bucketName,
     Key: pathImage,
-    Body: file.buffer,
-    ContentType: file.mimetype
+
+    Body: (await imagemComprimida).compressedBuffer, // << USAMOS O BUFFER COMPRIMIDO AQUI
+    ContentType: 'image/webp' // << ATUALIZAMOS O TIPO DE CONTEÚDO
   };
 
   const command = new PutObjectCommand(params);
