@@ -15,15 +15,15 @@ export const createCategory = async (req: Request, res: Response) => {
     return;
   }
 
-  if (verifySizeImage(image)) {
-    return res.status(401).json({
-      error: verifySizeImage(image)
-    });
-  }
-
   if (verifyMimetypeImage(image)) {
     return res.status(401).json({
       error: verifyMimetypeImage(image)
+    });
+  }
+
+  if (verifySizeImage(image)) {
+    return res.status(401).json({
+      error: verifySizeImage(image)
     });
   }
 
