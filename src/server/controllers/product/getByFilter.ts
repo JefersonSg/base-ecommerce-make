@@ -40,13 +40,13 @@ export const getByFilter = async (req: Request, res: Response) => {
     );
     const brand = (req.query.brand ? req.query.brand : null) as string;
     const orderBy = (
-      req.query.orderBy?.length ? req.query.orderBy : '-createdAt'
+      req.query.orderBy?.length ? req.query.orderBy : 'createdAt'
     ) as string;
     const orderDirection = req.query.orderDirection === 'desc' ? -1 : 1;
     const page = parseInt(req.params.page) ?? 1;
     const total = parseInt(req.params.total) ?? 10;
 
-    // Verifica se orderBy é uma propriedade válida
+    // Verifica se orderBy (Ordenar por) é uma propriedade válida
 
     const validOrderByFields = ['name', 'price', 'sales', 'createdAt'];
     if (!validOrderByFields.includes(orderBy)) {
