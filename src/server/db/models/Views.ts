@@ -5,9 +5,6 @@ const { Schema } = mongoose;
 const ViewsModel = mongoose.model(
   'views',
   new Schema({
-    ip: {
-      type: String
-    },
     sessionId: {
       type: String,
       required: true

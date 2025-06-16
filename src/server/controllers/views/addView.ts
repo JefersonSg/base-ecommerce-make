@@ -8,7 +8,7 @@ import { toZonedTime } from 'date-fns-tz';
 
 export const addView = async (req: Request, res: Response) => {
   const productId = req.params.productId;
-  const { userToken, userIp, sessionId, pageView } = req.body;
+  const { userToken, sessionId, pageView } = req.body;
 
   const timeZone = 'America/Sao_Paulo';
 
@@ -38,7 +38,6 @@ export const addView = async (req: Request, res: Response) => {
   }
   try {
     const newView = await new ViewsModel({
-      ip: userIp?.value ?? null,
       product: productId ?? null,
       userId: user._id ?? null,
       date: zonedDate,
