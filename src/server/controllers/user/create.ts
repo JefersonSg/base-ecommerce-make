@@ -23,7 +23,7 @@ export const create = async (req: Request, res: Response) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(422).json({ message: 'Por favor, utilize outro e-mail!' });
+    res.status(422).json({ message: ' Este e-mail já está em uso' });
     return;
   }
 

@@ -148,6 +148,24 @@ export const updateProduct = async (req: Request, res: Response) => {
       });
     }
 
+    const allAmounts = updateData.stock.amount.flat();
+    const hasStock = allAmounts.some((amount: any) => amount > 0);
+
+    // Se tentar ativar sem estoque → salva como inativo e avisa
+    if (productData.active && !hasStock) {
+      updateData.active = false;
+
+      // Ainda salva o produto, mas já retorna o aviso
+      await Product.findByIdAndUpdate(id, updateData);
+
+      return res.status(401).json({
+        updateData,
+        message:
+          'Produto atualizado, mas foi desativado por estar sem estoque.',
+        error: 'sem estoque'
+      });
+    }
+
     await Product.findByIdAndUpdate(id, updateData);
 
     return res
