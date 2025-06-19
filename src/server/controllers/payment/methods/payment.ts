@@ -24,7 +24,13 @@ export async function Payment(
     const newPayment = await preference.create({
       body: {
         items: frete ? [...items, frete] : [...items],
-        payment_methods: {},
+        payment_methods: {
+          installments: 12,
+          default_installments: 1,
+          excluded_payment_types: [
+            { id: 'ticket' } // opcional: remove boleto se quiser
+          ]
+        },
         back_urls: {
           success: `${process.env.FRONT_URL}/pagamento/sucesso`,
           failure: `${process.env.FRONT_URL}/pagamento/error`,

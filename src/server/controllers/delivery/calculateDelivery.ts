@@ -41,7 +41,7 @@ export const calculateDelivery = async (req: Request, res: Response) => {
           receipt: false,
           own_hand: false
         },
-        services: '1,2,3,4'
+        services: '1,2'
       };
 
       const apiEnvio =
@@ -51,24 +51,26 @@ export const calculateDelivery = async (req: Request, res: Response) => {
 
       const response = await calculo.data;
 
-      if (CepOrigin === cepLimpo) {
-        const retirada = {
-          id: 99,
+      const retirada = {
+        id: 99,
+        name: 'Retirada na loja',
+        price: '00.00',
+        custom_price: '00.00',
+        currency: 'R$',
+        delivery_time: 1,
+        delivery_range: { max: 'Combinar' },
+        custom_delivery_time: 'Combinar',
+        custom_delivery_range: { min: 1, max: 'Combinar' },
+        company: {
+          id: 1,
           name: 'Retirada na loja',
-          price: '00.00',
-          custom_price: '00.00',
-          currency: 'R$',
-          delivery_time: 1,
-          delivery_range: { max: 'Combinar' },
-          custom_delivery_time: 'Combinar',
-          custom_delivery_range: { min: 1, max: 'Combinar' },
-          company: {
-            id: 1,
-            name: 'Retirada na loja',
-            picture: ''
-          }
-        };
+          picture: ''
+        }
+      };
 
+      response.unshift(retirada);
+
+      if (CepOrigin === cepLimpo) {
         const motoboy = {
           id: 100,
           name: 'Motoboy',

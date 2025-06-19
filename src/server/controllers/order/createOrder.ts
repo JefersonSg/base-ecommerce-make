@@ -24,8 +24,6 @@ export const createOrder = async (req: Request, res: Response) => {
   const { cupom, methodPayment, serviceShippingId } = req.body;
   const hoje = new Date();
 
-  const valorDescontoFrete = 250.0;
-
   let itemNoStock: any = [];
 
   if (!userId) {
@@ -153,8 +151,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
     if (itemNoStock?.[0]) {
       return res.status(401).json({
-        message:
-          'O pedido não pode ser finalzado pois o ha um item sem estoque',
+        message: 'O pedido não pode ser finalzado pois há um item sem estoque',
         itemNoStock
       });
     }
@@ -225,8 +222,10 @@ export const createOrder = async (req: Request, res: Response) => {
 
     const paymentId = uuidv4();
 
+    const valorFreteGratis = 9999;
+
     const payment =
-      serviceShippingId === 99 || totalValue > 249.9
+      serviceShippingId === 99 || totalValue > valorFreteGratis
         ? await Payment(allItemsToPayment, paymentId)
         : await Payment(allItemsToPayment, paymentId, fretePayment);
 
