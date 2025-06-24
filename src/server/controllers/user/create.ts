@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import createUserToken from '../../shared/helpers/createUserToken';
 import ShoppingCart from '../../db/models/ShoppingCart';
 import { EmailBoasVindas } from '../../shared/helpers/emails/EmailBoasVindas';
+import { EmailAlertaNovoUsuario } from '../../shared/helpers/emails/EmailAlertaNovoUsuario';
 
 interface newUser {
   _id?: string;
@@ -44,6 +45,7 @@ export const create = async (req: Request, res: Response) => {
     const newUser: newUser | any = await user.save();
 
     await EmailBoasVindas({ name, to: email });
+    await EmailAlertaNovoUsuario({ userName: name, userEmail: email });
 
     if (cartId && newUser) {
       await ShoppingCart.findByIdAndUpdate(cartId, {
