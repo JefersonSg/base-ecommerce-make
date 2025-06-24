@@ -88,7 +88,7 @@ export const calculateDelivery = async (req: Request, res: Response) => {
           }
         };
 
-        response.unshift(motoboy, retirada);
+        response.unshift(motoboy);
       }
       return res.status(200).json({
         response

@@ -121,16 +121,19 @@ export const createOrder = async (req: Request, res: Response) => {
           const colorIndex = productPrice.colors.indexOf(item?.color ?? '');
           const sizeIndex = productPrice.size.indexOf(item.size);
 
+          // caso tenha um tamanho ou cor inesistente, remove do carrinhoa
           if (colorIndex < 0 || sizeIndex < 0) {
             await ItemCart.findByIdAndRemove(item._id);
             itemNoStock = productPrice;
             return null;
           }
+
           if (productPrice.promotion && productPrice.promotionalPrice) {
             produtosId.push(productPrice._id);
             produtosCores.push(item?.color ?? '');
             produtosQuantidade.push(+item.amount);
             produtosNames.push(productPrice.name);
+            produtosTamanhos.push(item.size);
             produtosValores.push(+productPrice.promotionalPrice);
 
             return +productPrice.promotionalPrice;
