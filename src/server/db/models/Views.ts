@@ -22,6 +22,7 @@ const ViewsModel = mongoose.model(
     },
     date: {
       type: Date,
+      default: Date.now,
       required: true
     }
   })

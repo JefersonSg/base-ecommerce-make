@@ -8,7 +8,8 @@ import {
   type AddressInterface,
   type ProductDataBackEnd,
   type cuponsInterface,
-  type delivery
+  type delivery,
+  type OrderInterface
 } from '../../shared/helpers/Interfaces';
 import Orders from '../../db/models/Orders';
 import AddressModel from '../../db/models/Address';
@@ -17,6 +18,9 @@ import { Payment } from '../payment/methods/payment';
 import { v4 as uuidv4 } from 'uuid';
 import { CuponsModel } from '../../db/models/Cupons';
 import CuponsUsed from '../../db/models/CuponsUsed';
+import { EmailAlertaNovaVenda } from '../../shared/helpers/emails/EmailAlertaNovaVenda';
+import User from '../../db/models/User';
+import { type userInterface } from '../user/interfaceUser';
 
 export const createOrder = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -52,6 +56,7 @@ export const createOrder = async (req: Request, res: Response) => {
       userId,
       status: 'aberto'
     });
+    const userData = (await User.findById(userId)) as userInterface;
 
     if (!shoppingCart) {
       res.status(200).json({
@@ -260,7 +265,18 @@ export const createOrder = async (req: Request, res: Response) => {
       shippingCompany: shippingOrder?.company?.name
     });
 
-    const createOrder = await newOrder.save();
+    const createOrder: OrderInterface | any = await newOrder.save();
+
+    await EmailAlertaNovaVenda({
+      name: userData.name,
+      surname: userData.surname,
+      email: userData.email,
+      paymentMethod: methodPayment,
+      address,
+      status: 'pendente',
+      total: Number((totalValue + +shippingOrder.price).toFixed(2)),
+      orderId: createOrder._id
+    });
 
     if (cupom && getCupom.code) {
       await new CuponsUsed({
