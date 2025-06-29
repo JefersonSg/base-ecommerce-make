@@ -62,13 +62,13 @@ export const create = async (req: Request, res: Response) => {
   }
 
   if (images.coverPhoto1?.[0]) {
-    let convertPhoto = await uploadToS3('products', images.coverPhoto1[0]);
+    const convertPhoto = await uploadToS3('products', images.coverPhoto1[0]);
 
     coverPhoto1 = convertPhoto || '';
   }
 
   if (images.coverPhoto2?.[0]) {
-    let convertPhoto = await uploadToS3('products', images?.coverPhoto2[0]);
+    const convertPhoto = await uploadToS3('products', images?.coverPhoto2[0]);
     coverPhoto2 = convertPhoto || '';
   }
 
@@ -121,6 +121,6 @@ export const create = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log('erro ao criar produto', error);
-    return res.status(500).json({ error: error });
+    return res.status(500).json({ error });
   }
 };

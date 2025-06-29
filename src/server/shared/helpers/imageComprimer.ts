@@ -3,7 +3,7 @@ import sharp from 'sharp';
 async function imageComprimer(file: Express.Multer.File) {
   const compressedBuffer = await sharp(file.buffer)
     .resize({ width: 1920, withoutEnlargement: true })
-    .toFormat('webp', { quality: 80 })
+    .toFormat('webp', { quality: 75 })
     .toBuffer();
 
   // 2. Gerar um nome de arquivo único com a nova extensão .webp
